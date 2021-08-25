@@ -23,11 +23,14 @@ admin.site.register(Driver, DriverAdmin)
 
 
 class RouteAdmin(admin.ModelAdmin):
+
 	list_display = (
 					'uid',
 					'a_point',
 					'b_point',
 					'vehicle',
 					)
+
+	readonly_fields = ('uid',) 
 
 admin.site.register(Route, RouteAdmin)

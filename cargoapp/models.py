@@ -15,8 +15,7 @@ class  Vehicle(models.Model):
 
 	def __str__(self):
 
-		return self.vin
-
+		return '{}'.format(self.car_number)
 
 	def save(self, *args, **kwargs):
 
@@ -40,7 +39,7 @@ class  Driver(models.Model):
 
 	def __str__(self):
 
-		return self.first_name
+		return '{0} {1}'.format(self.first_name, self.second_name)
 
 	def save(self, *args, **kwargs):
 
@@ -57,7 +56,7 @@ class  Driver(models.Model):
 
 class Route(models.Model):
 
-	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', null=True, blank=True)
+	uid = models.SlugField(max_length=36, verbose_name='Идентификатор')
 	from_date = models.DateField('Дата С', auto_now_add = False, blank=True, null=True)
 	to_date = models.DateField('Дата По', auto_now_add = False, blank=True, null=True)
 	a_point = models.CharField(max_length = 30, verbose_name = 'Точка А', null=True, blank=True)
@@ -70,7 +69,10 @@ class Route(models.Model):
 	vehicle = models.ForeignKey(Vehicle, verbose_name='Автомобиль', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 	driver = models.ForeignKey(Driver, verbose_name='Водитель', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 	logist = models.ForeignKey(User, verbose_name='Логист', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
+	
+	def __str__(self):
 
+		return '{}'.format(self.uid)
 
 	def save(self, *args, **kwargs):
 
