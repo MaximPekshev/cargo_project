@@ -6,7 +6,7 @@ from rest_framework import serializers
 class DriverSerializer(serializers.ModelSerializer):
     class Meta:
         model = Driver
-        fields = ('id', 'uid', 'first_name', 'second_name', 'third_name')
+        fields = ('uid', 'first_name', 'second_name', 'third_name')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -18,13 +18,12 @@ class UserSerializer(serializers.ModelSerializer):
 class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
-        fields = ['id', 'uid', 'vin', 'car_number', 'logist']
+        fields = ['uid', 'vin', 'car_number', 'logist']
 
 class RouteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Route
         fields = [
-            'id',
             'uid',
             'from_date',
             'to_date',

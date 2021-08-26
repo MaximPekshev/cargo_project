@@ -9,13 +9,13 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
 	path('drivers/', DriverList.as_view()),
-	path('drivers/<int:pk>/', DriverDetail.as_view()),
+	path('drivers/<str:uid>/', DriverDetail.as_view()),
 	path('users/', UserList.as_view()),
     path('users/<int:pk>/', UserDetail.as_view()),
     path('vehicles/', VehicleList.as_view()),
-    path('vehicles/<int:pk>/', VehicleDetail.as_view()),
+    path('vehicles/<str:uid>/', VehicleDetail.as_view()),
     path('routes/', RouteList.as_view()),
-    path('routes/<int:pk>/', RouteDetail.as_view()),
+    path('routes/<str:uid>/', RouteDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

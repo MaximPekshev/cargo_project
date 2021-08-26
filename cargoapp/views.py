@@ -25,22 +25,6 @@ class DriverList(generics.ListCreateAPIView):
 	 # 	serializer = DriverSerializer(drivers, many=True)
 	 # 	return Response(serializer.data)
 
-class DriverDetail(generics.RetrieveUpdateDestroyAPIView):
-	queryset = Driver.objects.all()
-	serializer_class = DriverSerializer
-	permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    # def get_object(self, pk):
-    #     try:
-    #         return Driver.objects.get(pk=pk)
-    #     except Driver.DoesNotExist:
-    #         raise Http404
-
-    # def get(self, request, pk, format=None):
-	   # 	driver = self.get_object(pk)
-	   # 	serializer = DriverSerializer(driver)
-	   # 	return Response(serializer.data)
-
-
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -61,6 +45,7 @@ class VehicleDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    lookup_field = 'uid'
 
 class RouteList(generics.ListAPIView):
     queryset = Route.objects.all()
@@ -71,3 +56,22 @@ class RouteDetail(generics.RetrieveAPIView):
     queryset = Route.objects.all()
     serializer_class = RouteSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    lookup_field = 'uid'
+
+class DriverDetail(generics.RetrieveUpdateDestroyAPIView):
+
+    queryset = Driver.objects.all()
+    serializer_class = DriverSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    lookup_field = 'uid'
+    
+    # def get_object(self, pk):
+    #     try:
+    #         return Driver.objects.get(pk=pk)
+    #     except Driver.DoesNotExist:
+    #         raise Http404
+
+    # def get(self, request, uid, format=None):
+    #     driver = self.get_object(pk)
+    #     serializer = DriverSerializer(driver)
+    #     return Response(serializer.data)

@@ -8,7 +8,7 @@ def get_uuid4():
 
 class  Vehicle(models.Model):
 
-	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', null=True, blank=True)
+	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', primary_key=True)
 	vin = models.CharField(max_length=17, verbose_name="VIN", null=True, blank=True)
 	car_number = models.CharField(max_length = 15, verbose_name = 'Гос номер', null=True, blank=True)
 	logist = models.ForeignKey(User, verbose_name='Логист', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
@@ -19,8 +19,8 @@ class  Vehicle(models.Model):
 
 	def save(self, *args, **kwargs):
 
-		# if not self.uid:
-		# 	self.uid = get_uuid4()
+		if not self.uid:
+			self.uid = get_uuid4()
 
 		super(Vehicle, self).save(*args, **kwargs)
 
@@ -32,7 +32,7 @@ class  Vehicle(models.Model):
 
 class  Driver(models.Model):
 
-	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', null=True, blank=True)
+	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', primary_key=True)
 	first_name		= models.CharField(max_length = 30, verbose_name = 'Имя', null=True, blank=True)
 	second_name		= models.CharField(max_length = 30, verbose_name = 'Фамилия', null=True, blank=True)
 	third_name		= models.CharField(max_length = 30, verbose_name = 'Отчество', null=True, blank=True)
@@ -43,8 +43,8 @@ class  Driver(models.Model):
 
 	def save(self, *args, **kwargs):
 
-		# if not self.uid:
-		# 	self.uid = get_uuid4()
+		if not self.uid:
+			self.uid = get_uuid4()
 
 		super(Driver, self).save(*args, **kwargs)	
 
@@ -56,7 +56,7 @@ class  Driver(models.Model):
 
 class Route(models.Model):
 
-	uid = models.SlugField(max_length=36, verbose_name='Идентификатор')
+	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', primary_key=True)
 	from_date = models.DateField('Дата С', auto_now_add = False, blank=True, null=True)
 	to_date = models.DateField('Дата По', auto_now_add = False, blank=True, null=True)
 	a_point = models.CharField(max_length = 30, verbose_name = 'Точка А', null=True, blank=True)

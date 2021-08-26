@@ -7,6 +7,7 @@ class VehicleAdmin(admin.ModelAdmin):
 					'vin',
 					'car_number',
 					)
+	readonly_fields = ('uid',)
 
 admin.site.register(Vehicle, VehicleAdmin)
 
@@ -18,6 +19,7 @@ class DriverAdmin(admin.ModelAdmin):
 					'second_name',
 					'third_name',
 					)
+	readonly_fields = ('uid',)
 
 admin.site.register(Driver, DriverAdmin)
 
