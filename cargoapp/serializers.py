@@ -11,7 +11,7 @@ class DriverSerializer(serializers.ModelSerializer):
 class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
-        fields = ['uid', 'vin', 'car_number', 'driver']
+        fields = ['uid', 'vin', 'car_number', 'driver', 'logist']
 
 class RouteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,4 +34,4 @@ class RouteSerializer(serializers.ModelSerializer):
 class LogistUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = LogistUser
-        fields = ('uid', 'username', 'is_active', 'password', )
+        fields = ('uid', 'username', 'is_active', 'psw', 'is_staff')

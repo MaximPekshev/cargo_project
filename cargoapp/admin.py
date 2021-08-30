@@ -7,7 +7,8 @@ class LogistUserAdmin(admin.ModelAdmin):
 					'username',
 					'uid',
 					)
-	readonly_fields = ['uid',]
+	# readonly_fields = ['uid',]
+	# exclude = ['psw',]
 admin.site.register(LogistUser, LogistUserAdmin)
 
 class DriverAdmin(admin.ModelAdmin):

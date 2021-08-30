@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser
 
 import uuid
 from cargoapp.core import upload_route
@@ -7,15 +8,29 @@ from django.conf import settings
 import datetime
 from django.utils.timezone import now
 
+from django.contrib.auth.hashers import make_password
+from django.conf import settings
+
 def get_uuid4():
     return str(uuid.uuid4())
 
 class LogistUser(AbstractUser):
 
 	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', unique=True)
+	psw = models.CharField(max_length = 25, verbose_name = 'ПСВ', null=True, blank=True, default='')
 
 	def __str__(self):
 		return '{}'.format(self.uid)
+
+	def save(self, *args, **kwargs):
+
+		if self.psw:
+			self.set_password(self.psw)
+			self.psw = ''
+
+		super(LogistUser, self).save(*args, **kwargs)
+
+	USERNAME_FIELD = 'username'
 
 	class Meta:
 		verbose_name = 'Логист'
@@ -49,7 +64,7 @@ class  Vehicle(models.Model):
 	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', unique=True)
 	vin = models.CharField(max_length=20, verbose_name="VIN", null=True, blank=True)
 	car_number = models.CharField(max_length = 15, verbose_name = 'Гос номер', null=True, blank=True)
-	logist = models.ForeignKey(LogistUser, verbose_name='Логист', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
+	logist = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Логист', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 	driver = models.ForeignKey(Driver, verbose_name='Водитель', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 	
 	def __str__(self):
@@ -80,7 +95,7 @@ class Route(models.Model):
 	expenses_3 = models.DecimalField(verbose_name = 'Затрата 3', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
 	vehicle = models.ForeignKey(Vehicle, verbose_name='Автомобиль', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 	driver = models.ForeignKey(Driver, verbose_name='Водитель', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
-	logist = models.ForeignKey(LogistUser, verbose_name='Логист', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
+	logist = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Логист', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 	
 	def __str__(self):
 
