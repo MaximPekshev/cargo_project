@@ -1,20 +1,19 @@
 from django.contrib import admin
-from .models import Vehicle, Driver, Route
+from .models import LogistUser, Vehicle, Driver, Route
 
-class VehicleAdmin(admin.ModelAdmin):
+class LogistUserAdmin(admin.ModelAdmin):
 	list_display = (
+					'id',
+					'username',
 					'uid',
-					'vin',
-					'car_number',
 					)
-	readonly_fields = ('uid',)
-
-admin.site.register(Vehicle, VehicleAdmin)
-
+	readonly_fields = ['uid',]
+admin.site.register(LogistUser, LogistUserAdmin)
 
 class DriverAdmin(admin.ModelAdmin):
 	list_display = (
 					'uid',
+					'title',
 					'first_name',
 					'second_name',
 					'third_name',
@@ -36,3 +35,13 @@ class RouteAdmin(admin.ModelAdmin):
 	readonly_fields = ('uid',) 
 
 admin.site.register(Route, RouteAdmin)
+
+class VehicleAdmin(admin.ModelAdmin):
+	list_display = (
+					'uid',
+					'vin',
+					'car_number',
+					)
+	readonly_fields = ('uid',)
+
+admin.site.register(Vehicle, VehicleAdmin)

@@ -1,24 +1,17 @@
-from .models import Driver, Vehicle, Route
-from django.contrib.auth.models import User
+from .models import Driver, Vehicle, Route, LogistUser
 from rest_framework import serializers
 
 
 class DriverSerializer(serializers.ModelSerializer):
     class Meta:
         model = Driver
-        fields = ('uid', 'first_name', 'second_name', 'third_name')
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'password']
+        fields = ('uid', 'title', 'first_name', 'second_name', 'third_name')
 
 
 class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
-        fields = ['uid', 'vin', 'car_number', 'logist']
+        fields = ['uid', 'vin', 'car_number', 'driver']
 
 class RouteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,5 +29,9 @@ class RouteSerializer(serializers.ModelSerializer):
             'expenses_3',
             'vehicle',
             'driver',
-            'logist',
-        ]        
+        ]
+
+class LogistUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LogistUser
+        fields = ('uid', 'username', 'is_active', 'password', )

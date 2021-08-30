@@ -2,18 +2,19 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Driver
 from .serializers import DriverSerializer
-from django.contrib.auth.models import User
-from .serializers import UserSerializer
 from .models import Vehicle
 from .serializers import VehicleSerializer
 from .models import Route
 from .serializers import RouteSerializer
+from .models import LogistUser
+from .serializers import LogistUserSerializer
 
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics, permissions
+
 
 
 class DriverList(generics.ListCreateAPIView):
@@ -25,16 +26,16 @@ class DriverList(generics.ListCreateAPIView):
 	 # 	serializer = DriverSerializer(drivers, many=True)
 	 # 	return Response(serializer.data)
 
-class UserList(generics.ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class LogistUserList(generics.ListCreateAPIView):
+    queryset = LogistUser.objects.all()
+    serializer_class = LogistUserSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class LogistUserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = LogistUser.objects.all()
+    serializer_class = LogistUserSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
+    lookup_field = 'uid'
 
 class VehicleList(generics.ListCreateAPIView):
     queryset = Vehicle.objects.all()
