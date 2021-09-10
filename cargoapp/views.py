@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework import viewsets
 from .models import Driver
 from .serializers import DriverSerializer
@@ -15,16 +15,16 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics, permissions
 
+from .forms import RouteForm
+from django.contrib import messages
+from decimal import Decimal
+
 
 
 class DriverList(generics.ListCreateAPIView):
 	queryset = Driver.objects.all()
 	serializer_class = DriverSerializer
 	permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-	 # def get(self, request, format=None):
-	 # 	drivers = Driver.objects.all()
-	 # 	serializer = DriverSerializer(drivers, many=True)
-	 # 	return Response(serializer.data)
 
 class LogistUserList(generics.ListCreateAPIView):
     queryset = LogistUser.objects.all()
@@ -66,13 +66,236 @@ class DriverDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     lookup_field = 'uid'
     
-    # def get_object(self, pk):
-    #     try:
-    #         return Driver.objects.get(pk=pk)
-    #     except Driver.DoesNotExist:
-    #         raise Http404
+def show_index_page(request):
 
-    # def get(self, request, uid, format=None):
-    #     driver = self.get_object(pk)
-    #     serializer = DriverSerializer(driver)
-    #     return Response(serializer.data)
+    if request.user.is_authenticated:
+
+        context = {
+             'user' : request.user,
+             'routes' : Route.objects.filter(logist=request.user),
+             'vehicles' : Vehicle.objects.filter(logist=request.user)
+        }
+
+        if request.GET.get('vehicle'):
+            vehicle = Vehicle.objects.get(uid=request.GET.get('vehicle'))
+            context.update({
+                'actual_vehicle': vehicle,
+                'routes' : Route.objects.filter(logist=request.user, vehicle=vehicle)
+                })
+
+        return render(request, 'cargoapp/index_page.html', context)
+
+    else:
+
+        return redirect('login')        
+
+
+def show_route(request, uid):
+
+    if request.user.is_authenticated:
+
+        route = Route.objects.get(uid=uid)
+
+        if route.driver:
+            drivers = Driver.objects.all().exclude(uid=route.driver.uid).order_by('title')
+        else:  
+            drivers = Driver.objects.all().order_by('title')
+
+        if route.logist:
+            logists = LogistUser.objects.all().exclude(uid=route.logist.uid).order_by('username')
+        else:  
+            logists = LogistUser.objects.all().order_by('username')
+
+        if route.vehicle:
+            vehicles = Vehicle.objects.all().exclude(uid=route.vehicle.uid).order_by('car_number')
+        else:  
+            vehicles = Vehicle.objects.all().order_by('car_number')   
+            
+
+        context = {
+            'route' : route,
+            'drivers' : drivers,
+            'logists' : logists,
+            'vehicles' : vehicles,
+        }
+
+        return render(request, 'cargoapp/route.html', context)
+
+    else:
+
+        return redirect('login')            
+    
+
+def route_save(request, uid):
+
+    if request.user.is_authenticated:
+
+        if request.method == 'POST':
+
+            route_form = RouteForm(request.POST)
+
+            if route_form.is_valid():
+
+                from_date = route_form.cleaned_data['inputFrom_date']
+                to_date = route_form.cleaned_data['inputTo_date']
+                a_point = route_form.cleaned_data['inputA_point']
+                b_point = route_form.cleaned_data['inputB_point']
+                route_length = route_form.cleaned_data['inputRoute_length']
+                route_cost = route_form.cleaned_data['inputRoute_cost']
+                expenses_1 = route_form.cleaned_data['inputExpenses_1']
+                vehicle_uid = route_form.cleaned_data['inputVehicle']
+                logist_uid = route_form.cleaned_data['inputLogist']
+                driver_uid = route_form.cleaned_data['inputDriver']
+
+                try:
+                    current_route = Route.objects.get(uid=uid)
+                except:
+                    current_route = None
+
+                if current_route:
+
+                    current_route.from_date = from_date
+                    current_route.to_date = to_date
+                    current_route.a_point = a_point
+                    current_route.b_point = b_point
+                    current_route.route_length = Decimal(route_length.replace(',','.'))
+                    current_route.route_cost = Decimal(route_cost.replace(',','.'))
+                    current_route.expenses_1 = Decimal(expenses_1.replace(',','.'))
+
+                    if vehicle_uid:
+                        try:
+                            current_vehicle = Vehicle.objects.get(uid=vehicle_uid)
+                            current_route.vehicle = current_vehicle
+                        except:
+                            current_route.vehicle = None
+                            messages.info(request, 'Выбранного Автомобиля не существует в базе данных!')
+
+                    if logist_uid:
+                        try:
+                            current_logist = LogistUser.objects.get(uid=logist_uid)
+                            current_route.logist = current_logist
+                        except:
+                            current_route.logist = None
+                            messages.info(request, 'Выбранного Логиста не существует в базе данных!')
+
+                    if driver_uid:
+                        try:
+                            current_driver = Driver.objects.get(uid=driver_uid)
+                            current_route.driver = current_driver
+                        except:
+                            current_route.logist = None
+                            messages.info(driver, 'Выбранного Водителя не существует в базе данных!')            
+
+                    current_route.save()
+
+                    current_path = request.META['HTTP_REFERER']
+                    return redirect(current_path)
+
+            else:
+
+                messages.info(driver, 'В форму введены не корректные данные!')
+                current_path = request.META['HTTP_REFERER']
+                return redirect(current_path)
+
+    else:
+
+        return redirect('login')            
+
+
+def route_add(request):
+
+    if request.user.is_authenticated:
+
+        if request.method == 'POST':
+
+            route_form = RouteForm(request.POST)
+
+            if route_form.is_valid():
+
+                from_date = route_form.cleaned_data['inputFrom_date']
+                to_date = route_form.cleaned_data['inputTo_date']
+                a_point = route_form.cleaned_data['inputA_point']
+                b_point = route_form.cleaned_data['inputB_point']
+                route_length = route_form.cleaned_data['inputRoute_length']
+                route_cost = route_form.cleaned_data['inputRoute_cost']
+                expenses_1 = route_form.cleaned_data['inputExpenses_1']
+                vehicle_uid = route_form.cleaned_data['inputVehicle']
+                logist_uid = route_form.cleaned_data['inputLogist']
+                driver_uid = route_form.cleaned_data['inputDriver']
+
+                current_route = Route()
+
+                current_route.from_date = from_date
+                current_route.to_date = to_date
+                current_route.a_point = a_point
+                current_route.b_point = b_point
+                if route_length:
+                    current_route.route_length = Decimal(route_length.replace(',','.'))
+                else:
+                    current_route.route_length = Decimal(0)
+
+                if route_cost:
+                    current_route.route_cost = Decimal(route_cost.replace(',','.'))
+                else:
+                    current_route.route_cost = Decimal(0)
+
+                if expenses_1:
+                    current_route.expenses_1 = Decimal(expenses_1.replace(',','.'))
+                else:
+                    current_route.expenses_1 = Decimal(0)       
+                
+
+                if vehicle_uid:
+                    try:
+                        current_vehicle = Vehicle.objects.get(uid=vehicle_uid)
+                        current_route.vehicle = current_vehicle
+                    except:
+                        current_route.vehicle = None
+                        messages.info(request, 'Выбранного Автомобиля не существует в базе данных!')
+
+                if logist_uid:
+                    try:
+                        current_logist = LogistUser.objects.get(uid=logist_uid)
+                        current_route.logist = current_logist
+                    except:
+                        current_route.logist = None
+                        messages.info(request, 'Выбранного Логиста не существует в базе данных!')
+
+                if driver_uid:
+                    try:
+                        current_driver = Driver.objects.get(uid=driver_uid)
+                        current_route.driver = current_driver
+                    except:
+                        current_route.logist = None
+                        messages.info(driver, 'Выбранного Водителя не существует в базе данных!')            
+
+                current_route.save()
+
+                return redirect('show_index_page')
+
+            else:
+
+                messages.info(driver, 'В форму введены не корректные данные!')
+                current_path = request.META['HTTP_REFERER']
+                return redirect(current_path)
+
+    else:
+
+        return redirect('login')
+                
+
+def show_new_route_form(request):
+
+    if request.user.is_authenticated:
+
+        context = {
+            'drivers' : Driver.objects.all().order_by('title'),
+            'logists' : LogistUser.objects.all().exclude(uid=request.user.uid).order_by('username'),
+            'vehicles' : Vehicle.objects.all().order_by('car_number'),
+        }
+
+        return render(request, 'cargoapp/new_route.html', context) 
+
+    else:
+
+        return redirect('login')    

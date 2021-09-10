@@ -1,0 +1,104 @@
+{% extends 'cargoapp/base.html' %}
+
+{% block content %}
+<nav class="fixed-bottom navbar-dark bg-dark">
+	<a class="navbar-brand" href="{% url 'show_index_page' %}">Назад</a>
+</nav>
+<div class="row">
+	<div class="col-2">Логист: {{ user.username }}</div>
+</div>
+<div class="row justify-content-center mt-4">
+	<form class="col-6" method="POST" id="routeForm" action="{% url 'route_save' uid=route.uid %}" >
+		{% csrf_token %}
+		<div class="form-group row mt-4">
+			<label for="inputFrom_date" class="col-2 col-form-label">Дата С</label>
+			<div class="col-4">
+				<input type="date" class="form-control" name="inputFrom_date" id="inputFrom_date" value="{{ route.from_date|date:'Y-m-d' }}">
+			</div>
+			<label for="inputTo_date" class="col-2 col-form-label">Дата По</label>
+			<div class="col-4">
+				<input type="date" class="form-control" name="inputTo_date" id="inputTo_date" value="{{ route.to_date|date:'Y-m-d' }}">
+			</div>
+		</div>
+		<div class="form-group row mt-4">
+			<label for="inputA_point" class="col-2 col-form-label">Откуда</label>
+			<div class="col-4">
+				<input type="text" class="form-control" name="inputA_point" id="inputA_point" placeholder="Точка отправления" value="{{ route.a_point }}">
+			</div>
+			<label for="inputB_point" class="col-2 col-form-label">Куда</label>
+			<div class="col-4">
+				<input type="text" class="form-control" name="inputB_point" id="inputB_point" placeholder="Точка назначения" value="{{ route.b_point }}">
+			</div>
+		</div>
+		<div class="form-group row mt-4">
+			<label for="inputRoute_length" class="col-2 col-form-label">Пробег, км</label>
+			<div class="col-4">
+				<input type="text" class="form-control" name="inputRoute_length" id="inputRoute_length" value="{{ route.route_length }}">
+			</div>
+			<label for="inputRoute_cost" class="col-2 col-form-label">Доход, руб</label>
+			<div class="col-4">
+				<input type="text" step="0.01" class="form-control" name="inputRoute_cost" id="inputRoute_cost" value="{{ route.route_cost }}">
+			</div>
+		</div>
+		<div class="form-group row mt-4">
+			<label for="inputExpenses_1" class="col-2 col-form-label">Прочие расходы, руб</label>
+			<div class="col-4">
+				<input type="text" class="form-control" name="inputExpenses_1" id="inputExpenses_1" value="{{ route.expenses_1 }}">
+			</div>
+			<label for="inputLogist" class="col-2 col-form-label">Логист</label>
+			<div class="col-4">
+				<div class="form-group">
+					<select class="form-control" id="inputLogist" name="inputLogist">
+						{% if route.logist %}
+						<option selected value="{{ route.logist.uid }}">{{ route.logist.username }}</option>
+						{% else %}
+						<option selected value="">...</option>
+						{% endif %}
+						{% for logist in logists %}
+						<option value="{{ logist.uid }}">{{ logist.username }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group row mt-4">
+			<label for="inputVehicle" class="col-2 col-form-label">Авто</label>
+			<div class="col-4">
+				<div class="form-group">
+					<select class="form-control" id="inputVehicle" name="inputVehicle">
+						{% if route.vehicle %}
+						<option selected value="{{ route.vehicle.uid }}">{{ route.vehicle.car_number }}</option>
+						{% else %}
+						<option selected value="">...</option>
+						{% endif %}
+						{% for vehicle in vehicles %}
+						<option value="{{ vehicle.uid }}">{{ vehicle.car_number }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			<label for="inputDriver" class="col-2 col-form-label">Водитель</label>
+			<div class="col-4">
+				<div class="form-group">
+					<select class="form-control" id="inputDriver" name="inputDriver">
+						{% if route.driver %}
+						<option selected value="{{ route.driver.uid }}">{{ route.driver.title }}</option>
+						{% else %}
+						<option selected value="">...</option>
+						{% endif %}
+						{% for driver in drivers %}
+						<option value="{{ driver.uid }}">{{ driver.title }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="form-group row mt-4" align="right">
+			<div class="col-sm-10 offset-sm-2">
+				<button type="submit" class="btn btn-primary" form="routeForm">Сохранить</button>
+			</div>
+		</div>
+	</form>
+</div>
+{% endblock %}

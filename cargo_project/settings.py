@@ -23,6 +23,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cargoapp',
     'rest_framework',
+    'authapp',
+    'api_app',
+    
 ]
 
 MIDDLEWARE = [

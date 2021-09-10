@@ -5,7 +5,7 @@ import datetime
 from decimal import Decimal
 
 def upload_route(route):
-    
+    # pass
     if route:
 
         url = 'http://1c.annasoft.ru:8081/test/hs/cargo/api/v1/routes'
@@ -14,8 +14,8 @@ def upload_route(route):
         data = {
             "fields": {
                 "uid" : route.uid,
-                "from_date" : route.from_date.strftime('%Y-%m-%d'),
-                "to_date" : route.to_date.strftime('%Y-%m-%d'),
+                "from_date" : route.from_date.strftime('%Y%m%d000000'),
+                "to_date" : route.to_date.strftime('%Y%m%d000000'),
                 "a_point" : route.a_point,
                 "b_point" : route.b_point,
                 "length" : str(Decimal(route.route_length)),
@@ -35,8 +35,17 @@ def upload_route(route):
                 "uid" : route.get_logist(),
             }
         }
-        print(data)
+        # print(data)
         # json.dumps(data)
 
         answer = requests.post(url, headers=header, data=json.dumps(data),)
         print(answer.status_code)
+
+def last_day_of_month(any_day):
+    next_month = any_day.replace(day=28) + datetime.timedelta(days=4)
+    return next_month - datetime.timedelta(days=next_month.day)
+
+def first_day_of_the_month(any_day):
+    if any_day.day > 25:
+        any_day += datetime.timedelta(7)
+    return any_day.replace(day=1)

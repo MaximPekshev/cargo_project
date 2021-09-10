@@ -15,11 +15,9 @@ class DriverAdmin(admin.ModelAdmin):
 	list_display = (
 					'uid',
 					'title',
-					'first_name',
-					'second_name',
-					'third_name',
 					)
 	readonly_fields = ('uid',)
+	exclude = ['first_name', 'second_name', 'third_name']
 
 admin.site.register(Driver, DriverAdmin)
 
@@ -33,7 +31,17 @@ class RouteAdmin(admin.ModelAdmin):
 					'vehicle',
 					)
 
-	readonly_fields = ('uid',) 
+	readonly_fields = ('uid',)
+
+	# def formfield_for_foreignkey(self, db_field, request, **kwargs):
+	# 	if db_field.name == "vehicle":
+	# 		kwargs["queryset"] = Vehicle.objects.all().order_by('car_number')
+	# 		return super(RouteAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+	# 	if db_field.name == "driver":
+	# 		kwargs["queryset"] = Driver.objects.all().order_by('title')
+	# 		return super(RouteAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+			
 
 admin.site.register(Route, RouteAdmin)
 

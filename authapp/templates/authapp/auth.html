@@ -1,0 +1,24 @@
+{% extends 'cargoapp/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+	<form class="form-inline col-lg-2" method="POST" action="{% url 'login' %}">
+		{% csrf_token %}
+		<label class="sr-only" for="inlineFormInputName2">Username</label>
+		<input type="text" class="form-control mb-2 mr-sm-2" name="username" id="inlineFormInputName2" placeholder="Username" required>
+
+		<label class="sr-only" for="inlineFormInputGroupUsername2">Password</label>
+		<div class="input-group mb-2 mr-sm-2">
+			<input type="password" class="form-control" name="password" id="inlineFormInputGroupUsername2" placeholder="Password" required>
+		</div>
+		<div align="right">
+			<button type="submit" class="btn btn-dark mb-2">Войти</button>
+		</div>
+	</form>
+	<div align="center">
+	{% for message in messages %}
+		<p  style="color: red" class="text-uppercase" >* {{ message }} </p>
+	{% endfor %}
+	</div>
+</div>
+{% endblock %}

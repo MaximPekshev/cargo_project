@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import AbstractBaseUser
 
+from decimal import Decimal
+
 import uuid
 from cargoapp.core import upload_route
 from django.conf import settings
@@ -48,7 +50,7 @@ class  Driver(models.Model):
 
 	def __str__(self):
 
-		return '{0} {1}'.format(self.first_name, self.second_name)
+		return '{0}'.format(self.uid)
 
 	def save(self, *args, **kwargs):
 
@@ -69,12 +71,11 @@ class  Vehicle(models.Model):
 	
 	def __str__(self):
 
-		return '{}'.format(self.car_number)
+		return '{}'.format(self.uid)
 
 	def save(self, *args, **kwargs):
 
 		super(Vehicle, self).save(*args, **kwargs)
-
 
 	class Meta:
 		verbose_name = 'Автомобиль'
@@ -90,7 +91,7 @@ class Route(models.Model):
 	b_point = models.CharField(max_length = 30, verbose_name = 'Точка В', null=True, blank=True)
 	route_length = models.DecimalField(verbose_name = 'Протяженность маршрута', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
 	route_cost = models.DecimalField(verbose_name = 'Стоимость маршрута', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
-	expenses_1 = models.DecimalField(verbose_name = 'Затрата 1', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
+	expenses_1 = models.DecimalField(verbose_name = 'Прочие расходы', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
 	expenses_2 = models.DecimalField(verbose_name = 'Затрата 2', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
 	expenses_3 = models.DecimalField(verbose_name = 'Затрата 3', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
 	vehicle = models.ForeignKey(Vehicle, verbose_name='Автомобиль', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
@@ -112,16 +113,44 @@ class Route(models.Model):
 
 	def get_vehicle(self):
 
-		return self.vehicle if self.vehicle else 0
+		return '{}'.format(self.vehicle) if self.vehicle else 0
 
 	def get_driver(self):
 
-		return self.driver if self.driver else 0
+		return '{}'.format(self.driver) if self.driver else 0
 
 	def get_logist(self):
 
-		return self.logist if self.logist else 0		
+		return '{}'.format(self.logist) if self.logist else 0
 
+	def get_fuel_cost(self):
+		
+		return (32*self.route_length/100)*45
+
+	def get_pay_check(self):
+		
+		return (6*self.route_length)
+
+	def get_pure_income(self):
+		
+		return (self.route_cost - self.get_fuel_cost() - self.get_pay_check() - self.expenses_1)	
+
+	def get_cost_of_km(self):
+		if self.route_length:
+			return (self.route_cost/self.route_length).quantize(Decimal("1.00"))
+		else:
+			return Decimal(0).quantize(Decimal("1.00"))
+
+	def get_cost_of_platon(self):
+		
+		return (self.route_length*Decimal(1.6)).quantize(Decimal("1.00"))	
+
+	def get_day_count(self):
+
+		if self.to_date and self.from_date:
+			return self.to_date-self.from_date
+		else:
+			return 0
 
 	class Meta:
 		verbose_name = 'Маршрут'

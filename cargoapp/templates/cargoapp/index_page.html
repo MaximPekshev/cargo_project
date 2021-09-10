@@ -1,0 +1,57 @@
+{% extends 'cargoapp/base.html' %}
+
+{% block content %}
+<nav class="fixed-bottom navbar-dark bg-dark">
+	{% for vehicle in vehicles %}
+  	<a class="navbar-brand" href="{% url 'show_index_page' %}?vehicle={{ vehicle }}">{{ vehicle.car_number }}</a>
+	{% endfor %}
+	<a class="navbar-brand" href="{% url 'show_index_page' %}">Все авто</a>
+	<a class="navbar-brand" href="{% url 'logout' %}" style="float: right;" >Выйти</a>
+</nav>
+<div class="row">
+	<div class="col-2">Логист: {{ user.username }}</div>
+	<div class="col-2">{% if actual_vehicle %}Автомобиль: {{ actual_vehicle.car_number }}{% endif %}</div>
+</div>
+<div class="row justify-content-center mt-4">
+	<table class="table table-sm col-12">
+		<thead>
+			<tr>
+				<th>Дата с</th>
+				<th>Дата по</th>
+				<th>Кол-во дней</th>
+				<th>Маршрут</th>
+				<th>Пробег, км</th>
+				<th>Валовый доход, руб</th>
+				<th>Топливо, руб</th>
+				<th>Зарплата/командир, руб</th>
+				<th>Прочие расходы, руб</th>
+				<th>Чистый доход, руб</th>
+				<th>Цена за км, руб/км</th>
+				<th>Платон</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for item in routes %}
+			<!-- <tr onclick="window.location.href='{% url 'show_route' uid=item.uid %}'; return false"> -->
+			<tr>
+				<td>{{ item.from_date|date:"Y-m-d" }}</td>
+				<td>{{ item.to_date|date:"Y-m-d" }}</td>
+				<td>{{ item.get_day_count.days }}</td>
+				<td><a href="{% url 'show_route' uid=item.uid %}">{{ item.a_point }} - {{ item.b_point }}</a></td>
+				<td>{{ item.route_length }}</td>
+				<td>{{ item.route_cost }}</td>
+				<td>{{ item.get_fuel_cost }}</td>
+				<td>{{ item.get_pay_check }}</td>
+				<td>{{ item.expenses_1 }}</td>
+				<td>{{ item.get_pure_income }}</td>
+				<td>{{ item.get_cost_of_km }}</td>
+				<td>{{ item.get_cost_of_platon }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+<div align="right">
+	<a href="{% url 'show_new_route_form' %}"><button type="button" class="btn btn-dark">+</button></a>
+</div>
+{% endblock %}

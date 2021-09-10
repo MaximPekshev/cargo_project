@@ -9,7 +9,9 @@ from django.conf import settings
 
 
 urlpatterns = [
-    path('api/v1/', include('cargoapp.urls')),
+    path('', include('cargoapp.urls')),
+    path('auth/', include('authapp.urls')),
+    path('api/v1/', include('api_app.urls')),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls'))
 ]
