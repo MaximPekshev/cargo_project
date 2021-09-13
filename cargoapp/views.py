@@ -107,7 +107,7 @@ def show_route(request, uid):
             logists = LogistUser.objects.all().order_by('username')
 
         if route.vehicle:
-            vehicles = Vehicle.objects.filter(logist=route.logist).exclude(uid=route.vehicle.uid).order_by('car_number')
+            vehicles = Vehicle.objects.filter(logist=request.user).exclude(uid=route.vehicle.uid).order_by('car_number')
         else:  
             vehicles = Vehicle.objects.all().order_by('car_number')   
             
@@ -291,7 +291,7 @@ def show_new_route_form(request):
         context = {
             'drivers' : Driver.objects.all().order_by('title'),
             'logists' : LogistUser.objects.all().exclude(uid=request.user.uid).order_by('username'),
-            'vehicles' : Vehicle.objects.all().order_by('car_number'),
+            'vehicles' : Vehicle.objects.filter(logist=request.user).order_by('car_number'),
         }
 
         return render(request, 'cargoapp/new_route.html', context) 
