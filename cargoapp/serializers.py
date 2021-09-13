@@ -34,7 +34,10 @@ class VehicleSerializer(serializers.ModelSerializer):
         except:
             logist = None    
         instance.driver = driver
+        print(driver)
         instance.logist = logist  
+        print(logist)
+        instance.save()
         return instance
 
     def update(self, instance, validated_data):
@@ -50,7 +53,8 @@ class VehicleSerializer(serializers.ModelSerializer):
         except:
             logist = None    
         instance.driver = driver
-        instance.logist = logist  
+        instance.logist = logist
+        instance.save()
         return instance 
 
 class RouteSerializer(serializers.ModelSerializer):

@@ -22,7 +22,7 @@ class LogistUser(AbstractUser):
 	psw = models.CharField(max_length = 25, verbose_name = 'ПСВ', null=True, blank=True, default='')
 
 	def __str__(self):
-		return '{}'.format(self.uid)
+		return '{}'.format(self.username)
 
 	def save(self, *args, **kwargs):
 
@@ -50,7 +50,7 @@ class  Driver(models.Model):
 
 	def __str__(self):
 
-		return '{0}'.format(self.uid)
+		return '{0}'.format(self.title)
 
 	def save(self, *args, **kwargs):
 
@@ -71,7 +71,7 @@ class  Vehicle(models.Model):
 	
 	def __str__(self):
 
-		return '{}'.format(self.uid)
+		return '{}'.format(self.car_number)
 
 	def save(self, *args, **kwargs):
 
