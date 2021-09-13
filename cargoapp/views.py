@@ -107,7 +107,7 @@ def show_route(request, uid):
             logists = LogistUser.objects.all().order_by('username')
 
         if route.vehicle:
-            vehicles = Vehicle.objects.all().exclude(uid=route.vehicle.uid).order_by('car_number')
+            vehicles = Vehicle.objects.filter(logist=route.logist).exclude(uid=route.vehicle.uid).order_by('car_number')
         else:  
             vehicles = Vehicle.objects.all().order_by('car_number')   
             

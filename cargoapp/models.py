@@ -113,15 +113,15 @@ class Route(models.Model):
 
 	def get_vehicle(self):
 
-		return '{}'.format(self.vehicle) if self.vehicle else 0
+		return '{}'.format(self.vehicle.uid) if self.vehicle else 0
 
 	def get_driver(self):
 
-		return '{}'.format(self.driver) if self.driver else 0
+		return '{}'.format(self.driver.uid) if self.driver else 0
 
 	def get_logist(self):
 
-		return '{}'.format(self.logist) if self.logist else 0
+		return '{}'.format(self.logist.uid) if self.logist else 0
 
 	def get_fuel_cost(self):
 		
