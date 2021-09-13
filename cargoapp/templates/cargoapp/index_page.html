@@ -3,7 +3,7 @@
 {% block content %}
 <nav class="fixed-bottom navbar-dark bg-dark">
 	{% for vehicle in vehicles %}
-  	<a class="navbar-brand" href="{% url 'show_index_page' %}?vehicle={{ vehicle }}">{{ vehicle.car_number }}</a>
+  	<a class="navbar-brand" href="{% url 'show_index_page' %}?vehicle={{ vehicle.uid }}">{{ vehicle.car_number }}</a>
 	{% endfor %}
 	<a class="navbar-brand" href="{% url 'show_index_page' %}">Все авто</a>
 	<a class="navbar-brand" href="{% url 'logout' %}" style="float: right;" >Выйти</a>
