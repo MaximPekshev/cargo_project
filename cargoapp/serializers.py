@@ -20,8 +20,24 @@ class VehicleSerializer(serializers.ModelSerializer):
         model = Vehicle
         fields = ('uid', 'vin', 'car_number', 'driver_uid', 'logist_uid')
 
+
+    def create(self, validated_data):
+        driver_uid = validated_data.pop('driver')
+        logist_uid = validated_data.pop('logist')
+        instance = Vehicle.objects.create(**validated_data)
+        try:
+            driver = Driver.objects.get(uid=driver_uid.get('uid'))
+        except:
+            driver = None
+        try:
+            logist = LogistUser.objects.get(uid=logist_uid.get('uid'))
+        except:
+            logist = None    
+        instance.driver = driver
+        instance.logist = logist  
+        return instance
+
     def update(self, instance, validated_data):
-        print(validated_data)
         driver_uid = validated_data.pop('driver')
         logist_uid = validated_data.pop('logist')
         instance = super().update(instance, validated_data)
