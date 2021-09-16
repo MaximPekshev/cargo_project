@@ -82,7 +82,6 @@ def show_index_page(request):
                 'actual_vehicle': vehicle,
                 'routes' : Route.objects.filter(logist=request.user, vehicle=vehicle)
                 })
-
         return render(request, 'cargoapp/index_page.html', context)
 
     else:
@@ -291,8 +290,25 @@ def show_new_route_form(request):
         context = {
             'drivers' : Driver.objects.all().order_by('title'),
             'logists' : LogistUser.objects.all().exclude(uid=request.user.uid).order_by('username'),
-            'vehicles' : Vehicle.objects.filter(logist=request.user).order_by('car_number'),
+            # 'vehicles' : Vehicle.objects.filter(logist=request.user).order_by('car_number'),
         }
+
+        if request.GET.get('vehicle'):
+
+            vehicle = Vehicle.objects.get(uid=request.GET.get('vehicle'))
+            try:
+                driver = Driver.objects.get(vehicle=vehicle)
+            except:
+                driver = None
+
+
+            context.update({
+                'actual_vehicle': vehicle,
+                'actual_driver' : driver,
+                'drivers' : Driver.objects.all().exclude(uid=driver.uid).order_by('title'),
+                # 'vehicles' : Vehicle.objects.filter(logist=request.user).order_by('car_number'),
+                })
+
 
         return render(request, 'cargoapp/new_route.html', context) 
 

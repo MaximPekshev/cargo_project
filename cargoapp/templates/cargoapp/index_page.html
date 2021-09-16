@@ -8,11 +8,16 @@
 	<a class="navbar-brand" href="{% url 'show_index_page' %}">Все авто</a>
 	<a class="navbar-brand" href="{% url 'logout' %}" style="float: right;" >Выйти</a>
 </nav>
-<div class="row">
-	<div class="col-2">Логист: {{ user.username }}</div>
-	<div class="col-2">{% if actual_vehicle %}Автомобиль: {{ actual_vehicle.car_number }}{% endif %}</div>
+<div class="row pt-1">
+	{% if actual_vehicle %}
+	<div class="col-1"><a href="{% url 'show_new_route_form' %}?vehicle={{ actual_vehicle.uid }}"><button type="button" class="btn btn-dark">+</button></a></div>
+	{% endif %}
+	<div class="col-2 {% if actual_vehicle %} offset-7 {% else %} offset-10 {% endif %} my-auto" align="right">Логист: {{ user.username }}</div>
+	{% if actual_vehicle %}
+	<div class="col-2 my-auto" align="right" >Автомобиль: {{ actual_vehicle.car_number }}</div>
+	{% endif %}
 </div>
-<div class="row justify-content-center mt-4">
+<div class="row justify-content-center mt-2">
 	<table class="table table-sm col-12">
 		<thead>
 			<tr>
@@ -50,8 +55,5 @@
 			{% endfor %}
 		</tbody>
 	</table>
-</div>
-<div align="right">
-	<a href="{% url 'show_new_route_form' %}"><button type="button" class="btn btn-dark">+</button></a>
 </div>
 {% endblock %}

@@ -4,10 +4,13 @@
 <nav class="fixed-bottom navbar-dark bg-dark">
 	<a class="navbar-brand" href="{% url 'show_index_page' %}">Назад</a>
 </nav>
-<div class="row">
-	<div class="col-2">Логист: {{ user.username }}</div>
+<div class="row pt-1">
+	<div class="col-2 {% if route.vehicle %} offset-8 {% else %} offset-10 {% endif %} my-auto" align="right">Логист: {{ user.username }}</div>
+	{% if route.vehicle %}
+	<div class="col-2 my-auto" align="right">Автомобиль: {{ route.vehicle.car_number }}</div>
+	{% endif %}
 </div>
-<div class="row justify-content-center mt-4">
+<div class="row justify-content-center mt-2">
 	<form class="col-6" method="POST" id="routeForm" action="{% url 'route_save' uid=route.uid %}" >
 		{% csrf_token %}
 		<div class="form-group row mt-4">
@@ -48,15 +51,11 @@
 			<label for="inputLogist" class="col-2 col-form-label">Логист</label>
 			<div class="col-4">
 				<div class="form-group">
-					<select class="form-control" id="inputLogist" name="inputLogist">
+					<input type="text" class="form-control" name="inputLogist" id="inputLogist" value="{{ route.logist.uid }}" hidden>
+					<select class="form-control" disabled>
 						{% if route.logist %}
-						<option selected value="{{ route.logist.uid }}">{{ route.logist.username }}</option>
-						{% else %}
-						<option selected value="">...</option>
+						<option selected>{{ route.logist.username }}</option>
 						{% endif %}
-						{% for logist in logists %}
-						<option value="{{ logist.uid }}">{{ logist.username }}</option>
-						{% endfor %}
 					</select>
 				</div>
 			</div>
@@ -66,15 +65,11 @@
 			<label for="inputVehicle" class="col-2 col-form-label">Авто</label>
 			<div class="col-4">
 				<div class="form-group">
-					<select class="form-control" id="inputVehicle" name="inputVehicle">
+					<input type="text" class="form-control" name="inputVehicle" id="inputVehicle" value="{{ route.vehicle.uid }}" hidden>
+					<select class="form-control" disabled>
 						{% if route.vehicle %}
-						<option selected value="{{ route.vehicle.uid }}">{{ route.vehicle.car_number }}</option>
-						{% else %}
-						<option selected value="">...</option>
+						<option selected >{{ route.vehicle.car_number }}</option>
 						{% endif %}
-						{% for vehicle in vehicles %}
-						<option value="{{ vehicle.uid }}">{{ vehicle.car_number }}</option>
-						{% endfor %}
 					</select>
 				</div>
 			</div>

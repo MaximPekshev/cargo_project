@@ -4,10 +4,13 @@
 <nav class="fixed-bottom navbar-dark bg-dark">
 	<a class="navbar-brand" href="{% url 'show_index_page' %}">Назад</a>
 </nav>
-<div class="row">
-	<div class="col-2">Логист: {{ user.username }}</div>
+<div class="row pt-1">
+	<div class="col-2 {% if actual_vehicle %} offset-8 {% else %} offset-10 {% endif %} my-auto" align="right">Логист: {{ user.username }}</div>
+	{% if actual_vehicle %}
+	<div class="col-2 my-auto" align="right">Автомобиль: {{ actual_vehicle.car_number }}</div>
+	{% endif %}
 </div>
-<div class="row justify-content-center mt-4">
+<div class="row justify-content-center mt-2">
 	<div align="center">
 		Новый маршрут
 	</div>
@@ -51,11 +54,9 @@
 			<label for="inputLogist" class="col-2 col-form-label">Логист</label>
 			<div class="col-4">
 				<div class="form-group">
-					<select class="form-control" id="inputLogist" name="inputLogist">
-						<option selected value="{{ user.uid }}">{{ user.username }}</option>
-						{% for logist in logists %}
-						<option value="{{ logist.uid }}">{{ logist.username }}</option>
-						{% endfor %}
+					<input type="text" class="form-control" name="inputLogist" id="inputLogist" value="{{ user.uid }}" hidden>
+					<select class="form-control" disabled>
+						<option selected>{{ user.username }}</option>
 					</select>
 				</div>
 			</div>
@@ -65,11 +66,9 @@
 			<label for="inputVehicle" class="col-2 col-form-label">Авто</label>
 			<div class="col-4">
 				<div class="form-group">
-					<select class="form-control" id="inputVehicle" name="inputVehicle">
-						<option selected value="">...</option>
-						{% for vehicle in vehicles %}
-						<option value="{{ vehicle.uid }}">{{ vehicle.car_number }}</option>
-						{% endfor %}
+					<input type="text" class="form-control" name="inputVehicle" id="inputVehicle" value="{{ actual_vehicle.uid }}" hidden>
+					<select class="form-control" disabled>
+						<option selected >{{ actual_vehicle.car_number }}</option>
 					</select>
 				</div>
 			</div>
@@ -77,7 +76,7 @@
 			<div class="col-4">
 				<div class="form-group">
 					<select class="form-control" id="inputDriver" name="inputDriver">
-						<option selected value="">...</option>
+						<option selected value="{{ actual_driver.uid }}">{{ actual_driver }}</option>
 						{% for driver in drivers %}
 						<option value="{{ driver.uid }}">{{ driver.title }}</option>
 						{% endfor %}
