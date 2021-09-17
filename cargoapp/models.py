@@ -155,3 +155,17 @@ class Route(models.Model):
 	class Meta:
 		verbose_name = 'Маршрут'
 		verbose_name_plural = 'Мартшруты'
+
+
+class City(models.Model):
+
+	code = models.CharField(max_length = 25, verbose_name = 'Код КЛАДР', unique=True)
+	title = models.CharField(max_length = 30, verbose_name = 'Наименование', null=True, blank=True, default='')
+	reduction = models.CharField(max_length = 5, verbose_name = 'Сокращение', null=True, blank=True, default='')
+
+	def __str__(self):
+		return '{}'.format(self.title)
+
+	class Meta:
+		verbose_name = 'Город'
+		verbose_name_plural = 'Города'

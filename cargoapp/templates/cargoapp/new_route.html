@@ -28,12 +28,21 @@
 		</div>
 		<div class="form-group row mt-4">
 			<label for="inputA_point" class="col-2 col-form-label">Откуда</label>
+
 			<div class="col-4">
-				<input type="text" class="form-control" name="inputA_point" id="inputA_point" placeholder="Точка отправления" >
+				<select class="js-example-basic-single form-control" name="inputA_point" id="inputA_point">
+					{% for item in cities %}
+					<option value="{{ item.title }}">{{ item.title }}</option>
+					{% endfor %}
+				</select>
 			</div>
 			<label for="inputB_point" class="col-2 col-form-label">Куда</label>
 			<div class="col-4">
-				<input type="text" class="form-control" name="inputB_point" id="inputB_point" placeholder="Точка назначения">
+				<select class="js-example-basic-single form-control" name="inputB_point" id="inputB_point">
+					{% for item in cities %}
+					<option value="{{ item.title }}">{{ item.title }}</option>
+					{% endfor %}
+				</select>
 			</div>
 		</div>
 		<div class="form-group row mt-4">

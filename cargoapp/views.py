@@ -8,6 +8,7 @@ from .models import Route
 from .serializers import RouteSerializer
 from .models import LogistUser
 from .serializers import LogistUserSerializer
+from .models import City
 
 from django.http import Http404
 from rest_framework.views import APIView
@@ -116,6 +117,7 @@ def show_route(request, uid):
             'drivers' : drivers,
             'logists' : logists,
             'vehicles' : vehicles,
+            'cities'   : City.objects.all().order_by('title'),
         }
 
         return render(request, 'cargoapp/route.html', context)
@@ -290,6 +292,7 @@ def show_new_route_form(request):
         context = {
             'drivers' : Driver.objects.all().order_by('title'),
             'logists' : LogistUser.objects.all().exclude(uid=request.user.uid).order_by('username'),
+            'cities'   : City.objects.all().order_by('title'),
             # 'vehicles' : Vehicle.objects.filter(logist=request.user).order_by('car_number'),
         }
 
