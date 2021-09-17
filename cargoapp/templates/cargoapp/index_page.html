@@ -9,6 +9,12 @@
 	<a class="navbar-brand" href="{% url 'logout' %}" style="float: right;" >Выйти</a>
 </nav>
 <div class="row pt-1">
+	<!-- <div class="col-2 my-auto">
+		<div class="row">
+			<div class="col-8 my-auto"><input type="month" name="" value="2021-09"></div>
+			<div class="col-4"><button type="button" class="btn btn-dark">отобрать</button></div>
+		</div>
+	</div> -->
 	{% if actual_vehicle %}
 	<div class="col-1"><a href="{% url 'show_new_route_form' %}?vehicle={{ actual_vehicle.uid }}"><button type="button" class="btn btn-dark">+</button></a></div>
 	{% endif %}
@@ -21,8 +27,8 @@
 	<table class="table table-sm col-12">
 		<thead>
 			<tr>
-				<th>Дата с</th>
-				<th>Дата по</th>
+				<th width="150">Дата с</th>
+				<th width="150">Дата по</th>
 				<th>Кол-во дней</th>
 				<th>Маршрут</th>
 				<th>Пробег, км</th>
@@ -41,18 +47,31 @@
 			<tr>
 				<td>{{ item.from_date|date:"Y-m-d" }}</td>
 				<td>{{ item.to_date|date:"Y-m-d" }}</td>
-				<td>{{ item.get_day_count.days }}</td>
+				<td>{{ item.day_count }}</td>
 				<td><a href="{% url 'show_route' uid=item.uid %}">{{ item.a_point }} - {{ item.b_point }}</a></td>
 				<td>{{ item.route_length }}</td>
 				<td>{{ item.route_cost }}</td>
-				<td>{{ item.get_fuel_cost }}</td>
-				<td>{{ item.get_pay_check }}</td>
+				<td>{{ item.fuel_cost }}</td>
+				<td>{{ item.pay_check }}</td>
 				<td>{{ item.expenses_1 }}</td>
-				<td>{{ item.get_pure_income }}</td>
-				<td>{{ item.get_cost_of_km }}</td>
-				<td>{{ item.get_cost_of_platon }}</td>
+				<td>{{ item.pure_income }}</td>
+				<td>{{ item.cost_of_km }}</td>
+				<td>{{ item.cost_of_platon }}</td>
 			</tr>
 			{% endfor %}
+			<tr style="background-color: grey;">
+				<td colspan="2">Итого (факт):</td>
+				<td>{{ total_days }}</td>
+				<td></td>
+				<td>{{ total_route_length }}</td>
+				<td>{{ total_route_cost }}</td>
+				<td>{{ total_fuel_cost }}</td>
+				<td>{{ total_pay_check }}</td>
+				<td>{{ total_expenses_1 }}</td>
+				<td>{{ total_pure_income }}</td>
+				<td>{{ total_cost_of_km }}</td>
+				<td>{{ total_cost_of_platon }}</td>
+			</tr>
 		</tbody>
 	</table>
 </div>

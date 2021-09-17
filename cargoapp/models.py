@@ -98,6 +98,13 @@ class Route(models.Model):
 	driver = models.ForeignKey(Driver, verbose_name='Водитель', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 	logist = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Логист', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 	
+	fuel_cost = models.DecimalField(verbose_name = 'Стоимость топлива', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
+	pay_check = models.DecimalField(verbose_name = 'Зарплата', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
+	pure_income = models.DecimalField(verbose_name = 'Чистый доход', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
+	cost_of_km = models.DecimalField(verbose_name = 'Цена за километр', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
+	cost_of_platon = models.DecimalField(verbose_name = 'Платон', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
+	day_count = models.DecimalField(verbose_name = 'Количество дней', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
+
 	def __str__(self):
 
 		return '{}'.format(self.uid)
@@ -106,6 +113,19 @@ class Route(models.Model):
 
 		if not self.uid:
 			self.uid = get_uuid4()
+
+		self.fuel_cost = 32*self.route_length/100*45
+		self.pay_check = 6*self.route_length
+		self.pure_income = self.route_cost - self.fuel_cost - self.pay_check - self.expenses_1
+		if self.route_length:
+			self.cost_of_km = self.route_cost/self.route_length
+		else:
+			self.cost_of_km = 0
+		self.cost_of_platon = self.route_length*Decimal(1.6)
+		if self.to_date and self.from_date:
+			self.day_count = (self.to_date-self.from_date).days
+		else:
+			self.day_count = 0
 
 		super(Route, self).save(*args, **kwargs)
 

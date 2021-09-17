@@ -10,6 +10,8 @@ from .models import LogistUser
 from .serializers import LogistUserSerializer
 from .models import City
 
+
+from django.db.models import Sum
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -71,18 +73,31 @@ def show_index_page(request):
 
     if request.user.is_authenticated:
 
-        context = {
-             'user' : request.user,
-             'routes' : Route.objects.filter(logist=request.user),
-             'vehicles' : Vehicle.objects.filter(logist=request.user)
-        }
-
         if request.GET.get('vehicle'):
             vehicle = Vehicle.objects.get(uid=request.GET.get('vehicle'))
-            context.update({
-                'actual_vehicle': vehicle,
-                'routes' : Route.objects.filter(logist=request.user, vehicle=vehicle)
-                })
+            routes = Route.objects.filter(logist=request.user, vehicle=vehicle)
+        else:
+            routes = Route.objects.filter(logist=request.user)
+            vehicle = None
+
+
+        context = {
+             'user' : request.user,
+             'routes' : routes,
+             'vehicles' : Vehicle.objects.filter(logist=request.user),
+             'actual_vehicle': vehicle,
+             'total_expenses_1' : routes.aggregate(Sum('expenses_1'))['expenses_1__sum'].quantize(Decimal("1.00")),
+             'total_route_cost' : routes.aggregate(Sum('route_cost'))['route_cost__sum'].quantize(Decimal("1.00")),
+             'total_route_length' : routes.aggregate(Sum('route_length'))['route_length__sum'].quantize(Decimal("1.00")),
+             'total_days' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")),
+             'total_fuel_cost' : routes.aggregate(Sum('fuel_cost'))['fuel_cost__sum'].quantize(Decimal("1.00")),
+             'total_pay_check' : routes.aggregate(Sum('pay_check'))['pay_check__sum'].quantize(Decimal("1.00")),
+             'total_pure_income' : (routes.aggregate(Sum('pure_income'))['pure_income__sum']-routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum']).quantize(Decimal("1.00")),
+             'total_cost_of_km' : (routes.aggregate(Sum('route_cost'))['route_cost__sum']/routes.aggregate(Sum('route_length'))['route_length__sum']).quantize(Decimal("1.00")),
+             'total_cost_of_platon' : routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum'].quantize(Decimal("1.00")),
+             'total_day_count' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")),
+        }
+
         return render(request, 'cargoapp/index_page.html', context)
 
     else:

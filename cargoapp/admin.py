@@ -33,6 +33,8 @@ class RouteAdmin(admin.ModelAdmin):
 
 	readonly_fields = ('uid',)
 
+	exclude = ['fuel_cost', 'pay_check', 'pure_income', 'cost_of_km', 'cost_of_platon', 'day_count', ]
+
 	# def formfield_for_foreignkey(self, db_field, request, **kwargs):
 	# 	if db_field.name == "vehicle":
 	# 		kwargs["queryset"] = Vehicle.objects.all().order_by('car_number')
