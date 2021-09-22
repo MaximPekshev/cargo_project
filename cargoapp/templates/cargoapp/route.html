@@ -99,8 +99,16 @@
 				</div>
 			</div>
 		</div>
-		<div class="form-group row mt-4" align="right">
-			<div class="col-sm-10 offset-sm-2">
+		<div align="center">
+		{% for message in messages %}
+			<p  style="color: red" class="text-uppercase" >* {{ message }} </p>
+		{% endfor %}
+		</div>
+		<div class="row justify-content-end mt-4">
+			<div class="form-group col-md-2 col-sm-3" align="right">
+				<button type="submit" class="btn btn-secondary" form="routeForm">Рассчитать</button>
+			</div>
+			<div class="form-group col-md-2 col-sm-3" align="right">
 				<button type="submit" class="btn btn-primary" form="routeForm">Сохранить</button>
 			</div>
 		</div>

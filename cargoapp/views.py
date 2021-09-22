@@ -22,6 +22,9 @@ from .forms import RouteForm
 from django.contrib import messages
 from decimal import Decimal
 
+import googlemaps
+import json
+import re
 
 
 class DriverList(generics.ListCreateAPIView):
@@ -170,11 +173,34 @@ def route_save(request, uid):
 
                 if current_route:
 
+                    if route_length:
+
+                        current_route.route_length = Decimal(route_length.replace(',','.'))
+
+                    else:
+                        
+                        gmaps = googlemaps.Client(key='AIzaSyAUMjzkYbazeZE43K_-OUAWSnhE3_OA3TY')
+
+                        try:
+                            distance = gmaps.distance_matrix(origins=a_point, destinations=b_point, language='ru', mode='driving')['rows'][0]['elements'][0]
+                        except:
+                            distance = None
+                            
+
+                        try:
+                            dist_length = json.dumps(distance.get('distance').get('text').split(' ')[0], ensure_ascii=False).replace('"', '')
+                            dist_length = re.sub(r"\s+", "", dist_length, flags=re.UNICODE)
+                        except:
+                            messages.info(request, 'Выбранного Маршрута не существует в базе данных!')
+                            dist_length = 0
+
+                        current_route.route_length = Decimal(dist_length)
+
                     current_route.from_date = from_date
                     current_route.to_date = to_date
                     current_route.a_point = a_point
                     current_route.b_point = b_point
-                    current_route.route_length = Decimal(route_length.replace(',','.'))
+                    
                     current_route.route_cost = Decimal(route_cost.replace(',','.'))
                     current_route.expenses_1 = Decimal(expenses_1.replace(',','.'))
 
@@ -245,10 +271,31 @@ def route_add(request):
                 current_route.to_date = to_date
                 current_route.a_point = a_point
                 current_route.b_point = b_point
+
                 if route_length:
+
                     current_route.route_length = Decimal(route_length.replace(',','.'))
+                    
+
                 else:
-                    current_route.route_length = Decimal(0)
+
+                    gmaps = googlemaps.Client(key='AIzaSyAUMjzkYbazeZE43K_-OUAWSnhE3_OA3TY')
+
+                    try:
+                        distance = gmaps.distance_matrix(origins=a_point, destinations=b_point, language='ru', mode='driving')['rows'][0]['elements'][0]
+                    except:
+                        distance = None
+                        
+
+                    try:
+                        dist_length = json.dumps(distance.get('distance').get('text').split(' ')[0], ensure_ascii=False).replace('"', '')
+                        dist_length = re.sub(r"\s+", "", dist_length, flags=re.UNICODE)
+                    except:
+                        messages.info(request, 'Выбранного Маршрута не существует в базе данных!')
+                        dist_length = 0
+
+
+                    current_route.route_length = Decimal(dist_length)
 
                 if route_cost:
                     current_route.route_cost = Decimal(route_cost.replace(',','.'))
@@ -287,7 +334,7 @@ def route_add(request):
 
                 current_route.save()
 
-                return redirect('show_index_page')
+                return redirect('show_route', uid=current_route.uid)
 
             else:
 
@@ -308,7 +355,6 @@ def show_new_route_form(request):
             'drivers' : Driver.objects.all().order_by('title'),
             'logists' : LogistUser.objects.all().exclude(uid=request.user.uid).order_by('username'),
             'cities'   : City.objects.all().order_by('title'),
-            # 'vehicles' : Vehicle.objects.filter(logist=request.user).order_by('car_number'),
         }
 
         if request.GET.get('vehicle'):
@@ -324,7 +370,6 @@ def show_new_route_form(request):
                 'actual_vehicle': vehicle,
                 'actual_driver' : driver,
                 'drivers' : Driver.objects.all().exclude(uid=driver.uid).order_by('title'),
-                # 'vehicles' : Vehicle.objects.filter(logist=request.user).order_by('car_number'),
                 })
 
 
