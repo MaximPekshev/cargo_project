@@ -25,6 +25,7 @@ from decimal import Decimal
 import googlemaps
 import json
 import re
+from decouple import config
 
 
 class DriverList(generics.ListCreateAPIView):
@@ -89,16 +90,16 @@ def show_index_page(request):
              'routes' : routes,
              'vehicles' : Vehicle.objects.filter(logist=request.user),
              'actual_vehicle': vehicle,
-             'total_expenses_1' : routes.aggregate(Sum('expenses_1'))['expenses_1__sum'].quantize(Decimal("1.00")),
-             'total_route_cost' : routes.aggregate(Sum('route_cost'))['route_cost__sum'].quantize(Decimal("1.00")),
-             'total_route_length' : routes.aggregate(Sum('route_length'))['route_length__sum'].quantize(Decimal("1.00")),
-             'total_days' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")),
-             'total_fuel_cost' : routes.aggregate(Sum('fuel_cost'))['fuel_cost__sum'].quantize(Decimal("1.00")),
-             'total_pay_check' : routes.aggregate(Sum('pay_check'))['pay_check__sum'].quantize(Decimal("1.00")),
-             'total_pure_income' : (routes.aggregate(Sum('pure_income'))['pure_income__sum']-routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum']).quantize(Decimal("1.00")),
-             'total_cost_of_km' : (routes.aggregate(Sum('route_cost'))['route_cost__sum']/routes.aggregate(Sum('route_length'))['route_length__sum']).quantize(Decimal("1.00")),
-             'total_cost_of_platon' : routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum'].quantize(Decimal("1.00")),
-             'total_day_count' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")),
+             'total_expenses_1' : routes.aggregate(Sum('expenses_1'))['expenses_1__sum'].quantize(Decimal("1.00")) if routes else 0,
+             'total_route_cost' : routes.aggregate(Sum('route_cost'))['route_cost__sum'].quantize(Decimal("1.00")) if routes else 0,
+             'total_route_length' : routes.aggregate(Sum('route_length'))['route_length__sum'].quantize(Decimal("1.00")) if routes else 0,
+             'total_days' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")) if routes else 0,
+             'total_fuel_cost' : routes.aggregate(Sum('fuel_cost'))['fuel_cost__sum'].quantize(Decimal("1.00")) if routes else 0,
+             'total_pay_check' : routes.aggregate(Sum('pay_check'))['pay_check__sum'].quantize(Decimal("1.00")) if routes else 0,
+             'total_pure_income' : ((routes.aggregate(Sum('pure_income'))['pure_income__sum']-routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum']).quantize(Decimal("1.00"))) if routes else 0,
+             'total_cost_of_km' : ((routes.aggregate(Sum('route_cost'))['route_cost__sum']/routes.aggregate(Sum('route_length'))['route_length__sum']).quantize(Decimal("1.00"))) if routes else 0,
+             'total_cost_of_platon' : routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum'].quantize(Decimal("1.00")) if routes else 0 if routes else 0,
+             'total_day_count' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")) if routes else 0,
         }
 
         return render(request, 'cargoapp/index_page.html', context)
@@ -179,7 +180,7 @@ def route_save(request, uid):
 
                     else:
                         
-                        gmaps = googlemaps.Client(key='AIzaSyAUMjzkYbazeZE43K_-OUAWSnhE3_OA3TY')
+                        gmaps = googlemaps.Client(key=config('GOOGLE_SECRET_KEY'))
 
                         try:
                             distance = gmaps.distance_matrix(origins=a_point, destinations=b_point, language='ru', mode='driving')['rows'][0]['elements'][0]
@@ -279,7 +280,7 @@ def route_add(request):
 
                 else:
 
-                    gmaps = googlemaps.Client(key='AIzaSyAUMjzkYbazeZE43K_-OUAWSnhE3_OA3TY')
+                    gmaps = googlemaps.Client(key=config('GOOGLE_SECRET_KEY'))
 
                     try:
                         distance = gmaps.distance_matrix(origins=a_point, destinations=b_point, language='ru', mode='driving')['rows'][0]['elements'][0]
