@@ -13,8 +13,20 @@ from django.utils.timezone import now
 from django.contrib.auth.hashers import make_password
 from django.conf import settings
 
+NDS_RATE = (
+	('TP', '20%'),
+	('NO', 'Без НДС'),
+	)
+
+
 def get_uuid4():
     return str(uuid.uuid4())
+
+def get_image_name(instance, filename):
+	
+	new_name = ('%s' + '.' + filename.split('.')[-1]) % instance.uid
+	return new_name
+
 
 class LogistUser(AbstractUser):
 
@@ -105,6 +117,20 @@ class Route(models.Model):
 	cost_of_platon = models.DecimalField(verbose_name = 'Платон', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
 	day_count = models.DecimalField(verbose_name = 'Количество дней', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
 
+	items_count = models.DecimalField(verbose_name = 'Количетво мест', max_digits=3, decimal_places=0, blank=True, null=True, default=0)
+	client = models.ForeignKey('Organization', verbose_name = 'Заказчик', on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
+	request_img	= models.ImageField(upload_to=get_image_name, verbose_name='Скан Заявки', null=True, blank=True, default=None)
+	loa_img	= models.ImageField(upload_to=get_image_name, verbose_name='Скан доверенности', null=True, blank=True, default=None)
+	weight = models.DecimalField(verbose_name='Вес, кг', max_digits=15, decimal_places=2, null=True, blank=True, default=0)
+	volume = models.DecimalField(verbose_name='Объем, м3', max_digits=15, decimal_places=2, null=True, blank=True, default=0)
+	width = models.DecimalField(verbose_name='Ширина, см', max_digits=15, decimal_places=0, null=True, blank=True, default=0)
+	height = models.DecimalField(verbose_name='Высота, см', max_digits=15, decimal_places=0, null=True, blank=True, default=0)
+	depth = models.DecimalField(verbose_name='Глубина, см', max_digits=15, decimal_places=0, null=True, blank=True, default=0)
+	request_number = models.CharField(max_length = 30, verbose_name = 'Номер заявки', null=True, blank=True, default='')
+
+	cargo_description = models.CharField(max_length = 256, verbose_name = 'Описание груза', null=True, blank=True, default='')
+
+
 	def __str__(self):
 
 		return '{}'.format(self.uid)
@@ -130,6 +156,10 @@ class Route(models.Model):
 		super(Route, self).save(*args, **kwargs)
 
 		upload_route(self)
+
+	def get_client(self):
+
+		return '{}'.format(self.client.uid) if self.client else 0
 
 	def get_vehicle(self):
 
@@ -189,3 +219,29 @@ class City(models.Model):
 	class Meta:
 		verbose_name = 'Город'
 		verbose_name_plural = 'Города'
+
+
+class Organization(models.Model):
+
+	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', unique=True)
+	title = models.CharField(max_length = 50, verbose_name = 'Наименование', null=True, blank=True)
+	full_title = models.CharField(max_length = 128, verbose_name = 'Наименование полное', null=True, blank=True)
+	inn = models.CharField(max_length = 12, verbose_name = 'ИНН', null=True, blank=True)
+	kpp = models.CharField(max_length = 10, verbose_name = 'КПП', null=True, blank=True)
+	ogrn = models.CharField(max_length = 14, verbose_name = 'ОГРН', null=True, blank=True)
+	
+	address = models.CharField(max_length = 1024, verbose_name = 'Юридический адрес', null=True, blank=True)
+	nds = models.CharField(max_length=2, verbose_name='Ставка НДС', choices=NDS_RATE, null=True, blank=True)
+
+	bank_account = models.CharField(max_length = 20, verbose_name = 'Номер счета', null=True, blank=True)
+	bank_bik = models.CharField(max_length = 9, verbose_name = 'БИК банка', null=True, blank=True)
+	bank_account = models.CharField(max_length = 20, verbose_name = 'Корр счет банка', null=True, blank=True)
+	bank_title = models.CharField(max_length = 128, verbose_name = 'Наименование банка', null=True, blank=True)
+
+
+	def __str__(self):
+		return '{}'.format(self.title)
+
+	class Meta:
+		verbose_name = 'Организация'
+		verbose_name_plural = 'Организации'		

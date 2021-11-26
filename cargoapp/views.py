@@ -9,6 +9,8 @@ from .serializers import RouteSerializer
 from .models import LogistUser
 from .serializers import LogistUserSerializer
 from .models import City
+from .models import Organization
+from .serializers import OrganizationSerializer
 
 
 from django.db.models import Sum
@@ -27,6 +29,10 @@ import json
 import re
 from decouple import config
 
+class OrganizationList(generics.ListCreateAPIView):
+    queryset = Organization.objects.all()
+    serializer_class = OrganizationSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class DriverList(generics.ListCreateAPIView):
 	queryset = Driver.objects.all()
@@ -38,27 +44,33 @@ class LogistUserList(generics.ListCreateAPIView):
     serializer_class = LogistUserSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+class RouteList(generics.ListAPIView):
+    queryset = Route.objects.all()
+    serializer_class = RouteSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]    
+
+class VehicleList(generics.ListCreateAPIView):
+    queryset = Vehicle.objects.all()
+    serializer_class = VehicleSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]    
+
 class LogistUserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = LogistUser.objects.all()
     serializer_class = LogistUserSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     lookup_field = 'uid'
 
-class VehicleList(generics.ListCreateAPIView):
-    queryset = Vehicle.objects.all()
-    serializer_class = VehicleSerializer
+class OrganizationDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Organization.objects.all()
+    serializer_class = OrganizationSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    lookup_field = 'uid'    
 
 class VehicleDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     lookup_field = 'uid'
-
-class RouteList(generics.ListAPIView):
-    queryset = Route.objects.all()
-    serializer_class = RouteSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class RouteDetail(generics.RetrieveAPIView):
     queryset = Route.objects.all()
@@ -115,6 +127,11 @@ def show_route(request, uid):
 
         route = Route.objects.get(uid=uid)
 
+        if route.client:
+            organizations = Organization.objects.all().exclude(uid=route.client.uid).order_by('title')
+        else:  
+            organizations = Organization.objects.all().order_by('title')
+
         if route.driver:
             drivers = Driver.objects.all().exclude(uid=route.driver.uid).order_by('title')
         else:  
@@ -137,6 +154,7 @@ def show_route(request, uid):
             'logists' : logists,
             'vehicles' : vehicles,
             'cities'   : City.objects.all().order_by('title'),
+            'organizations' : organizations,
         }
 
         return render(request, 'cargoapp/route.html', context)
@@ -166,6 +184,16 @@ def route_save(request, uid):
                 vehicle_uid = route_form.cleaned_data['inputVehicle']
                 logist_uid = route_form.cleaned_data['inputLogist']
                 driver_uid = route_form.cleaned_data['inputDriver']
+
+                client_uid = route_form.cleaned_data['inputСlient']
+                items_count = route_form.cleaned_data['inputItems_count'] 
+                weight = route_form.cleaned_data['inputWeight']
+                volume = route_form.cleaned_data['inputVolume']
+                width = route_form.cleaned_data['inputWidth']
+                height = route_form.cleaned_data['inputHeight']
+                depth = route_form.cleaned_data['inputDepth']
+                cargo_description = route_form.cleaned_data['inputDescription']
+                request_number = route_form.cleaned_data['inputRequest_number']
 
                 try:
                     current_route = Route.objects.get(uid=uid)
@@ -201,9 +229,17 @@ def route_save(request, uid):
                     current_route.to_date = to_date
                     current_route.a_point = a_point
                     current_route.b_point = b_point
+                    current_route.cargo_description = cargo_description
+                    current_route.request_number = request_number
                     
                     current_route.route_cost = Decimal(route_cost.replace(',','.'))
                     current_route.expenses_1 = Decimal(expenses_1.replace(',','.'))
+                    current_route.items_count = Decimal(items_count.replace(',','.'))
+                    current_route.weight = Decimal(weight.replace(',','.'))
+                    current_route.volume = Decimal(volume.replace(',','.'))
+                    current_route.width = Decimal(width.replace(',','.'))
+                    current_route.height = Decimal(height.replace(',','.'))
+                    current_route.depth = Decimal(depth.replace(',','.'))
 
                     if vehicle_uid:
                         try:
@@ -211,7 +247,7 @@ def route_save(request, uid):
                             current_route.vehicle = current_vehicle
                         except:
                             current_route.vehicle = None
-                            messages.info(request, 'Выбранного Автомобиля не существует в базе данных!')
+                            messages.info(request, 'Выбранного Автомобиля не существует в базе данных!')           
 
                     if logist_uid:
                         try:
@@ -219,7 +255,7 @@ def route_save(request, uid):
                             current_route.logist = current_logist
                         except:
                             current_route.logist = None
-                            messages.info(request, 'Выбранного Логиста не существует в базе данных!')
+                            messages.info(request, 'Выбранного Логиста не существует в базе данных!')           
 
                     if driver_uid:
                         try:
@@ -227,8 +263,22 @@ def route_save(request, uid):
                             current_route.driver = current_driver
                         except:
                             current_route.logist = None
-                            messages.info(driver, 'Выбранного Водителя не существует в базе данных!')            
+                            messages.info(driver, 'Выбранного Водителя не существует в базе данных!')
+                    else:
+                        current_route.driver = None         
 
+                    print(client_uid)
+
+                    if client_uid:
+                        try:
+                            current_client = Organization.objects.get(uid=client_uid)
+                            current_route.client = current_client
+                        except:
+                            current_route.client = None
+                            messages.info(request, 'Выбранной Организации не существует в базе данных!')                   
+                    else:
+                        current_route.client = None
+           
                     current_route.save()
 
                     current_path = request.META['HTTP_REFERER']
@@ -266,12 +316,26 @@ def route_add(request):
                 logist_uid = route_form.cleaned_data['inputLogist']
                 driver_uid = route_form.cleaned_data['inputDriver']
 
+                client_uid = route_form.cleaned_data['inputСlient']
+                items_count = route_form.cleaned_data['inputItems_count'] 
+                weight = route_form.cleaned_data['inputWeight']
+                volume = route_form.cleaned_data['inputVolume']
+                width = route_form.cleaned_data['inputWidth']
+                height = route_form.cleaned_data['inputHeight']
+                depth = route_form.cleaned_data['inputDepth']
+                cargo_description = route_form.cleaned_data['inputDescription']
+                request_number = route_form.cleaned_data['inputRequest_number']
+
+
                 current_route = Route()
 
                 current_route.from_date = from_date
                 current_route.to_date = to_date
                 current_route.a_point = a_point
                 current_route.b_point = b_point
+                current_route.cargo_description = cargo_description
+                current_route.request_number = request_number
+
 
                 if route_length:
 
@@ -298,6 +362,36 @@ def route_add(request):
 
                     current_route.route_length = Decimal(dist_length)
 
+                if items_count:
+                    current_route.items_count = Decimal(items_count.replace(',','.'))
+                else:
+                    current_route.items_count = Decimal(0)
+
+                if weight:
+                    current_route.weight = Decimal(weight.replace(',','.'))
+                else:
+                    current_route.weight = Decimal(0)
+
+                if volume:
+                    current_route.volume = Decimal(volume.replace(',','.'))
+                else:
+                    current_route.volume = Decimal(0)
+
+                if width:
+                    current_route.width = Decimal(width.replace(',','.'))
+                else:
+                    current_route.width = Decimal(0)
+
+                if height:
+                    current_route.height = Decimal(height.replace(',','.'))
+                else:
+                    current_route.height = Decimal(0)
+                    
+                if depth:
+                    current_route.depth = Decimal(depth.replace(',','.'))
+                else:
+                    current_route.depth = Decimal(0)            
+
                 if route_cost:
                     current_route.route_cost = Decimal(route_cost.replace(',','.'))
                 else:
@@ -323,7 +417,7 @@ def route_add(request):
                         current_route.logist = current_logist
                     except:
                         current_route.logist = None
-                        messages.info(request, 'Выбранного Логиста не существует в базе данных!')
+                        messages.info(request, 'Выбранного Логиста не существует в базе данных!')         
 
                 if driver_uid:
                     try:
@@ -331,7 +425,19 @@ def route_add(request):
                         current_route.driver = current_driver
                     except:
                         current_route.logist = None
-                        messages.info(driver, 'Выбранного Водителя не существует в базе данных!')            
+                        messages.info(request, 'Выбранного Водителя не существует в базе данных!') 
+                else:
+                        current_route.driver = None        
+   
+                if client_uid:
+                    try:
+                        current_client = Organization.objects.get(uid=client_uid)
+                        current_route.client = current_client
+                    except:
+                        current_route.client = None
+                        messages.info(request, 'Выбранной Организации не существует в базе данных!')                   
+                else:
+                        current_route.client = None        
 
                 current_route.save()
 
@@ -356,6 +462,7 @@ def show_new_route_form(request):
             'drivers' : Driver.objects.all().order_by('title'),
             'logists' : LogistUser.objects.all().exclude(uid=request.user.uid).order_by('username'),
             'cities'   : City.objects.all().order_by('title'),
+            'organizations' : Organization.objects.all().order_by('title'),
         }
 
         if request.GET.get('vehicle'):

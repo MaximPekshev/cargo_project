@@ -6,7 +6,6 @@ from decimal import Decimal
 import xlrd
 
 def upload_route(route):
-    # pass
     if route:
 
         url = 'http://1c.annasoft.ru:8081/test/hs/cargo/api/v1/routes'
@@ -25,6 +24,15 @@ def upload_route(route):
                 "expenses_2" :str(Decimal(route.expenses_2)),
                 "expenses_3" : str(Decimal(route.expenses_3)),
 
+                "items_count" : str(Decimal(route.items_count)),
+                "weight" : str(Decimal(route.weight)),
+                "volume" : str(Decimal(route.volume)),
+                "width" : str(Decimal(route.width)),
+                "height" : str(Decimal(route.height)),
+                "depth" : str(Decimal(route.depth)),
+                "request_number" : str(Decimal(route.request_number)),
+                "description" : str(Decimal(route.cargo_description)),
+
             },
             "vehicle": {
                 "uid" : route.get_vehicle(),
@@ -34,10 +42,11 @@ def upload_route(route):
             },
             "logist" : {
                 "uid" : route.get_logist(),
+            },
+            "client" : {
+                "uid" : route.get_client(),
             }
         }
-        # print(data)
-        # json.dumps(data)
 
         answer = requests.post(url, headers=header, data=json.dumps(data))
         print(answer.status_code)

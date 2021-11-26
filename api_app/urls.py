@@ -5,6 +5,7 @@ from cargoapp.views import DriverList, DriverDetail
 from cargoapp.views import LogistUserList, LogistUserDetail
 from cargoapp.views import VehicleList, VehicleDetail
 from cargoapp.views import RouteList, RouteDetail
+from cargoapp.views import OrganizationList, OrganizationDetail
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
@@ -16,6 +17,9 @@ urlpatterns = [
     path('vehicles/<str:uid>/', VehicleDetail.as_view()),
     path('routes/', RouteList.as_view()),
     path('routes/<str:uid>/', RouteDetail.as_view()),
+    path('organizations/', OrganizationList.as_view()),
+    path('organizations/<str:uid>/', OrganizationDetail.as_view()),
+
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

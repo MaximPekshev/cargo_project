@@ -1,6 +1,23 @@
-from .models import Driver, Vehicle, Route, LogistUser
+from .models import Driver, Vehicle, Route, LogistUser, Organization
 from rest_framework import serializers
 
+class OrganizationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Organization
+        fields = (
+            'uid',
+            'title',
+            'full_title',
+            'inn',
+            'kpp',
+            'ogrn',
+            'address',
+            'nds',
+            'bank_account',
+            'bank_bik',
+            'bank_account',
+            'bank_title',
+            )
 
 class DriverSerializer(serializers.ModelSerializer):
     class Meta:
@@ -62,6 +79,7 @@ class RouteSerializer(serializers.ModelSerializer):
     vehicle = VehicleSerializer(read_only=True)
     driver = DriverSerializer(read_only=True)
     logist = LogistUserSerializer(read_only=True)
+    client = OrganizationSerializer(read_only=True)
 
     class Meta:
         model = Route
@@ -78,7 +96,8 @@ class RouteSerializer(serializers.ModelSerializer):
             'expenses_3',
             'vehicle',
             'driver',
-            'logist'
+            'logist',
+            'client',
         )
 
 

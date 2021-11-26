@@ -52,7 +52,7 @@
 			</div>
 			<label for="inputRoute_cost" class="col-2 col-form-label">Доход, руб</label>
 			<div class="col-4">
-				<input type="text" step="0.01" class="form-control" name="inputRoute_cost" id="inputRoute_cost" >
+				<input type="text" class="form-control" name="inputRoute_cost" id="inputRoute_cost" >
 			</div>
 		</div>
 		<div class="form-group row mt-4">
@@ -60,15 +60,7 @@
 			<div class="col-4">
 				<input type="text" class="form-control" name="inputExpenses_1" id="inputExpenses_1">
 			</div>
-			<label for="inputLogist" class="col-2 col-form-label">Логист</label>
-			<div class="col-4">
-				<div class="form-group">
-					<input type="text" class="form-control" name="inputLogist" id="inputLogist" value="{{ user.uid }}" hidden>
-					<select class="form-control" disabled>
-						<option selected>{{ user.username }}</option>
-					</select>
-				</div>
-			</div>
+			
 		</div>
 
 		<div class="form-group row mt-4">
@@ -85,7 +77,8 @@
 			<div class="col-4">
 				<div class="form-group">
 					<select class="form-control" id="inputDriver" name="inputDriver">
-						<option selected value="{{ actual_driver.uid }}">{{ actual_driver }}</option>
+						<option value="{{ actual_driver.uid }}">{{ actual_driver }}</option>
+						<option value="">...</option>
 						{% for driver in drivers %}
 						<option value="{{ driver.uid }}">{{ driver.title }}</option>
 						{% endfor %}
@@ -93,6 +86,85 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="form-group row mt-4">
+			<label for="inputClient" class="col-2 col-form-label">Заказчик</label>
+			<div class="col-4">
+				<div class="form-group">
+					<select class="form-control" id="inputClient" name="inputClient">
+						<option value="">...</option>
+						{% for org in organizations %}
+						<option value="{{ org.uid }}">{{ org.title }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			<label for="inputLogist" class="col-2 col-form-label">Логист</label>
+			<div class="col-4">
+				<div class="form-group">
+					<input type="text" class="form-control" name="inputLogist" id="inputLogist" value="{{ user.uid }}" hidden>
+					<select class="form-control" disabled>
+						<option selected>{{ user.username }}</option>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div align="center" class="mt-3 mb-3">
+			Информация о грузе
+		</div>
+
+		<div class="form-group row mt-4">
+			<label for="inputItems_count" class="col-2 col-form-label">Количество мест</label>
+			<div class="col-4">
+				<input type="text" class="form-control" name="inputItems_count" id="inputItems_count">
+			</div>
+			<label for="inputRequest_number" class="col-2 col-form-label">Номер заявки</label>
+			<div class="col-4">
+				<input type="text" class="form-control" name="inputRequest_number" id="inputRequest_number">
+			</div>
+		</div>
+
+		<div class="form-group row mt-4">
+			<label for="inputWeight" class="col-2 col-form-label">Вес, кг</label>
+			<div class="col-4">
+				<input type="text" class="form-control" name="inputWeight" id="inputWeight">
+			</div>
+			<label for="inputVolume" class="col-2 col-form-label">Объем, м3</label>
+			<div class="col-4">
+				<input type="text" class="form-control" name="inputVolume" id="inputVolume" >
+			</div>
+		</div>
+
+		<div align="center" class="mt-3 mb-3">
+			Габариты
+		</div>
+
+		<div class="form-group row mt-4">
+			<label for="inputWidth" class="col-2 col-form-label">Ширина, см</label>
+			<div class="col-2">
+				<input type="text" class="form-control" name="inputWidth" id="inputWidth">
+			</div>
+			<label for="inputHeight" class="col-2 col-form-label">Высота , см</label>
+			<div class="col-2">
+				<input type="text" class="form-control" name="inputHeight" id="inputHeight" >
+			</div>
+			<label for="inputDepth" class="col-2 col-form-label">Глубина, см</label>
+			<div class="col-2">
+				<input type="text" class="form-control" name="inputDepth" id="inputDepth" >
+			</div>
+		</div>
+
+		<div align="center" class="mt-3 mb-3">
+			Описание груза
+		</div>
+
+		<div class="form-group row mt-4">
+			<div class="col-12">
+				<input type="text" class="form-control" name="inputDescription" id="inputDescription">
+			</div>
+		</div>
+
 		<div class="row justify-content-end mt-4">
 			<div class="form-group col-md-2 col-sm-3" align="right">
 				<button type="submit" class="btn btn-secondary" form="routeForm">Рассчитать</button>

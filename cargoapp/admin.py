@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import LogistUser, Vehicle, Driver, Route, City
+from .models import Organization
 
 class LogistUserAdmin(admin.ModelAdmin):
 	list_display = (
@@ -67,3 +68,14 @@ class CityAdmin(admin.ModelAdmin):
 	readonly_fields = ('code',)
 
 admin.site.register(City, CityAdmin)
+
+
+class OrganizationAdmin(admin.ModelAdmin):
+	list_display = (
+					'title',
+					'inn',
+					'kpp',
+					)
+	readonly_fields = ('uid',)
+
+admin.site.register(Organization, OrganizationAdmin)
