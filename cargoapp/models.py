@@ -235,7 +235,7 @@ class Organization(models.Model):
 
 	bank_account = models.CharField(max_length = 20, verbose_name = 'Номер счета', null=True, blank=True)
 	bank_bik = models.CharField(max_length = 9, verbose_name = 'БИК банка', null=True, blank=True)
-	bank_account = models.CharField(max_length = 20, verbose_name = 'Корр счет банка', null=True, blank=True)
+	bank_corr = models.CharField(max_length = 20, verbose_name = 'Корр счет банка', null=True, blank=True)
 	bank_title = models.CharField(max_length = 128, verbose_name = 'Наименование банка', null=True, blank=True)
 
 

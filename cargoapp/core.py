@@ -30,8 +30,8 @@ def upload_route(route):
                 "width" : str(Decimal(route.width)),
                 "height" : str(Decimal(route.height)),
                 "depth" : str(Decimal(route.depth)),
-                "request_number" : str(Decimal(route.request_number)),
-                "description" : str(Decimal(route.cargo_description)),
+                "request_number" : route.request_number,
+                "description" : route.cargo_description,
 
             },
             "vehicle": {

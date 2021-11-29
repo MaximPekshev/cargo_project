@@ -15,7 +15,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
             'nds',
             'bank_account',
             'bank_bik',
-            'bank_account',
+            'bank_corr',
             'bank_title',
             )
 
