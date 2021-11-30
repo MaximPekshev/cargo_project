@@ -24,4 +24,7 @@ class RouteForm(forms.Form):
 	inputDescription = forms.CharField(max_length = 256, required=False)
 	inputRequest_number = forms.CharField(max_length = 30, required=False)
 
+	inputRequest_img = forms.FileField(required=False)
+	inputLoa_img = forms.FileField(required=False)
+
 	

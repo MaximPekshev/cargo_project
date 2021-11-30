@@ -170,7 +170,7 @@ def route_save(request, uid):
 
         if request.method == 'POST':
 
-            route_form = RouteForm(request.POST)
+            route_form = RouteForm(request.POST, request.FILES)
 
             if route_form.is_valid():
 
@@ -194,6 +194,16 @@ def route_save(request, uid):
                 depth = route_form.cleaned_data['inputDepth']
                 cargo_description = route_form.cleaned_data['inputDescription']
                 request_number = route_form.cleaned_data['inputRequest_number']
+
+                try:
+                    request_img = request.FILES['inputRequest_img']
+                except:
+                    request_img = None
+                    
+                try:
+                    loa_img = request.FILES['inputLoa_img']
+                except:
+                    loa_img = None    
 
                 try:
                     current_route = Route.objects.get(uid=uid)
@@ -241,6 +251,12 @@ def route_save(request, uid):
                     current_route.height = Decimal(height.replace(',','.'))
                     current_route.depth = Decimal(depth.replace(',','.'))
 
+                    if request_img:
+                        current_route.request_img = request_img
+
+                    if loa_img:
+                        current_route.loa_img = loa_img    
+
                     if vehicle_uid:
                         try:
                             current_vehicle = Vehicle.objects.get(uid=vehicle_uid)
@@ -267,8 +283,6 @@ def route_save(request, uid):
                     else:
                         current_route.driver = None         
 
-                    print(client_uid)
-
                     if client_uid:
                         try:
                             current_client = Organization.objects.get(uid=client_uid)
@@ -286,7 +300,7 @@ def route_save(request, uid):
 
             else:
 
-                messages.info(driver, 'В форму введены не корректные данные!')
+                messages.info(request, 'В форму введены не корректные данные!')
                 current_path = request.META['HTTP_REFERER']
                 return redirect(current_path)
 
@@ -301,7 +315,7 @@ def route_add(request):
 
         if request.method == 'POST':
 
-            route_form = RouteForm(request.POST)
+            route_form = RouteForm(request.POST, request.FILES)
 
             if route_form.is_valid():
 
@@ -326,6 +340,8 @@ def route_add(request):
                 cargo_description = route_form.cleaned_data['inputDescription']
                 request_number = route_form.cleaned_data['inputRequest_number']
 
+                request_img = request.FILES['inputRequest_img']
+                loa_img = request.FILES['inputLoa_img']
 
                 current_route = Route()
 
@@ -402,6 +418,11 @@ def route_add(request):
                 else:
                     current_route.expenses_1 = Decimal(0)       
                 
+                if request_img:
+                        current_route.request_img = request_img
+
+                if loa_img:
+                    current_route.loa_img = loa_img
 
                 if vehicle_uid:
                     try:
@@ -437,7 +458,7 @@ def route_add(request):
                         current_route.client = None
                         messages.info(request, 'Выбранной Организации не существует в базе данных!')                   
                 else:
-                        current_route.client = None        
+                        current_route.client = None 
 
                 current_route.save()
 
@@ -485,4 +506,33 @@ def show_new_route_form(request):
 
     else:
 
-        return redirect('login')    
+        return redirect('login')   
+
+
+def delete_req_img(request, uid):
+    # pass
+    try:
+        route = Route.objects.get(uid=uid)
+        route.request_img.delete()
+
+        route.save()
+    except:
+        pass
+
+
+    current_path = request.META['HTTP_REFERER']
+    return redirect(current_path)
+
+def delete_loa_img(request, uid):
+
+    try:
+        route = Route.objects.get(uid=uid)
+        route.loa_img.delete()
+
+        route.save()
+    except:
+        pass
+
+
+    current_path = request.META['HTTP_REFERER']
+    return redirect(current_path)

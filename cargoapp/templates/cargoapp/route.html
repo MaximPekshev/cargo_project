@@ -11,7 +11,7 @@
 	{% endif %}
 </div>
 <div class="row justify-content-center mt-2">
-	<form class="col-6" method="POST" id="routeForm" action="{% url 'route_save' uid=route.uid %}" >
+	<form class="col-6" method="POST" id="routeForm" action="{% url 'route_save' uid=route.uid %}" enctype="multipart/form-data">
 		{% csrf_token %}
 		<div class="form-group row mt-4">
 			<label for="inputFrom_date" class="col-2 col-form-label">Дата С</label>
@@ -91,7 +91,7 @@
 		</div>
 
 		<div class="form-group row mt-4">
-			<label for="inputСlient" class="col-2 col-form-label">Заказчик</label>
+			<label for="inputСlient" class="col-2 col-form-label">Организация</label>
 			<div class="col-4">
 				<div class="form-group">
 					<select class="form-control" id="inputСlient" name="inputСlient">
@@ -122,13 +122,58 @@
 		</div>
 
 		<div align="center" class="mt-3 mb-3">
+			Документы
+		</div>
+
+		<div class="form-group row mt-4">
+			<label for="inputRequest_img" class="col-2 col-form-label">Заявка</label>
+			<div class="col-10">
+				{% if route.request_img %}
+				<div class="row">
+					<div class="col-10"> 
+						<a data-bs-toggle="modal" data-bs-target="#request_img_modal" class="form-control as-link" style="cursor: pointer;">{{ route.request_img }}</a>
+					</div>
+					<div class="col-2" align="center">
+						<a href="{% url 'delete_req_img' uid=route.uid %}" class="form-control as-link" style="cursor: pointer;"><i class="fa fa-times"></i></a>
+					</div>
+				</div>
+				{% else %}
+				<div class="form-group">
+					<input type="file" class="form-control" id="inputRequest_img" name="inputRequest_img">
+				</div>
+				{% endif %}
+			</div>
+		</div>
+		<div class="form-group row mt-4">	
+			<label for="inputLoa_img" class="col-2 col-form-label">Доверенность</label>
+			<div class="col-10">
+				{% if route.loa_img %}
+				<div class="row">
+					<div class="col-10">
+						<a data-bs-toggle="modal" data-bs-target="#loa_img_modal" class="form-control as-link" style="cursor: pointer;">{{ route.loa_img }}</a>
+					</div>
+					<div class="col-2" align="center">
+						<a href="{% url 'delete_loa_img' uid=route.uid %}" class="form-control as-link" style="cursor: pointer;"><i class="fa fa-times"></i></a>
+					</div>
+				</div>
+				{% else %}
+				<div class="form-group">
+					<div class="input-group mb-3">
+						<input type="file" class="form-control" id="inputLoa_img" name="inputLoa_img" >
+					</div>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+
+		<div align="center" class="mt-3 mb-3">
 			Информация о грузе
 		</div>
 
 		<div class="form-group row mt-4">
 			<label for="inputItems_count" class="col-2 col-form-label">Количество мест</label>
 			<div class="col-4">
-				<input type="text" class="form-control" name="inputItems_count" id="inputItems_count" value="{{ route.items_count }}">
+				<input type="text" class="form-control" name="inputItems_count" id="inputItems_count" value="{{ route.items_count }}" disabled>
 			</div>
 			<label for="inputRequest_number" class="col-2 col-form-label">Номер заявки</label>
 			<div class="col-4">
@@ -143,11 +188,11 @@
 			</div>
 			<label for="inputVolume" class="col-2 col-form-label">Объем, м3</label>
 			<div class="col-4">
-				<input type="text" class="form-control" name="inputVolume" id="inputVolume" value="{{ route.volume }}">
+				<input type="text" class="form-control" name="inputVolume" id="inputVolume" value="{{ route.volume }}" disabled>
 			</div>
 		</div>
 
-		<div align="center" class="mt-3 mb-3">
+		<!-- <div align="center" class="mt-3 mb-3">
 			Габариты
 		</div>
 
@@ -164,7 +209,7 @@
 			<div class="col-2">
 				<input type="text" class="form-control" name="inputDepth" id="inputDepth" value="{{ route.depth }}">
 			</div>
-		</div>
+		</div> -->
 
 		<div align="center" class="mt-3 mb-3">
 			Описание груза
@@ -192,4 +237,40 @@
 	</form>
 	<div class="pb-5"></div>
 </div>
+
+
+<div class="modal fade" id="request_img_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="request_img_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      	<div class="text-center">
+      		{% if route.request_img %}
+        	<img src="{{ route.request_img.url }}" class="img-fluid" alt="">
+        	{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="loa_img_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="loa_img_modal_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      	<div class="text-center">
+      		{% if route.loa_img %}
+        	<img src="{{ route.loa_img.url }}" class="img-fluid" alt="">
+      		{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
