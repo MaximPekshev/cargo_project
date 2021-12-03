@@ -116,17 +116,19 @@ class Route(models.Model):
 	cost_of_km = models.DecimalField(verbose_name = 'Цена за километр', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
 	cost_of_platon = models.DecimalField(verbose_name = 'Платон', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
 	day_count = models.DecimalField(verbose_name = 'Количество дней', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
+	
+	organization = models.ForeignKey('Organization', verbose_name = 'Организация', on_delete=models.SET_DEFAULT, related_name='route_organization', default=None, null=True, blank=True)
+	contragent = models.ForeignKey('Organization', verbose_name = 'Контрагент', on_delete=models.SET_DEFAULT, related_name='route_contragent', default=None, null=True, blank=True)
+	contract = models.ForeignKey('Contracts', verbose_name = 'Договор', on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
 
-	items_count = models.DecimalField(verbose_name = 'Количетво мест', max_digits=3, decimal_places=0, blank=True, null=True, default=0)
-	client = models.ForeignKey('Organization', verbose_name = 'Заказчик', on_delete=models.SET_DEFAULT, default=None, null=True, blank=True)
 	request_img	= models.ImageField(upload_to=get_image_name, verbose_name='Скан Заявки', null=True, blank=True, default=None)
 	loa_img	= models.ImageField(upload_to=get_image_name, verbose_name='Скан доверенности', null=True, blank=True, default=None)
-	weight = models.DecimalField(verbose_name='Вес, кг', max_digits=15, decimal_places=2, null=True, blank=True, default=0)
-	volume = models.DecimalField(verbose_name='Объем, м3', max_digits=15, decimal_places=2, null=True, blank=True, default=0)
-	width = models.DecimalField(verbose_name='Ширина, см', max_digits=15, decimal_places=0, null=True, blank=True, default=0)
-	height = models.DecimalField(verbose_name='Высота, см', max_digits=15, decimal_places=0, null=True, blank=True, default=0)
-	depth = models.DecimalField(verbose_name='Глубина, см', max_digits=15, decimal_places=0, null=True, blank=True, default=0)
+	weight = models.DecimalField(verbose_name='Вес, т', max_digits=15, decimal_places=2, null=True, blank=True, default=0)
 	request_number = models.CharField(max_length = 30, verbose_name = 'Номер заявки', null=True, blank=True, default='')
+
+	banner_all = models.BooleanField(verbose_name='Растентовка полная', default=False)
+	banner_side = models.BooleanField(verbose_name='Растентовка бок', default=False)
+	control_penalty = models.BooleanField(verbose_name='Штраф контроля', default=False)
 
 	cargo_description = models.CharField(max_length = 256, verbose_name = 'Описание груза', null=True, blank=True, default='')
 
@@ -159,7 +161,7 @@ class Route(models.Model):
 
 	def get_client(self):
 
-		return '{}'.format(self.client.uid) if self.client else 0
+		return '{}'.format(self.organization.uid) if self.organization else 0
 
 	def get_vehicle(self):
 
@@ -229,6 +231,8 @@ class Organization(models.Model):
 	inn = models.CharField(max_length = 12, verbose_name = 'ИНН', null=True, blank=True)
 	kpp = models.CharField(max_length = 10, verbose_name = 'КПП', null=True, blank=True)
 	ogrn = models.CharField(max_length = 14, verbose_name = 'ОГРН', null=True, blank=True)
+
+	is_contragent = models.BooleanField(verbose_name='Контрагент', default=False)
 	
 	address = models.CharField(max_length = 1024, verbose_name = 'Юридический адрес', null=True, blank=True)
 	nds = models.CharField(max_length=2, verbose_name='Ставка НДС', choices=NDS_RATE, null=True, blank=True)
@@ -242,6 +246,32 @@ class Organization(models.Model):
 	def __str__(self):
 		return '{}'.format(self.title)
 
+	def save(self, *args, **kwargs):
+
+		super(Organization, self).save(*args, **kwargs)
+
 	class Meta:
 		verbose_name = 'Организация'
-		verbose_name_plural = 'Организации'		
+		verbose_name_plural = 'Организации'
+
+class Contracts(models.Model):
+
+	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', unique=True)
+	title = models.CharField(max_length = 100, verbose_name = 'Наименование', null=True, blank=True)
+	number = models.CharField(max_length = 50, verbose_name = 'Номер', null=True, blank=True)
+	date = models.DateField('Дата', auto_now_add = False)
+
+	organization = models.ForeignKey(Organization, verbose_name = 'Организация', on_delete=models.PROTECT, related_name='organization', null=True, blank=True)
+	contragent = models.ForeignKey(Organization, verbose_name = 'Контрагент', on_delete=models.PROTECT, related_name='contragent', null=True, blank=True)
+
+
+	def __str__(self):
+		return '{}'.format(self.title)
+
+	def save(self, *args, **kwargs):
+
+		super(Contracts, self).save(*args, **kwargs)
+
+	class Meta:
+		verbose_name = 'Договор'
+		verbose_name_plural = 'Договоры'

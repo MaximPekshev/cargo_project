@@ -11,6 +11,8 @@ from .serializers import LogistUserSerializer
 from .models import City
 from .models import Organization
 from .serializers import OrganizationSerializer
+from .models import Contracts
+from .serializers import ContractsSerializer
 
 
 from django.db.models import Sum
@@ -28,6 +30,11 @@ import googlemaps
 import json
 import re
 from decouple import config
+
+class ContractsList(generics.ListCreateAPIView):
+    queryset = Contracts.objects.all()
+    serializer_class = ContractsSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class OrganizationList(generics.ListCreateAPIView):
     queryset = Organization.objects.all()
@@ -57,6 +64,12 @@ class VehicleList(generics.ListCreateAPIView):
 class LogistUserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = LogistUser.objects.all()
     serializer_class = LogistUserSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    lookup_field = 'uid'
+
+class ContractsDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Contracts.objects.all()
+    serializer_class = ContractsSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     lookup_field = 'uid'
 
@@ -127,11 +140,16 @@ def show_route(request, uid):
 
         route = Route.objects.get(uid=uid)
 
-        if route.client:
-            organizations = Organization.objects.all().exclude(uid=route.client.uid).order_by('title')
+        if route.organization:
+            organizations = Organization.objects.filter(is_contragent=False).exclude(uid=route.organization.uid).order_by('title')
         else:  
-            organizations = Organization.objects.all().order_by('title')
+            organizations = Organization.objects.filter(is_contragent=False).order_by('title')
 
+        if route.contragent:
+            contragents = Organization.objects.filter(is_contragent=True).exclude(uid=route.contragent.uid).order_by('title')
+        else:  
+            contragents = Organization.objects.filter(is_contragent=True).order_by('title')
+              
         if route.driver:
             drivers = Driver.objects.all().exclude(uid=route.driver.uid).order_by('title')
         else:  
@@ -145,7 +163,15 @@ def show_route(request, uid):
         if route.vehicle:
             vehicles = Vehicle.objects.filter(logist=request.user).exclude(uid=route.vehicle.uid).order_by('car_number')
         else:  
-            vehicles = Vehicle.objects.all().order_by('car_number')   
+            vehicles = Vehicle.objects.all().order_by('car_number')
+
+        contracts = {}
+
+        if route.organization and route.contragent:
+            if route.contract:
+                contracts = Contracts.objects.filter(organization=route.organization, contragent=route.contragent).exclude(uid=route.contract.uid).order_by('date') 
+            else:
+                contracts = Contracts.objects.filter(organization=route.organization, contragent=route.contragent).order_by('date') 
             
 
         context = {
@@ -155,6 +181,8 @@ def show_route(request, uid):
             'vehicles' : vehicles,
             'cities'   : City.objects.all().order_by('title'),
             'organizations' : organizations,
+            'contragents' : contragents,
+            'contracts' : contracts,
         }
 
         return render(request, 'cargoapp/route.html', context)
@@ -185,15 +213,17 @@ def route_save(request, uid):
                 logist_uid = route_form.cleaned_data['inputLogist']
                 driver_uid = route_form.cleaned_data['inputDriver']
 
-                client_uid = route_form.cleaned_data['inputСlient']
-                items_count = route_form.cleaned_data['inputItems_count'] 
+                organization_uid = route_form.cleaned_data['inputOrganization']
                 weight = route_form.cleaned_data['inputWeight']
-                volume = route_form.cleaned_data['inputVolume']
-                width = route_form.cleaned_data['inputWidth']
-                height = route_form.cleaned_data['inputHeight']
-                depth = route_form.cleaned_data['inputDepth']
                 cargo_description = route_form.cleaned_data['inputDescription']
                 request_number = route_form.cleaned_data['inputRequest_number']
+
+                contragent_uid = route_form.cleaned_data['inputContragent']
+                contract_uid = route_form.cleaned_data['inputContract']
+
+                banner_all = route_form.cleaned_data['inputBanner_all']
+                banner_side = route_form.cleaned_data['inputBanner_side']
+                control_penalty = route_form.cleaned_data['inputControl_penalty']
 
                 try:
                     request_img = request.FILES['inputRequest_img']
@@ -244,18 +274,19 @@ def route_save(request, uid):
                     
                     current_route.route_cost = Decimal(route_cost.replace(',','.'))
                     current_route.expenses_1 = Decimal(expenses_1.replace(',','.'))
-                    current_route.items_count = Decimal(items_count.replace(',','.'))
                     current_route.weight = Decimal(weight.replace(',','.'))
-                    current_route.volume = Decimal(volume.replace(',','.'))
-                    current_route.width = Decimal(width.replace(',','.'))
-                    current_route.height = Decimal(height.replace(',','.'))
-                    current_route.depth = Decimal(depth.replace(',','.'))
 
                     if request_img:
                         current_route.request_img = request_img
 
                     if loa_img:
-                        current_route.loa_img = loa_img    
+                        current_route.loa_img = loa_img
+
+                    current_route.banner_all = banner_all
+
+                    current_route.banner_side = banner_side
+
+                    current_route.control_penalty = control_penalty    
 
                     if vehicle_uid:
                         try:
@@ -283,15 +314,35 @@ def route_save(request, uid):
                     else:
                         current_route.driver = None         
 
-                    if client_uid:
+                    if organization_uid:
                         try:
-                            current_client = Organization.objects.get(uid=client_uid)
-                            current_route.client = current_client
+                            current_organization = Organization.objects.get(uid=organization_uid)
+                            current_route.organization = current_organization
                         except:
-                            current_route.client = None
+                            current_route.organization = None
                             messages.info(request, 'Выбранной Организации не существует в базе данных!')                   
                     else:
-                        current_route.client = None
+                        current_route.organization = None
+
+                    if contragent_uid:
+                        try:
+                            current_contragent = Organization.objects.get(uid=contragent_uid)
+                            current_route.contragent = current_contragent
+                        except:
+                            current_route.contragent = None
+                            messages.info(request, 'Выбранного Контрагента не существует в базе данных!')                   
+                    else:
+                        current_route.contragent = None
+
+                    if contract_uid:
+                        try:
+                            current_contract = Contracts.objects.get(uid=contract_uid)
+                            current_route.contract = current_contract
+                        except:
+                            current_route.contract = None
+                            messages.info(request, 'Выбранного Договора не существует в базе данных!')                   
+                    else:
+                        current_route.contract = None      
            
                     current_route.save()
 
@@ -330,18 +381,26 @@ def route_add(request):
                 logist_uid = route_form.cleaned_data['inputLogist']
                 driver_uid = route_form.cleaned_data['inputDriver']
 
-                client_uid = route_form.cleaned_data['inputСlient']
-                items_count = route_form.cleaned_data['inputItems_count'] 
+                organization_uid = route_form.cleaned_data['inputOrganization']
                 weight = route_form.cleaned_data['inputWeight']
-                volume = route_form.cleaned_data['inputVolume']
-                width = route_form.cleaned_data['inputWidth']
-                height = route_form.cleaned_data['inputHeight']
-                depth = route_form.cleaned_data['inputDepth']
                 cargo_description = route_form.cleaned_data['inputDescription']
                 request_number = route_form.cleaned_data['inputRequest_number']
 
-                request_img = request.FILES['inputRequest_img']
-                loa_img = request.FILES['inputLoa_img']
+                contragent_uid = route_form.cleaned_data['inputContragent']
+
+                banner_all = route_form.cleaned_data['inputBanner_all']
+                banner_side = route_form.cleaned_data['inputBanner_side']
+                control_penalty = route_form.cleaned_data['inputControl_penalty']
+
+                try:
+                    request_img = request.FILES['inputRequest_img']
+                except:
+                    request_img = None
+                    
+                try:
+                    loa_img = request.FILES['inputLoa_img']
+                except:
+                    loa_img = None 
 
                 current_route = Route()
 
@@ -378,36 +437,11 @@ def route_add(request):
 
                     current_route.route_length = Decimal(dist_length)
 
-                if items_count:
-                    current_route.items_count = Decimal(items_count.replace(',','.'))
-                else:
-                    current_route.items_count = Decimal(0)
-
                 if weight:
                     current_route.weight = Decimal(weight.replace(',','.'))
                 else:
                     current_route.weight = Decimal(0)
-
-                if volume:
-                    current_route.volume = Decimal(volume.replace(',','.'))
-                else:
-                    current_route.volume = Decimal(0)
-
-                if width:
-                    current_route.width = Decimal(width.replace(',','.'))
-                else:
-                    current_route.width = Decimal(0)
-
-                if height:
-                    current_route.height = Decimal(height.replace(',','.'))
-                else:
-                    current_route.height = Decimal(0)
-                    
-                if depth:
-                    current_route.depth = Decimal(depth.replace(',','.'))
-                else:
-                    current_route.depth = Decimal(0)            
-
+       
                 if route_cost:
                     current_route.route_cost = Decimal(route_cost.replace(',','.'))
                 else:
@@ -423,6 +457,12 @@ def route_add(request):
 
                 if loa_img:
                     current_route.loa_img = loa_img
+
+                current_route.banner_all = banner_all
+
+                current_route.banner_side = banner_side
+
+                current_route.control_penalty = control_penalty        
 
                 if vehicle_uid:
                     try:
@@ -450,15 +490,25 @@ def route_add(request):
                 else:
                         current_route.driver = None        
    
-                if client_uid:
+                if organization_uid:
                     try:
-                        current_client = Organization.objects.get(uid=client_uid)
-                        current_route.client = current_client
+                        current_organization = Organization.objects.get(uid=organization_uid)
+                        current_route.organization = current_organization
                     except:
-                        current_route.client = None
+                        current_route.organization = None
                         messages.info(request, 'Выбранной Организации не существует в базе данных!')                   
                 else:
-                        current_route.client = None 
+                    current_route.organization = None
+
+                if contragent_uid:
+                    try:
+                        current_contragent = Organization.objects.get(uid=contragent_uid)
+                        current_route.contragent = current_contragent
+                    except:
+                        current_route.contragent = None
+                        messages.info(request, 'Выбранного Контрагента не существует в базе данных!')                   
+                else:
+                    current_route.contragent = None         
 
                 current_route.save()
 
@@ -483,7 +533,8 @@ def show_new_route_form(request):
             'drivers' : Driver.objects.all().order_by('title'),
             'logists' : LogistUser.objects.all().exclude(uid=request.user.uid).order_by('username'),
             'cities'   : City.objects.all().order_by('title'),
-            'organizations' : Organization.objects.all().order_by('title'),
+            'organizations' : Organization.objects.filter(is_contragent=False).order_by('title'),
+            'contragents' : Organization.objects.filter(is_contragent=True).order_by('title'),
         }
 
         if request.GET.get('vehicle'):
@@ -510,7 +561,6 @@ def show_new_route_form(request):
 
 
 def delete_req_img(request, uid):
-    # pass
     try:
         route = Route.objects.get(uid=uid)
         route.request_img.delete()

@@ -1,4 +1,5 @@
-from .models import Driver, Vehicle, Route, LogistUser, Organization
+from .models import Driver, Vehicle, Route
+from .models import LogistUser, Organization, Contracts
 from rest_framework import serializers
 
 class OrganizationSerializer(serializers.ModelSerializer):
@@ -17,6 +18,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
             'bank_bik',
             'bank_corr',
             'bank_title',
+            'is_contragent',
             )
 
 class DriverSerializer(serializers.ModelSerializer):
@@ -51,9 +53,7 @@ class VehicleSerializer(serializers.ModelSerializer):
         except:
             logist = None    
         instance.driver = driver
-        print(driver)
         instance.logist = logist  
-        print(logist)
         instance.save()
         return instance
 
@@ -101,3 +101,53 @@ class RouteSerializer(serializers.ModelSerializer):
         )
 
 
+class ContractsSerializer(serializers.ModelSerializer):
+
+    organization_uid = serializers.CharField(source='organization.uid', required=False)
+    contragent_uid = serializers.CharField(source='contragent.uid', required=False)
+
+    class Meta:
+
+        model = Contracts
+        fields = (
+            'uid',
+            'title',
+            'number',
+            'date',
+            'organization_uid',
+            'contragent_uid',
+        )
+
+    def create(self, validated_data):
+        organization_uid = validated_data.pop('organization')
+        contragent_uid = validated_data.pop('contragent')
+        instance = Contracts.objects.create(**validated_data)
+        try:
+            organization = Organization.objects.get(uid=organization_uid.get('uid'))
+        except:
+            organization = None
+        try:
+            contragent = Organization.objects.get(uid=contragent_uid.get('uid'))
+        except:
+            contragent = None    
+        instance.organization = organization
+        instance.contragent = contragent  
+        instance.save()
+        return instance
+
+    def update(self, instance, validated_data):
+        organization_uid = validated_data.pop('organization')
+        contragent_uid = validated_data.pop('contragent')
+        instance = super().update(instance, validated_data)
+        try:
+            organization = Organization.objects.get(uid=organization_uid.get('uid'))
+        except:
+            organization = None
+        try:
+            contragent = Organization.objects.get(uid=contragent_uid.get('uid'))
+        except:
+            contragent = None    
+        instance.organization = organization
+        instance.contragent = contragent
+        instance.save()
+        return instance     

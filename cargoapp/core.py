@@ -23,13 +23,7 @@ def upload_route(route):
                 "expenses_1" : str(Decimal(route.expenses_1)),
                 "expenses_2" :str(Decimal(route.expenses_2)),
                 "expenses_3" : str(Decimal(route.expenses_3)),
-
-                "items_count" : str(Decimal(route.items_count)),
                 "weight" : str(Decimal(route.weight)),
-                "volume" : str(Decimal(route.volume)),
-                "width" : str(Decimal(route.width)),
-                "height" : str(Decimal(route.height)),
-                "depth" : str(Decimal(route.depth)),
                 "request_number" : route.request_number,
                 "description" : route.cargo_description,
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import LogistUser, Vehicle, Driver, Route, City
-from .models import Organization
+from .models import Organization, Contracts
 
 class LogistUserAdmin(admin.ModelAdmin):
 	list_display = (
@@ -75,7 +75,31 @@ class OrganizationAdmin(admin.ModelAdmin):
 					'title',
 					'inn',
 					'kpp',
+					'is_contragent',
 					)
+
+	list_filter = ('is_contragent',)
+
+	search_fields = ('title', 'full_title', )
+
 	readonly_fields = ('uid',)
 
+	
+
 admin.site.register(Organization, OrganizationAdmin)
+
+class ContractsAdmin(admin.ModelAdmin):
+	list_display = (
+					'title',
+					'number',
+					'date',
+					)
+
+	list_filter = ('organization',)
+
+	search_fields = ('title', 'number', 'date')
+
+	readonly_fields = ('uid',)
+
+
+admin.site.register(Contracts, ContractsAdmin)
