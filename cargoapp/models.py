@@ -8,10 +8,13 @@ import uuid
 from cargoapp.core import upload_route
 from django.conf import settings
 import datetime
+
 from django.utils.timezone import now
 
 from django.contrib.auth.hashers import make_password
 from django.conf import settings
+
+from django.db.models import Sum
 
 NDS_RATE = (
 	('TP', '20%'),
@@ -26,6 +29,41 @@ def get_image_name(instance, filename):
 	
 	new_name = ('%s' + '.' + filename.split('.')[-1]) % instance.uid
 	return new_name
+
+
+def divide_route_by_days(uid):
+
+	try:
+		route = Route.objects.get(uid = uid)
+	except:
+		return
+
+	days_of_route = DailyIndicators.objects.filter(route=route)
+
+	if days_of_route:
+		for day in days_of_route:
+			day.delete()
+
+	route_length = route.route_length
+	route_cost = route.route_cost
+
+	route_length_of_day = int(route.route_length/route.day_count)
+	route_cost_of_day = int(route.route_cost/route.day_count)
+	date = route.from_date
+	while date <= route.to_date:
+		newDay = DailyIndicators(date=date, route=route, driver=route.driver, mileage=route_length_of_day, rate=route_cost_of_day)
+		route_length -= route_length_of_day
+		route_cost -= route_cost_of_day
+		if route_length < route_length_of_day:
+			newDay.mileage += route_length
+		if route_cost < route_cost_of_day:
+			newDay.rate += route_cost
+
+		newDay.save()
+
+		date += datetime.timedelta(days=1)
+
+
 
 
 class LogistUser(AbstractUser):
@@ -60,13 +98,23 @@ class  Driver(models.Model):
 	second_name		= models.CharField(max_length = 30, verbose_name = 'Фамилия', null=True, blank=True)
 	third_name		= models.CharField(max_length = 30, verbose_name = 'Отчество', null=True, blank=True)
 
+	employment_date = models.DateField('Дата приема на работу', auto_now_add = False, blank=True, null=True, default=now)
+
 	def __str__(self):
 
 		return '{0}'.format(self.title)
 
 	def save(self, *args, **kwargs):
 
-		super(Driver, self).save(*args, **kwargs)	
+		super(Driver, self).save(*args, **kwargs)
+
+	def get_experience(self):
+
+		if self.employment_date:
+
+			return int((now().date()-self.employment_date).days/ (365.25))	
+			
+		return 0
 
 	class Meta:
 		verbose_name = 'Водитель'
@@ -80,6 +128,8 @@ class  Vehicle(models.Model):
 	car_number = models.CharField(max_length = 15, verbose_name = 'Гос номер', null=True, blank=True)
 	logist = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Логист', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 	driver = models.ForeignKey(Driver, verbose_name='Водитель', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
+
+	employment_date = models.DateField('Дата приема на работу', auto_now_add = False, blank=True, null=True, default=now)
 	
 	def __str__(self):
 
@@ -88,6 +138,14 @@ class  Vehicle(models.Model):
 	def save(self, *args, **kwargs):
 
 		super(Vehicle, self).save(*args, **kwargs)
+
+	def get_experience(self):
+
+		if self.employment_date:
+
+			return int((now().date()-self.employment_date).days/ (365.25))	
+			
+		return 0	
 
 	class Meta:
 		verbose_name = 'Автомобиль'
@@ -143,7 +201,9 @@ class Route(models.Model):
 			self.uid = get_uuid4()
 
 		self.fuel_cost = 32*self.route_length/100*45
-		self.pay_check = 6*self.route_length
+
+		self.set_pay_check()
+
 		self.pure_income = self.route_cost - self.fuel_cost - self.pay_check - self.expenses_1
 		if self.route_length:
 			self.cost_of_km = self.route_cost/self.route_length
@@ -151,13 +211,54 @@ class Route(models.Model):
 			self.cost_of_km = 0
 		self.cost_of_platon = self.route_length*Decimal(1.6)
 		if self.to_date and self.from_date:
-			self.day_count = (self.to_date-self.from_date).days
+			self.day_count = (self.to_date-self.from_date).days + 1
 		else:
-			self.day_count = 0
+			self.day_count = 0	
 
 		super(Route, self).save(*args, **kwargs)
-
+		divide_route_by_days(self.uid)
 		upload_route(self)
+
+	def set_pay_check(self):
+		
+		#Определяем первый день месяца
+		todayDate = datetime.date.today()
+		if todayDate.day > 25:
+			todayDate += datetime.timedelta(7)
+		month_first_day =  todayDate.replace(day=1)
+
+		#определяем сумму пробегов с начала месяца
+		month_mileage = DailyIndicators.objects.filter(driver=self.driver, date__gte=month_first_day, date__lte=self.from_date).aggregate(Sum('mileage')).get('mileage__sum')
+
+		if month_mileage:
+
+			#определяем порог тарифов начисления заработной платы
+			milage_rate = MileageThresholds.objects.filter(mileage__lte=month_mileage, date__lte=self.from_date).order_by('-mileage', '-date').first()
+			#определяем стаж работы водителя
+			driver_experience = self.driver.get_experience()
+			if driver_experience < 1:
+				rate = milage_rate.rate
+			elif 1 <= driver_experience < 2:
+				rate = milage_rate.surcharge_2
+			elif 2 <= driver_experience < 3:
+				rate = milage_rate.surcharge_3
+			elif 3 <= driver_experience < 4:
+				rate = milage_rate.surcharge_4
+			elif 4 <= driver_experience < 5:
+				rate = milage_rate.surcharge_5
+			elif 5 <= driver_experience < 6:
+				rate = milage_rate.surcharge_6
+			elif driver_experience > 6:
+				rate = milage_rate.surcharge_7
+		else:
+
+			milage_rate = MileageThresholds.objects.filter(mileage__lte=17999, date__lte=self.from_date).order_by('-mileage', '-date').first()
+
+			rate = milage_rate.rate
+
+		self.pay_check = rate*self.route_length
+
+
 
 	def get_client(self):
 
@@ -200,7 +301,7 @@ class Route(models.Model):
 	def get_day_count(self):
 
 		if self.to_date and self.from_date:
-			return self.to_date-self.from_date
+			return (self.to_date-self.from_date + 1)
 		else:
 			return 0
 
@@ -275,3 +376,69 @@ class Contracts(models.Model):
 	class Meta:
 		verbose_name = 'Договор'
 		verbose_name_plural = 'Договоры'
+
+
+class MileageRevenueStandard(models.Model):
+
+	vehicle = models.ForeignKey('Vehicle', verbose_name='Автомобиль', on_delete=models.SET_DEFAULT, default=None)
+	date = models.DateField('Действует с', auto_now_add = False)
+	mileage = models.DecimalField(verbose_name = 'Норматив пробега', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
+	revenue = models.DecimalField(verbose_name = 'Норматив выручки', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
+
+
+	def __str__(self):
+		return '{}'.format(self.pk)
+
+	def save(self, *args, **kwargs):
+
+		super(MileageRevenueStandard, self).save(*args, **kwargs)
+
+	class Meta:
+		verbose_name = 'Норматив по пробегу и выручке'
+		verbose_name_plural = 'Нормативы по пробегу и выручке'
+
+
+class MileageThresholds(models.Model):
+
+	date = models.DateField('Действует с', auto_now_add = False)
+	mileage = models.DecimalField(verbose_name = 'Пробег от ', max_digits=15, decimal_places=2)
+	rate = models.DecimalField(verbose_name = 'Тариф ', max_digits=15, decimal_places=2)
+
+	surcharge_2 = models.DecimalField(verbose_name = 'Долата за стаж (2 год)', max_digits=15, decimal_places=2, blank=True, null=True)
+	surcharge_3 = models.DecimalField(verbose_name = 'Долата за стаж (3 год)', max_digits=15, decimal_places=2, blank=True, null=True)
+	surcharge_4 = models.DecimalField(verbose_name = 'Долата за стаж (4 год)', max_digits=15, decimal_places=2, blank=True, null=True)
+	surcharge_5 = models.DecimalField(verbose_name = 'Долата за стаж (5 год)', max_digits=15, decimal_places=2, blank=True, null=True)
+	surcharge_6 = models.DecimalField(verbose_name = 'Долата за стаж (6 год)', max_digits=15, decimal_places=2, blank=True, null=True)
+	surcharge_7 = models.DecimalField(verbose_name = 'Долата за стаж (7 год и далее)', max_digits=15, decimal_places=2, blank=True, null=True)
+
+	def __str__(self):
+		return '{}'.format(self.pk)
+
+	def save(self, *args, **kwargs):
+
+		super(MileageThresholds, self).save(*args, **kwargs)
+
+	class Meta:
+		verbose_name = 'Порог тарифов по ежемесячному пробегу'
+		verbose_name_plural = 'Пороги тарифов по ежемесячному пробегу'
+
+
+class DailyIndicators(models.Model):
+
+	date = models.DateField('Дата', auto_now_add = False)
+	mileage = models.DecimalField(verbose_name = 'Протяженность', max_digits=15, decimal_places=2)
+	rate = models.DecimalField(verbose_name = 'Стоимость', max_digits=15, decimal_places=2)
+
+	route = models.ForeignKey('Route', verbose_name = 'Ссылка на маршрут', on_delete=models.CASCADE)
+	driver = models.ForeignKey('Driver', verbose_name = 'Ссылка на водителя', on_delete=models.SET_DEFAULT, blank=True, null=True, default=None)
+
+	def __str__(self):
+		return '{}'.format(self.pk)
+
+	def save(self, *args, **kwargs):
+
+		super(DailyIndicators, self).save(*args, **kwargs)
+
+	class Meta:
+		verbose_name = 'Дневные показатели'
+		verbose_name_plural = 'Дневные показатели'

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import LogistUser, Vehicle, Driver, Route, City
 from .models import Organization, Contracts
+from .models import MileageRevenueStandard, MileageThresholds, DailyIndicators
 
 class LogistUserAdmin(admin.ModelAdmin):
 	list_display = (
@@ -16,9 +17,14 @@ class DriverAdmin(admin.ModelAdmin):
 	list_display = (
 					'uid',
 					'title',
+					'experience'
 					)
 	readonly_fields = ('uid',)
 	exclude = ['first_name', 'second_name', 'third_name']
+
+	def experience(self, obj):
+
+		return obj.get_experience()
 
 admin.site.register(Driver, DriverAdmin)
 
@@ -32,9 +38,9 @@ class RouteAdmin(admin.ModelAdmin):
 					'vehicle',
 					)
 
-	readonly_fields = ('uid',)
+	readonly_fields = ('uid','pay_check')
 
-	exclude = ['fuel_cost', 'pay_check', 'pure_income', 'cost_of_km', 'cost_of_platon', 'day_count', ]
+	exclude = ['fuel_cost', 'pure_income', 'cost_of_km', 'cost_of_platon', 'day_count', ]
 
 	# def formfield_for_foreignkey(self, db_field, request, **kwargs):
 	# 	if db_field.name == "vehicle":
@@ -103,3 +109,39 @@ class ContractsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Contracts, ContractsAdmin)
+
+
+class MileageRevenueStandardAdmin(admin.ModelAdmin):
+
+	list_display = (
+					'date',
+					'vehicle',
+					'mileage',
+					'revenue',
+					)
+
+admin.site.register(MileageRevenueStandard, MileageRevenueStandardAdmin)
+
+
+class MileageThresholdsAdmin(admin.ModelAdmin):
+
+	list_display = (
+					'date',
+					'mileage',
+					'rate',
+					)
+	
+admin.site.register(MileageThresholds, MileageThresholdsAdmin)
+
+class DailyIndicatorsAdmin(admin.ModelAdmin):
+
+	list_display = (
+					'date',
+					'mileage',
+					'rate',
+					'route'
+					)
+
+list_filter = ('route',)
+
+admin.site.register(DailyIndicators,DailyIndicatorsAdmin)

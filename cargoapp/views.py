@@ -104,9 +104,9 @@ def show_index_page(request):
 
         if request.GET.get('vehicle'):
             vehicle = Vehicle.objects.get(uid=request.GET.get('vehicle'))
-            routes = Route.objects.filter(logist=request.user, vehicle=vehicle)
+            routes = Route.objects.filter(logist=request.user, vehicle=vehicle).order_by('-from_date')
         else:
-            routes = Route.objects.filter(logist=request.user)
+            routes = Route.objects.filter(logist=request.user).order_by('-from_date')
             vehicle = None
 
 
