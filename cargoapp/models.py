@@ -429,8 +429,8 @@ class DailyIndicators(models.Model):
 	mileage = models.DecimalField(verbose_name = 'Протяженность', max_digits=15, decimal_places=2)
 	rate = models.DecimalField(verbose_name = 'Стоимость', max_digits=15, decimal_places=2)
 
-	route = models.ForeignKey('Route', verbose_name = 'Ссылка на маршрут', on_delete=models.CASCADE)
-	driver = models.ForeignKey('Driver', verbose_name = 'Ссылка на водителя', on_delete=models.SET_DEFAULT, blank=True, null=True, default=None)
+	route = models.ForeignKey('Route', verbose_name = 'Маршрут', on_delete=models.CASCADE)
+	driver = models.ForeignKey('Driver', verbose_name = 'Водитель', on_delete=models.SET_DEFAULT, blank=True, null=True, default=None)
 
 	def __str__(self):
 		return '{}'.format(self.pk)

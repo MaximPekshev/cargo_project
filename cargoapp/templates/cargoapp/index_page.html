@@ -27,6 +27,7 @@
 	<table class="table table-sm col-12">
 		<thead>
 			<tr>
+				<th>#</th>
 				<th width="150">Дата с</th>
 				<th width="150">Дата по</th>
 				<th>Кол-во дней</th>
@@ -45,6 +46,7 @@
 			{% for item in routes %}
 			<!-- <tr onclick="window.location.href='{% url 'show_route' uid=item.uid %}'; return false"> -->
 			<tr>
+				<td>{{ item.id }}</td>
 				<td>{{ item.from_date|date:"Y-m-d" }}</td>
 				<td>{{ item.to_date|date:"Y-m-d" }}</td>
 				<td>{{ item.day_count }}</td>
@@ -61,6 +63,7 @@
 			{% endfor %}
 			<tr style="background-color: grey;">
 				<td colspan="2">Итого (факт):</td>
+				<td></td>
 				<td>{{ total_days }}</td>
 				<td></td>
 				<td>{{ total_route_length }}</td>

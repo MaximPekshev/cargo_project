@@ -5,9 +5,7 @@ from .models import MileageRevenueStandard, MileageThresholds, DailyIndicators
 
 class LogistUserAdmin(admin.ModelAdmin):
 	list_display = (
-					'id',
 					'username',
-					'uid',
 					)
 	# readonly_fields = ['uid',]
 	# exclude = ['psw',]
@@ -15,7 +13,6 @@ admin.site.register(LogistUser, LogistUserAdmin)
 
 class DriverAdmin(admin.ModelAdmin):
 	list_display = (
-					'uid',
 					'title',
 					'experience'
 					)
@@ -32,7 +29,7 @@ admin.site.register(Driver, DriverAdmin)
 class RouteAdmin(admin.ModelAdmin):
 
 	list_display = (
-					'uid',
+					'id',
 					'a_point',
 					'b_point',
 					'vehicle',
@@ -56,7 +53,6 @@ admin.site.register(Route, RouteAdmin)
 
 class VehicleAdmin(admin.ModelAdmin):
 	list_display = (
-					'uid',
 					'vin',
 					'car_number',
 					)
@@ -90,8 +86,6 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 	readonly_fields = ('uid',)
 
-	
-
 admin.site.register(Organization, OrganizationAdmin)
 
 class ContractsAdmin(admin.ModelAdmin):
@@ -106,7 +100,6 @@ class ContractsAdmin(admin.ModelAdmin):
 	search_fields = ('title', 'number', 'date')
 
 	readonly_fields = ('uid',)
-
 
 admin.site.register(Contracts, ContractsAdmin)
 

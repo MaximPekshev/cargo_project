@@ -13,6 +13,9 @@
 <div class="row justify-content-center mt-2">
 	<form class="col-6" method="POST" id="routeForm" action="{% url 'route_save' uid=route.uid %}" enctype="multipart/form-data">
 		{% csrf_token %}
+		<div>
+			<h4>#{{ route.id }}</h4>
+		</div>
 		<div class="form-group row mt-4">
 			<label for="inputFrom_date" class="col-2 col-form-label">Дата С</label>
 			<div class="col-4">
