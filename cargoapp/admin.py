@@ -55,7 +55,11 @@ class VehicleAdmin(admin.ModelAdmin):
 	list_display = (
 					'vin',
 					'car_number',
+					'logist',
+					'driver'
 					)
+
+	list_filter = ('logist',)
 	readonly_fields = ('uid',)
 
 admin.site.register(Vehicle, VehicleAdmin)
