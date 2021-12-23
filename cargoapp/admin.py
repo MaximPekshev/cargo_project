@@ -93,6 +93,8 @@ class ContractsAdmin(admin.ModelAdmin):
 					'title',
 					'number',
 					'date',
+					'organization',
+					'contragent'
 					)
 
 	list_filter = ('organization',)
