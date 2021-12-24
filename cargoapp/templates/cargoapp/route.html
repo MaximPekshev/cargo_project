@@ -134,7 +134,7 @@
 				<div class="form-group">
 					<select class="form-control" id="inputContragent" name="inputContragent">
 						{% if route.contragent %}
-						<option selected value="{{ route.contragent.uid }}">{{ route.contragent.title }}</option>
+						<option selected value="{{ route.contragent.uid }}">{{ route.contragent.title }}, ИНН {{ route.contragent.inn }}</option>
 						<option value="">...</option>
 						{% else %}
 						<option value="">...</option>
