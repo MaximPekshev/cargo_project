@@ -109,6 +109,12 @@ def show_index_page(request):
             routes = Route.objects.filter(logist=request.user).order_by('-from_date')
             vehicle = None
 
+        try:
+            total_routes_length = routes.aggregate(Sum('route_length'))['route_length__sum']
+            total_cost_of_km = ((routes.aggregate(Sum('route_cost'))['route_cost__sum']/routes.aggregate(Sum('route_length'))['route_length__sum']).quantize(Decimal("1.00")))
+        except:
+            total_cost_of_km = Decimal(0)
+            total_cost_of_km = total_cost_of_km.quantize(Decimal("1.00"))
 
         context = {
              'user' : request.user,
@@ -122,7 +128,7 @@ def show_index_page(request):
              'total_fuel_cost' : routes.aggregate(Sum('fuel_cost'))['fuel_cost__sum'].quantize(Decimal("1.00")) if routes else 0,
              'total_pay_check' : routes.aggregate(Sum('pay_check'))['pay_check__sum'].quantize(Decimal("1.00")) if routes else 0,
              'total_pure_income' : ((routes.aggregate(Sum('pure_income'))['pure_income__sum']-routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum']).quantize(Decimal("1.00"))) if routes else 0,
-             'total_cost_of_km' : ((routes.aggregate(Sum('route_cost'))['route_cost__sum']/routes.aggregate(Sum('route_length'))['route_length__sum']).quantize(Decimal("1.00"))) if routes else 0,
+             'total_cost_of_km' : total_cost_of_km,
              'total_cost_of_platon' : routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum'].quantize(Decimal("1.00")) if routes else 0 if routes else 0,
              'total_day_count' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")) if routes else 0,
         }

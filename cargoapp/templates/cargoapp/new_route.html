@@ -117,7 +117,7 @@
 					<select class="form-control" id="inputContragent" name="inputContragent">
 						<option value="">...</option>
 						{% for contragent in contragents %}
-						<option value="{{ contragent.uid }}">{{ contragent.title }}</option>
+						<option value="{{ contragent.uid }}">{{ contragent.title }} , ИНН {{ contragent.inn }}</option>
 						{% endfor %}
 					</select>
 				</div>
