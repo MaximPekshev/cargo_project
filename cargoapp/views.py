@@ -278,9 +278,9 @@ def route_save(request, uid):
                     current_route.cargo_description = cargo_description
                     current_route.request_number = request_number
                     
-                    current_route.route_cost = Decimal(route_cost.replace(',','.'))
-                    current_route.expenses_1 = Decimal(expenses_1.replace(',','.'))
-                    current_route.weight = Decimal(weight.replace(',','.'))
+                    current_route.route_cost = Decimal(route_cost.replace(',','.')) if route_cost else Decimal(0).quantize(Decimal("1.00"))
+                    current_route.expenses_1 = Decimal(expenses_1.replace(',','.')) if expenses_1 else Decimal(0).quantize(Decimal("1.00"))
+                    current_route.weight = Decimal(weight.replace(',','.')) if weight else Decimal(0).quantize(Decimal("1.00"))
 
                     if request_img:
                         current_route.request_img = request_img
