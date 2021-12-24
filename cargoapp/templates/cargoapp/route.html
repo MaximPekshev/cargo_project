@@ -140,7 +140,7 @@
 						<option value="">...</option>
 						{% endif %}
 						{% for contragent in contragents %}
-						<option value="{{ contragent.uid }}">{{ contragent.title }}</option>
+						<option value="{{ contragent.uid }}">{{ contragent.title }}, ИНН {{ route.contragent.inn }}</option>
 						{% endfor %}
 					</select>
 				</div>
