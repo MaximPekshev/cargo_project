@@ -37,7 +37,7 @@ class VehicleSerializer(serializers.ModelSerializer):
     logist_uid = serializers.CharField(source='logist.uid', required=False)
     class Meta:
         model = Vehicle
-        fields = ('uid', 'vin', 'car_number', 'employment_date', 'driver_uid', 'logist_uid')
+        fields = ('uid', 'vin', 'car_number', 'employment_date', 'driver_uid', 'logist_uid', 'nav_id',)
 
 
     def create(self, validated_data):

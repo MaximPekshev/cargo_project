@@ -130,6 +130,7 @@ class  Vehicle(models.Model):
 	driver = models.ForeignKey(Driver, verbose_name='Водитель', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 
 	employment_date = models.DateField('Дата приема на работу', auto_now_add = False, blank=True, null=True, default=now)
+	nav_id = models.CharField(max_length=15, verbose_name="Nav ID", null=True, blank=True)
 	
 	def __str__(self):
 
@@ -200,7 +201,7 @@ class Route(models.Model):
 		if not self.uid:
 			self.uid = get_uuid4()
 
-		self.fuel_cost = 32*self.route_length/100*45
+		self.fuel_cost = 32*self.route_length/100*52
 
 		self.set_pay_check()
 
