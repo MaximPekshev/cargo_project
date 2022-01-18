@@ -229,15 +229,13 @@ class Route(models.Model):
 		month_first_day =  todayDate.replace(day=1)
 		milage_rate = MileageThresholds.objects.filter(mileage__lte=17999, date__lte=self.from_date).order_by('-mileage', '-date').first()
 		if milage_rate:
-		    rate = milage_rate.rate
+			rate = milage_rate.rate
 		else:
 		    rate=1
-		    
+
 		#определяем сумму пробегов с начала месяца
 		month_mileage = DailyIndicators.objects.filter(driver=self.driver, date__gte=month_first_day, date__lte=self.from_date).aggregate(Sum('mileage')).get('mileage__sum')
-		
-		if month_mileage:
-
+		if month_mileage > 17999:
 			#определяем порог тарифов начисления заработной платы
 			milage_rate = MileageThresholds.objects.filter(mileage__lte=month_mileage, date__lte=self.from_date).order_by('-mileage', '-date').first()
 			#определяем стаж работы водителя

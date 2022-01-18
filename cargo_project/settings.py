@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'authapp',
     'api_app',
+    'autographapp',
     'django_cleanup',
     
 ]
