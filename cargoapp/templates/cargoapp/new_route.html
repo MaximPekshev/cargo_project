@@ -114,8 +114,8 @@
 			<label for="inputContragent" class="col-2 col-form-label">Контрагент</label>
 			<div class="col-4">
 				<div class="form-group">
-					<select class="form-control" id="inputContragent" name="inputContragent">
-						<option value="">...</option>
+					<select class="js-example-basic-single form-control" name="inputContragent" id="inputContragent">
+						<option selected value="">...</option>
 						{% for contragent in contragents %}
 						<option value="{{ contragent.uid }}">{{ contragent.title }} , ИНН {{ contragent.inn }}</option>
 						{% endfor %}

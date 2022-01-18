@@ -132,15 +132,15 @@
 			<label for="inputContragent" class="col-2 col-form-label">Контрагент</label>
 			<div class="col-4">
 				<div class="form-group">
-					<select class="form-control" id="inputContragent" name="inputContragent">
+					<select class="js-example-basic-single form-control" name="inputContragent" id="inputContragent">
 						{% if route.contragent %}
-						<option selected value="{{ route.contragent.uid }}">{{ route.contragent.title }}, ИНН {{ route.contragent.inn }}</option>
 						<option value="">...</option>
+						<option selected value="{{ route.contragent.uid }}">{{ route.contragent.title }}, ИНН {{ route.contragent.inn }}</option>
 						{% else %}
 						<option value="">...</option>
 						{% endif %}
 						{% for contragent in contragents %}
-						<option value="{{ contragent.uid }}">{{ contragent.title }}, ИНН {{ route.contragent.inn }}</option>
+						<option value="{{ contragent.uid }}">{{ contragent.title }} , ИНН {{ contragent.inn }}</option>
 						{% endfor %}
 					</select>
 				</div>
