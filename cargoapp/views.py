@@ -14,6 +14,11 @@ from .serializers import OrganizationSerializer
 from .models import Contracts
 from .serializers import ContractsSerializer
 
+from django.contrib.auth.models import Group
+
+from autographapp.models import AutographDailyIndicators
+import datetime
+
 
 from django.db.models import Sum
 from django.http import Http404
@@ -102,96 +107,185 @@ def show_index_page(request):
 
     if request.user.is_authenticated:
 
-        if request.GET.get('vehicle'):
-            vehicle = Vehicle.objects.get(uid=request.GET.get('vehicle'))
-            routes = Route.objects.filter(logist=request.user, vehicle=vehicle).order_by('-from_date')
-        else:
-            routes = Route.objects.filter(logist=request.user).order_by('-from_date')
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_logistsupervisor = Group.objects.get(name="Старший логист").user_set.all()
+
+        if request.user in users_in_group_vehicle_supervisor:
+            # исправить таймдельта на 1
+            if request.GET.get('date'):
+                date = datetime.datetime.strptime(request.GET.get('date'), "%Y-%m-%d")
+            else:    
+                date = datetime.datetime.now() -  datetime.timedelta(days=1)
+
+            context = {
+                'vehicles' : AutographDailyIndicators.objects.filter(date=date.date(), vehicle__in=Vehicle.objects.filter(columnar=request.user)),
+                'date' : date.strftime("%Y-%m-%d"),
+            }
+            return render(request, 'autographapp/autograph.html', context)
+
+        elif request.user in users_in_group_logistsupervisor:
+
+            logists  = LogistUser.objects.filter(supervisor=request.user)
             vehicle = None
+            logist = None
 
-        try:
-            total_routes_length = routes.aggregate(Sum('route_length'))['route_length__sum']
-            total_cost_of_km = ((routes.aggregate(Sum('route_cost'))['route_cost__sum']/routes.aggregate(Sum('route_length'))['route_length__sum']).quantize(Decimal("1.00")))
-        except:
-            total_cost_of_km = Decimal(0)
-            total_cost_of_km = total_cost_of_km.quantize(Decimal("1.00"))
+            if request.GET.get('vehicle') and not request.GET.get('logist'):
+                vehicle = Vehicle.objects.get(uid=request.GET.get('vehicle'))
+                routes = Route.objects.filter(vehicle=vehicle).order_by('-from_date')
+            elif not request.GET.get('vehicle') and request.GET.get('logist'):
+                logist = LogistUser.objects.get(uid=request.GET.get('logist'))
+                routes = Route.objects.filter(logist=logist).order_by('-from_date')
+            elif request.GET.get('vehicle') and request.GET.get('logist'):
+                vehicle = Vehicle.objects.get(uid=request.GET.get('vehicle'))
+                logist = LogistUser.objects.get(uid=request.GET.get('logist'))
+                routes = Route.objects.filter(logist=logist, vehicle=vehicle).order_by('-from_date')
+            else:
+                routes = Route.objects.filter(logist__in=logists).order_by('-from_date')
+                vehicle = None
 
-        context = {
-             'user' : request.user,
-             'routes' : routes,
-             'vehicles' : Vehicle.objects.filter(logist=request.user),
-             'actual_vehicle': vehicle,
-             'total_expenses_1' : routes.aggregate(Sum('expenses_1'))['expenses_1__sum'].quantize(Decimal("1.00")) if routes else 0,
-             'total_route_cost' : routes.aggregate(Sum('route_cost'))['route_cost__sum'].quantize(Decimal("1.00")) if routes else 0,
-             'total_route_length' : routes.aggregate(Sum('route_length'))['route_length__sum'].quantize(Decimal("1.00")) if routes else 0,
-             'total_days' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")) if routes else 0,
-             'total_fuel_cost' : routes.aggregate(Sum('fuel_cost'))['fuel_cost__sum'].quantize(Decimal("1.00")) if routes else 0,
-             'total_pay_check' : routes.aggregate(Sum('pay_check'))['pay_check__sum'].quantize(Decimal("1.00")) if routes else 0,
-             'total_pure_income' : ((routes.aggregate(Sum('pure_income'))['pure_income__sum']-routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum']).quantize(Decimal("1.00"))) if routes else 0,
-             'total_cost_of_km' : total_cost_of_km,
-             'total_cost_of_platon' : routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum'].quantize(Decimal("1.00")) if routes else 0 if routes else 0,
-             'total_day_count' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")) if routes else 0,
-        }
+            # try:
+            #     total_routes_length = routes.aggregate(Sum('route_length'))['route_length__sum']
+            #     total_cost_of_km = ((routes.aggregate(Sum('route_cost'))['route_cost__sum']/routes.aggregate(Sum('route_length'))['route_length__sum']).quantize(Decimal("1.00")))
+            # except:
+            #     total_cost_of_km = Decimal(0)
+            #     total_cost_of_km = total_cost_of_km.quantize(Decimal("1.00"))
+            if vehicle:
+                print(vehicle.uid)
+                vehicles = Vehicle.objects.filter(logist__in=logists).exclude(uid=vehicle.uid)
+            else:
+                vehicles = Vehicle.objects.filter(logist__in=logists)
 
-        return render(request, 'cargoapp/index_page.html', context)
+            if logist:
+                print(logist.uid)
+                logists =  LogistUser.objects.filter(supervisor=request.user).exclude(uid=logist.uid)
+            else:
+                logists = LogistUser.objects.filter(supervisor=request.user)    
+
+            context = {
+                'user' : request.user,
+                'routes' : routes,
+                'vehicles' : vehicles,
+                'logists' : logists,
+                'checked_vehicle': vehicle,
+                'checked_logist': logist,
+                # 'total_expenses_1' : routes.aggregate(Sum('expenses_1'))['expenses_1__sum'].quantize(Decimal("1.00")) if routes else 0,
+                # 'total_route_cost' : routes.aggregate(Sum('route_cost'))['route_cost__sum'].quantize(Decimal("1.00")) if routes else 0,
+                # 'total_route_length' : routes.aggregate(Sum('route_length'))['route_length__sum'].quantize(Decimal("1.00")) if routes else 0,
+                # 'total_days' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")) if routes else 0,
+                # 'total_fuel_cost' : routes.aggregate(Sum('fuel_cost'))['fuel_cost__sum'].quantize(Decimal("1.00")) if routes else 0,
+                # 'total_pay_check' : routes.aggregate(Sum('pay_check'))['pay_check__sum'].quantize(Decimal("1.00")) if routes else 0,
+                # 'total_pure_income' : ((routes.aggregate(Sum('pure_income'))['pure_income__sum']-routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum']).quantize(Decimal("1.00"))) if routes else 0,
+                # 'total_cost_of_km' : total_cost_of_km,
+                # 'total_cost_of_platon' : routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum'].quantize(Decimal("1.00")) if routes else 0 if routes else 0,
+                # 'total_day_count' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")) if routes else 0,
+            }
+
+            return render(request, 'cargoapp/supervisor_index.html', context)
+
+        else:
+            if request.GET.get('vehicle'):
+                vehicle = Vehicle.objects.get(uid=request.GET.get('vehicle'))
+                routes = Route.objects.filter(logist=request.user, vehicle=vehicle).order_by('-from_date')
+            else:
+                routes = Route.objects.filter(logist=request.user).order_by('-from_date')
+                vehicle = None
+
+            try:
+                total_routes_length = routes.aggregate(Sum('route_length'))['route_length__sum']
+                total_cost_of_km = ((routes.aggregate(Sum('route_cost'))['route_cost__sum']/routes.aggregate(Sum('route_length'))['route_length__sum']).quantize(Decimal("1.00")))
+            except:
+                total_cost_of_km = Decimal(0)
+                total_cost_of_km = total_cost_of_km.quantize(Decimal("1.00"))
+
+            context = {
+                'user' : request.user,
+                'routes' : routes,
+                'vehicles' : Vehicle.objects.filter(logist=request.user),
+                'actual_vehicle': vehicle,
+                'total_expenses_1' : routes.aggregate(Sum('expenses_1'))['expenses_1__sum'].quantize(Decimal("1.00")) if routes else 0,
+                'total_route_cost' : routes.aggregate(Sum('route_cost'))['route_cost__sum'].quantize(Decimal("1.00")) if routes else 0,
+                'total_route_length' : routes.aggregate(Sum('route_length'))['route_length__sum'].quantize(Decimal("1.00")) if routes else 0,
+                'total_days' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")) if routes else 0,
+                'total_fuel_cost' : routes.aggregate(Sum('fuel_cost'))['fuel_cost__sum'].quantize(Decimal("1.00")) if routes else 0,
+                'total_pay_check' : routes.aggregate(Sum('pay_check'))['pay_check__sum'].quantize(Decimal("1.00")) if routes else 0,
+                'total_pure_income' : ((routes.aggregate(Sum('pure_income'))['pure_income__sum']-routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum']).quantize(Decimal("1.00"))) if routes else 0,
+                'total_cost_of_km' : total_cost_of_km,
+                'total_cost_of_platon' : routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum'].quantize(Decimal("1.00")) if routes else 0 if routes else 0,
+                'total_day_count' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")) if routes else 0,
+            }
+
+            return render(request, 'cargoapp/index_page.html', context)
 
     else:
 
         return redirect('login')        
 
 
+
 def show_route(request, uid):
 
     if request.user.is_authenticated:
 
-        route = Route.objects.get(uid=uid)
+        users_in_group_logistsupervisor = Group.objects.get(name="Старший логист").user_set.all()
 
-        if route.organization:
-            organizations = Organization.objects.filter(is_contragent=False).exclude(uid=route.organization.uid).order_by('title')
-        else:  
-            organizations = Organization.objects.filter(is_contragent=False).order_by('title')
+        if request.user in users_in_group_logistsupervisor:
 
-        if route.contragent:
-            contragents = Organization.objects.filter(is_contragent=True).exclude(uid=route.contragent.uid).order_by('title')
-        else:  
-            contragents = Organization.objects.filter(is_contragent=True).order_by('title')
-              
-        if route.driver:
-            drivers = Driver.objects.all().exclude(uid=route.driver.uid).order_by('title')
-        else:  
-            drivers = Driver.objects.all().order_by('title')
+            context = {
+                'route':  Route.objects.get(uid=uid)
+            }
 
-        if route.logist:
-            logists = LogistUser.objects.all().exclude(uid=route.logist.uid).order_by('username')
-        else:  
-            logists = LogistUser.objects.all().order_by('username')
+            return render(request, 'cargoapp/supervisor_route.html', context)
 
-        if route.vehicle:
-            vehicles = Vehicle.objects.filter(logist=request.user).exclude(uid=route.vehicle.uid).order_by('car_number')
-        else:  
-            vehicles = Vehicle.objects.all().order_by('car_number')
+        else:    
 
-        contracts = {}
+            route = Route.objects.get(uid=uid)
 
-        if route.organization and route.contragent:
-            if route.contract:
-                contracts = Contracts.objects.filter(organization=route.organization, contragent=route.contragent).exclude(uid=route.contract.uid).order_by('date') 
-            else:
-                contracts = Contracts.objects.filter(organization=route.organization, contragent=route.contragent).order_by('date') 
-            
+            if route.organization:
+                organizations = Organization.objects.filter(is_contragent=False).exclude(uid=route.organization.uid).order_by('title')
+            else:  
+                organizations = Organization.objects.filter(is_contragent=False).order_by('title')
 
-        context = {
-            'route' : route,
-            'drivers' : drivers,
-            'logists' : logists,
-            'vehicles' : vehicles,
-            'cities'   : City.objects.all().order_by('title'),
-            'organizations' : organizations,
-            'contragents' : contragents,
-            'contracts' : contracts,
-        }
+            if route.contragent:
+                contragents = Organization.objects.filter(is_contragent=True).exclude(uid=route.contragent.uid).order_by('title')
+            else:  
+                contragents = Organization.objects.filter(is_contragent=True).order_by('title')
+                
+            if route.driver:
+                drivers = Driver.objects.all().exclude(uid=route.driver.uid).order_by('title')
+            else:  
+                drivers = Driver.objects.all().order_by('title')
 
-        return render(request, 'cargoapp/route.html', context)
+            if route.logist:
+                logists = LogistUser.objects.all().exclude(uid=route.logist.uid).order_by('username')
+            else:  
+                logists = LogistUser.objects.all().order_by('username')
+
+            if route.vehicle:
+                vehicles = Vehicle.objects.filter(logist=request.user).exclude(uid=route.vehicle.uid).order_by('car_number')
+            else:  
+                vehicles = Vehicle.objects.all().order_by('car_number')
+
+            contracts = {}
+
+            if route.organization and route.contragent:
+                if route.contract:
+                    contracts = Contracts.objects.filter(organization=route.organization, contragent=route.contragent).exclude(uid=route.contract.uid).order_by('date') 
+                else:
+                    contracts = Contracts.objects.filter(organization=route.organization, contragent=route.contragent).order_by('date') 
+                
+
+            context = {
+                'route' : route,
+                'drivers' : drivers,
+                'logists' : logists,
+                'vehicles' : vehicles,
+                'cities'   : City.objects.all().order_by('title'),
+                'organizations' : organizations,
+                'contragents' : contragents,
+                'contracts' : contracts,
+            }
+
+            return render(request, 'cargoapp/route.html', context)
 
     else:
 

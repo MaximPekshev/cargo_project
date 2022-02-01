@@ -1,3 +1,4 @@
+from django.http import request
 from cargoapp.models import Vehicle
 from autographapp.models import AutographDailyIndicators
 from decouple import config
@@ -23,11 +24,18 @@ def enumDevices(session):
 	autograph_path = config('AUTOGRAPH_BASE_PATH')
 	schemaID = config('AUTOGRAPH_SCHEME')
 	URL = '{0}EnumDevices?session={1}&schemaID={2}'.format(autograph_path, session, schemaID)
-	answer = requests.get(URL)
 
-	response = answer.json()
-	response_vehicles = response.get('Items')
-	return response_vehicles
+	try:
+		answer = requests.get(URL)
+	except:
+		answer = None	
+
+	if answer:
+		response = answer.json()
+		response_vehicles = response.get('Items')
+		return response_vehicles
+	else:
+		return None	
 
 def createAutographDay(data, date, serial):
 	try:
@@ -42,14 +50,13 @@ def createAutographDay(data, date, serial):
 		newAutographDay.vehicle = vehicle
 		newAutographDay.driver = vehicle.driver
 
-		newAutographDay.maxSpeed = Decimal(data.get('MaxSpeed')).quantize(Decimal("1.00"))
-		newAutographDay.averageSpeed = Decimal(data.get('AverageSpeed')).quantize(Decimal("1.00"))
-
-		newAutographDay.fuelConsumPerDay = Decimal(data.get('AverageSpeed')).quantize(Decimal("1.00"))
-		newAutographDay.fuelConsumPer100km = Decimal(data.get('AverageSpeed')).quantize(Decimal("1.00"))
-		newAutographDay.rotationMAX = Decimal(data.get('RotationMAX')).quantize(Decimal("1.00"))
-		newAutographDay.parkCount = int(data.get('ParkCount'))
-		newAutographDay.totalDistance = Decimal(data.get('TotalDistance')).quantize(Decimal("1.00"))
+		newAutographDay.maxSpeed = Decimal(data.get('maxSpeed')).quantize(Decimal("1.00"))
+		newAutographDay.averageSpeed = Decimal(data.get('averageSpeed')).quantize(Decimal("1.00"))
+		newAutographDay.fuelConsumPerDay = Decimal(data.get('fuelConsumPerDay')).quantize(Decimal("1.00"))
+		newAutographDay.fuelConsumPer100km = Decimal(data.get('fuelConsumPer100km')).quantize(Decimal("1.00"))
+		newAutographDay.rotationMAX = Decimal(data.get('rotationMAX')).quantize(Decimal("1.00"))
+		newAutographDay.parkCount = int(data.get('parkCount'))
+		newAutographDay.totalDistance = Decimal(data.get('totalDistance')).quantize(Decimal("1.00"))
 		
 		newAutographDay.save()
 
@@ -81,20 +88,84 @@ def uploadAutographDailyIndicators():
 					autograph_path = config('AUTOGRAPH_BASE_PATH')
 					schemaID = config('AUTOGRAPH_SCHEME')
 					yesterday = datetime.datetime.now() -  datetime.timedelta(days=1)
-					dateTimeFirst = yesterday.strftime("%Y%m%d")
-					dateTimeLast = dateTimeFirst + '-2359'
+					dateTimeFirst = yesterday.strftime("%Y%m%d") + '-0300'
+					dateTimeLast = datetime.datetime.now().strftime("%Y%m%d") + '-0259'
+					# yesterday = datetime.datetime.strptime('20220124', "%Y%m%d")
+					# dateTimeFirst = '20220124-0300'
+					# dateTimeLast = '20220125-0259'
 
 					URL = '{0}GetTrips?session={1}&schemaID={2}&IDs={3}&SD={4}&ED={5}&tripSplitterIndex=0'.format(
 						autograph_path, session, schemaID, vehicleID, dateTimeFirst, dateTimeLast)
 
-					answer = getRequest(URL)
+					try:
+						answer = getRequest(URL)
+					except:
+						answer = None	
+
 					if answer:
+
 						response = answer.json()
 						data = response.get(vehicleID)
 						trips = data.get('Trips')
 						if trips:
-							trips = trips[0]
-							createAutographDay(trips.get('Total'), yesterday, data.get('Serial'))
+
+							trips_count = 0
+							date = yesterday
+							maxSpeed = 0
+							averageSpeed = 0
+							fuelConsumPerDay = 0
+							fuelConsumPer100km = 0
+							rotationMAX = 0
+							parkCount = 0
+							parkCount5MinMore = 0
+							hardBrakingCount = 0
+							totalDistance = 0
+
+							for item in trips:
+								totalData = item.get("Total")
+
+								request_maxSpeed = totalData.get("MaxSpeed")
+								if request_maxSpeed:
+									if request_maxSpeed > maxSpeed:
+										maxSpeed = request_maxSpeed
+
+								request_averageSpeed = totalData.get("AverageSpeed")
+								if request_averageSpeed:
+									averageSpeed += request_averageSpeed
+
+								request_fuelConsumPerDay = totalData.get("Engine1FuelConsum")
+								if request_fuelConsumPerDay:
+									fuelConsumPerDay += request_fuelConsumPerDay
+
+								request_fuelConsumPer100km = totalData.get("Engine1FuelConsumPer100km")
+								if request_fuelConsumPer100km:
+									fuelConsumPer100km += request_fuelConsumPer100km
+
+								request_rotationMAX = totalData.get("RotationMAX")
+								if request_rotationMAX:
+									if request_rotationMAX > rotationMAX:
+										rotationMAX = request_rotationMAX
+
+								request_parkCount = totalData.get("ParkCount")
+								if request_parkCount:
+									parkCount += request_parkCount
+
+								request_totalDistance = totalData.get("TotalDistance")
+								if request_totalDistance:
+									totalDistance += request_totalDistance
+
+								trips_count += 1
+
+							request_context = {
+								'maxSpeed' : maxSpeed,
+								'averageSpeed' : averageSpeed/trips_count,
+								'fuelConsumPerDay' : fuelConsumPerDay,
+								'fuelConsumPer100km' : fuelConsumPer100km/trips_count,
+								'rotationMAX' : rotationMAX,
+								'parkCount' : parkCount,
+								'totalDistance' : totalDistance,
+							}	
+							createAutographDay(request_context, date, data.get('Serial'))	
 						else:
 							pass
 					else:

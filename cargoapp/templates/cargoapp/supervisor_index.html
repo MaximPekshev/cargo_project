@@ -1,0 +1,104 @@
+{% extends 'cargoapp/base.html' %}
+
+{% block content %}
+<nav class="fixed-bottom navbar-dark bg-dark">
+	<a class="navbar-brand" href="{% url 'logout' %}" style="float: right;" >Выйти</a>
+</nav>
+<div class="row pt-3 justify-content-between ">
+    <div class="col-4" align="left">
+        <form id="super_logist_form" class="row" action="{% url 'show_index_page' %}" method="GET" >
+            <div class="col-1 col-md-1 align-self-center">
+                <a href="{% url 'show_index_page' %}"><button type="button" class="btn-close" aria-label="Close"></button></a>
+            </div>
+            <div class="col-5 col-md-5 align-self-center">
+                <select class="js-example-basic-single form-control" name="vehicle" id="vehicle">
+                    {% if checked_vehicle %}
+                    <option value="">...</option>
+                    <option selected value="{{ checked_vehicle.uid }}">{{ checked_vehicle }}</option>
+                    {% else %}
+                    <option selected value="">...</option>
+                    {% endif %}
+                    {% for vehicle in vehicles %}
+                    <option value="{{ vehicle.uid }}">{{ vehicle.car_number }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-5 col-md-5 align-self-center">
+                <select class="js-example-basic-single form-control" name="logist" id="logist">
+                    {% if checked_logist %}
+                    <option value="">...</option>
+                    <option selected value="{{ checked_logist.uid }}">{{ checked_logist }}</option>
+                    {% else %}
+                    <option selected value="">...</option>
+                    {% endif %}
+                    {% for logist in logists %}
+                    <option value="{{ logist.uid }}">{{ logist.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-1 col-md-1 align-self-center">
+                <button type="submit" class="btn btn-dark btn-sm">Отобрать</button>
+            </div>
+        </form>    
+    </div>
+	<div class="col-2" align="right">Пользователь: {{ user.username }}</div>
+</div>
+<div class="row justify-content-center mt-2">
+	<table class="table table-sm col-12">
+		<thead>
+			<tr>
+				<th>#</th>
+                <th width="150">Авто</th>
+				<th width="100">Дата с</th>
+				<th width="100">Дата по</th>
+				<th>Кол-во дней</th>
+				<th>Маршрут</th>
+				<th>Пробег, км</th>
+				<th>Валовый доход, руб</th>
+				<th>Топливо, руб</th>
+				<th>Зарплата/командир, руб</th>
+				<th>Прочие расходы, руб</th>
+				<th>Чистый доход, руб</th>
+				<th>Цена за км, руб/км</th>
+				<th>Платон</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for item in routes %}
+			<!-- <tr onclick="window.location.href='{% url 'show_route' uid=item.uid %}'; return false"> -->
+			<tr>
+				<td>{{ item.id }}</td>
+                <td>{{ item.vehicle }}</td>
+				<td>{{ item.from_date|date:"Y-m-d" }}</td>
+				<td>{{ item.to_date|date:"Y-m-d" }}</td>
+				<td>{{ item.day_count }}</td>
+				<td><a href="{% url 'show_route' uid=item.uid %}">{{ item.a_point }} - {{ item.b_point }}</a></td>
+				<td>{{ item.route_length }}</td>
+				<td>{{ item.route_cost }}</td>
+				<td>{{ item.fuel_cost }}</td>
+				<td>{{ item.pay_check }}</td>
+				<td>{{ item.expenses_1 }}</td>
+				<td>{{ item.pure_income }}</td>
+				<td>{{ item.cost_of_km }}</td>
+				<td>{{ item.cost_of_platon }}</td>
+			</tr>
+			{% endfor %}
+			{% comment %} <tr style="background-color: grey;">
+				<td colspan="2">Итого (факт):</td>
+				<td></td>
+				<td>{{ total_days }}</td>
+				<td></td>
+				<td>{{ total_route_length }}</td>
+				<td>{{ total_route_cost }}</td>
+				<td>{{ total_fuel_cost }}</td>
+				<td>{{ total_pay_check }}</td>
+				<td>{{ total_expenses_1 }}</td>
+				<td>{{ total_pure_income }}</td>
+				<td>{{ total_cost_of_km }}</td>
+				<td>{{ total_cost_of_platon }}</td>
+			</tr> {% endcomment %}
+		</tbody>
+	</table>
+	<div class="pb-5"></div>
+</div>
+{% endblock %}

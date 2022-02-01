@@ -1,0 +1,61 @@
+{% extends 'cargoapp/base.html' %}
+
+{% block content %}
+<nav class="fixed-bottom navbar-dark bg-dark">
+	<a class="navbar-brand" href="{% url 'logout' %}" style="float: right;" >Выйти</a>
+</nav>
+<div class="row pt-3 justify-content-between">
+    <div class="col-3" align="left">
+        <form id="super_logist_form" class="row justify-content-start" action="{% url 'show_index_page' %}" method="GET" >
+            <div class="col-1 col-md-1 align-self-center" align="right">
+                <a href="{% url 'show_index_page' %}"><button type="button" class="btn-close" aria-label="Close"></button></a>
+            </div>
+            <div class="col-9 col-md-9 align-self-center">
+				<input type="date" class="form-control" name="date" id="date" value="{{ date }}">
+            </div>
+            <div class="col-2 col-md-2 align-self-center">
+                <button type="submit" class="btn btn-dark btn-sm">Отобрать</button>
+            </div>
+        </form>    
+    </div>
+	<div class="col-2" align="right">Пользователь: {{ user.username }}</div>
+</div>
+<div class="row justify-content-center mt-2">
+	<table class="table table-sm col-12">
+		<thead>
+			<tr>
+				<th>#</th>
+                <th >дата</th>
+				<th width="150">Атомобиль</th>
+                <th>Водитель</th>
+				<th>Максимальная скорость</th>
+				<th>Средняя скорость</th>
+				<th>Расход по баку в л. за сутки</th>
+				<th>Расход по баку в л. на 100 км</th>
+				<th>Обороты макс</th>
+				<th>Количество остановок</th>
+				<th>Суточный пробег</th>
+			</tr>
+		</thead>
+		<tbody>
+            {% for day in vehicles %}
+			<tr>
+                <td></td>
+                <td>{{ day.date | date:"d.m.y"  }}</td>
+                <td>{{ day.vehicle }}</td>
+                <td>{{ day.driver }}</td>
+                <td>{{ day.maxSpeed }}</td>
+                <td>{{ day.averageSpeed }}</td> 
+                <td>{{ day.fuelConsumPerDay }}</td>
+                <td>{{ day.fuelConsumPer100km }}</td>
+                <td>{{ day.rotationMAX }}</td>
+                <td>{{ day.parkCount }}</td>
+                <td>{{ day.totalDistance }}</td>
+			</tr>
+            {% endfor %} 
+		</tbody>
+	</table>
+	<div class="pb-5"></div>
+</div>
+
+{% endblock %}

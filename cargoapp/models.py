@@ -1,7 +1,8 @@
+from select import select
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import AbstractBaseUser
-
+# from .core import get_last_autograph_day
 from decimal import Decimal
 
 import uuid
@@ -70,6 +71,7 @@ class LogistUser(AbstractUser):
 
 	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', unique=True)
 	psw = models.CharField(max_length = 25, verbose_name = 'ПСВ', null=True, blank=True, default='')
+	supervisor = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Руководитель', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 
 	def __str__(self):
 		return '{}'.format(self.username)
@@ -126,12 +128,14 @@ class  Vehicle(models.Model):
 	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', unique=True)
 	vin = models.CharField(max_length=20, verbose_name="VIN", null=True, blank=True)
 	car_number = models.CharField(max_length = 15, verbose_name = 'Гос номер', null=True, blank=True)
-	logist = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Логист', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
+	logist = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="logist", verbose_name='Логист', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 	driver = models.ForeignKey(Driver, verbose_name='Водитель', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 
 	employment_date = models.DateField('Дата приема на работу', auto_now_add = False, blank=True, null=True, default=now)
 	nav_id = models.CharField(max_length=15, verbose_name="Nav ID", null=True, blank=True)
 	
+	columnar = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="columnar", verbose_name='Колонный', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
+
 	def __str__(self):
 
 		return '{}'.format(self.car_number)
@@ -146,7 +150,11 @@ class  Vehicle(models.Model):
 
 			return int((now().date()-self.employment_date).days/ (365.25))	
 			
-		return 0	
+		return 0
+
+	# def get_last_autograph_day(self):
+	# 	days = get_last_autograph_day(self)
+	# 	return days
 
 	class Meta:
 		verbose_name = 'Автомобиль'
@@ -231,7 +239,7 @@ class Route(models.Model):
 		if milage_rate:
 			rate = milage_rate.rate
 		else:
-		    rate=1
+			rate=1
 
 		#определяем сумму пробегов с начала месяца
 		month_mileage = DailyIndicators.objects.filter(driver=self.driver, date__gte=month_first_day, date__lte=self.from_date).aggregate(Sum('mileage')).get('mileage__sum')
