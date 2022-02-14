@@ -6,7 +6,9 @@
   	<a class="navbar-brand" href="{% url 'show_index_page' %}?vehicle={{ vehicle.uid }}">{{ vehicle.car_number }}</a>
 	{% endfor %}
 	<a class="navbar-brand" href="{% url 'show_index_page' %}">Все авто</a>
-	<a class="navbar-brand" href="{% url 'logout' %}" style="float: right;" >Выйти</a>
+	
+	{% comment %} <a class="navbar-brand" href="{% url 'logout' %}" style="float: right;" >Выйти</a> {% endcomment %}
+	<a class="navbar-brand" type="button" data-bs-toggle="modal" data-bs-target="#modalLogout" style="float: right;" >Выйти</a>
 </nav>
 <div class="row pt-3">
 	<!-- <div class="col-2 my-auto">
@@ -40,6 +42,7 @@
 				<th>Чистый доход, руб</th>
 				<th>Цена за км, руб/км</th>
 				<th>Платон</th>
+				<th>Прямые</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -56,9 +59,12 @@
 				<td>{{ item.fuel_cost }}</td>
 				<td>{{ item.pay_check }}</td>
 				<td>{{ item.expenses_1 }}</td>
-				<td>{{ item.pure_income }}</td>
+				<td>{{ item.straight }}</td>
 				<td>{{ item.cost_of_km }}</td>
 				<td>{{ item.cost_of_platon }}</td>
+				<td>
+					{{ item.get_straight }}
+				</td>
 			</tr>
 			{% endfor %}
 			<tr style="background-color: grey;">
@@ -74,9 +80,28 @@
 				<td>{{ total_pure_income }}</td>
 				<td>{{ total_cost_of_km }}</td>
 				<td>{{ total_cost_of_platon }}</td>
+				<td></td>
 			</tr>
 		</tbody>
 	</table>
 	<div class="pb-5"></div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalLogout" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLogoutLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="modalLogoutLabel">Вы уверены что хотите выйти?</h5>
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+		  <a href="{% url 'logout' %}" class="btn btn-primary">Выйти</a>
+		</div>
+	  </div>
+	</div>
 </div>
 {% endblock %}

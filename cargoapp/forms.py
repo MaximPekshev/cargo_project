@@ -23,6 +23,8 @@ class RouteForm(forms.Form):
 	inputBanner_side = forms.BooleanField(required=False)
 	inputControl_penalty = forms.BooleanField(required=False)
 
+	inputStraight_boolean = forms.BooleanField(required=False)
+
 	inputDescription = forms.CharField(max_length = 256, required=False)
 	inputRequest_number = forms.CharField(max_length = 30, required=False)
 

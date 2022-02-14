@@ -54,6 +54,12 @@
 			</div>
 		</div>
 		<div class="form-group row mt-4">
+			<label for="straight_boolean" class="col-2 col-form-label">Прямые</label>
+			<div class="col-4 form-check form-switch align-self-center">
+				<input {% if route.straight_boolean %}checked{% endif %} disabled class="ml-2 form-check-input" type="checkbox" role="switch" id="straight_boolean" name="inputStraight_boolean">
+			</div>
+		</div>
+		<div class="form-group row mt-4">
 			<label for="inputVehicle" class="col-2 col-form-label">Авто</label>
 			<div class="col-4">
 				<div class="form-group">
@@ -120,7 +126,8 @@
 				{% if route.request_img %}
 				<div class="row">
 					<div class="col-10"> 
-						<a data-bs-toggle="modal" data-bs-target="#request_img_modal" class="form-control as-link" style="cursor: pointer;">{{ route.request_img }}</a>
+						{% comment %} <a data-bs-toggle="modal" data-bs-target="#request_img_modal" class="form-control as-link" style="cursor: pointer;">{{ route.request_img }}</a> {% endcomment %}
+						<a class="form-control as-link" style="cursor: pointer;" target="_blank" href="{{ route.request_img.url }}">{{ route.request_img }}</a>
 					</div>
 				</div>
 				{% else %}
@@ -136,7 +143,8 @@
 				{% if route.loa_img %}
 				<div class="row">
 					<div class="col-10">
-						<a data-bs-toggle="modal" data-bs-target="#loa_img_modal" class="form-control as-link" style="cursor: pointer;">{{ route.loa_img }}</a>
+						{% comment %} <a data-bs-toggle="modal" data-bs-target="#loa_img_modal" class="form-control as-link" style="cursor: pointer;">{{ route.loa_img }}</a> {% endcomment %}
+						<a class="form-control as-link" style="cursor: pointer;" target="_blank" href="{{ route.loa_img.url }}">{{ route.loa_img }}</a>
 					</div>
 				</div>
 				{% else %}

@@ -177,6 +177,9 @@ class Route(models.Model):
 	driver = models.ForeignKey(Driver, verbose_name='Водитель', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 	logist = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Логист', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 	
+	straight = models.DecimalField(verbose_name = 'Чистый доход - прямые', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
+	straight_boolean = models.BooleanField(verbose_name='Прямые', default=False)
+
 	fuel_cost = models.DecimalField(verbose_name = 'Стоимость топлива', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
 	pay_check = models.DecimalField(verbose_name = 'Зарплата', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
 	pure_income = models.DecimalField(verbose_name = 'Чистый доход', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
@@ -213,16 +216,25 @@ class Route(models.Model):
 
 		self.set_pay_check()
 
-		self.pure_income = self.route_cost - self.fuel_cost - self.pay_check - self.expenses_1
+		
 		if self.route_length:
 			self.cost_of_km = self.route_cost/self.route_length
 		else:
 			self.cost_of_km = 0
+
 		self.cost_of_platon = self.route_length*Decimal(1.6)
+
+		self.pure_income = self.route_cost - self.fuel_cost - self.pay_check - self.expenses_1 - self.cost_of_platon
+		
 		if self.to_date and self.from_date:
 			self.day_count = (self.to_date-self.from_date).days + 1
 		else:
-			self.day_count = 0	
+			self.day_count = 0
+
+		if self.straight_boolean:
+			self.straight = self.pure_income - self.pure_income*Decimal(0.05)
+		else:
+			self.straight = self.pure_income	
 
 		super(Route, self).save(*args, **kwargs)
 		divide_route_by_days(self.uid)
@@ -293,9 +305,14 @@ class Route(models.Model):
 		
 		return (6*self.route_length)
 
-	def get_pure_income(self):
-		
-		return (self.route_cost - self.get_fuel_cost() - self.get_pay_check() - self.expenses_1)	
+	def get_straight(self):
+
+		if self.straight_boolean:
+			straight = (self.pure_income*Decimal(0.05)).quantize(Decimal("1.00"))
+		else:
+			straight = 0
+
+		return straight		
 
 	def get_cost_of_km(self):
 		if self.route_length:

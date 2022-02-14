@@ -35,7 +35,7 @@ class RouteAdmin(admin.ModelAdmin):
 					'vehicle',
 					)
 
-	readonly_fields = ('uid','pay_check')
+	readonly_fields = ('uid','pay_check', 'straight')
 
 	exclude = ['fuel_cost', 'pure_income', 'cost_of_km', 'cost_of_platon', 'day_count', ]
 

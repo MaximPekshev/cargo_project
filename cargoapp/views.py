@@ -208,7 +208,7 @@ def show_index_page(request):
                 'total_days' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")) if routes else 0,
                 'total_fuel_cost' : routes.aggregate(Sum('fuel_cost'))['fuel_cost__sum'].quantize(Decimal("1.00")) if routes else 0,
                 'total_pay_check' : routes.aggregate(Sum('pay_check'))['pay_check__sum'].quantize(Decimal("1.00")) if routes else 0,
-                'total_pure_income' : ((routes.aggregate(Sum('pure_income'))['pure_income__sum']-routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum']).quantize(Decimal("1.00"))) if routes else 0,
+                'total_pure_income' : routes.aggregate(Sum('straight'))['straight__sum'].quantize(Decimal("1.00"))if routes else 0,
                 'total_cost_of_km' : total_cost_of_km,
                 'total_cost_of_platon' : routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum'].quantize(Decimal("1.00")) if routes else 0 if routes else 0,
                 'total_day_count' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")) if routes else 0,
@@ -325,6 +325,8 @@ def route_save(request, uid):
                 banner_side = route_form.cleaned_data['inputBanner_side']
                 control_penalty = route_form.cleaned_data['inputControl_penalty']
 
+                straight_boolean = route_form.cleaned_data['inputStraight_boolean']
+
                 try:
                     request_img = request.FILES['inputRequest_img']
                 except:
@@ -386,7 +388,9 @@ def route_save(request, uid):
 
                     current_route.banner_side = banner_side
 
-                    current_route.control_penalty = control_penalty    
+                    current_route.control_penalty = control_penalty
+                    
+                    current_route.straight_boolean = straight_boolean
 
                     if vehicle_uid:
                         try:
@@ -492,6 +496,9 @@ def route_add(request):
                 banner_side = route_form.cleaned_data['inputBanner_side']
                 control_penalty = route_form.cleaned_data['inputControl_penalty']
 
+                straight_boolean = route_form.cleaned_data['inputStraight_boolean']
+
+
                 try:
                     request_img = request.FILES['inputRequest_img']
                 except:
@@ -562,7 +569,9 @@ def route_add(request):
 
                 current_route.banner_side = banner_side
 
-                current_route.control_penalty = control_penalty        
+                current_route.control_penalty = control_penalty
+
+                current_route.straight_boolean = straight_boolean
 
                 if vehicle_uid:
                     try:
