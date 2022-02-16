@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'api_app',
     'autographapp',
     'django_cleanup',
+    'django_crontab',
     
 ]
 
@@ -109,3 +110,7 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'cargoapp.LogistUser'
+
+CRONJOBS = [
+    ('55 3 * * *', 'autographapp.cron.uploadAutographDailyIndicators'),
+]
