@@ -14,7 +14,9 @@ urlpatterns = [
     path('autograph/', include('autographapp.urls')),
     path('api/v1/', include('api_app.urls')),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls')),
+    path('mobi-fuel/', include('mobiFuel.urls')),
+    path('mobi-group/', include('mobiGroup.urls'))
 ]
 
 

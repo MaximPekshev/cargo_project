@@ -1,0 +1,33 @@
+{%load static%}
+
+Тест
+
+Водитель:
+
+Номер телефона:
+
+Kолонный:
+
+Гос номер:
+
+Модель транспортного средства:
+
+Дата: {{date}}
+
+{%for i in test%}
+
+{{i.count}}. {{i.query}}
+{{i.answer1}}
+{{i.answer2}}
+{%if i.answer3%}
+{{i.answer3}}
+{%endif%} {%if i.answer4%}
+{{i.answer4}}
+{%endif%} {%if i.answer5%}
+{{i.answer5}}
+{%endif%} {%if i.answer6%}
+{{i.answer6}}
+{%endif%} {%if i.answer7%}
+{{i.answer7}}
+{%endif%}
+{%endfor%} Завершить

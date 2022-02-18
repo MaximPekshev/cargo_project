@@ -1,0 +1,82 @@
+{%load static%}
+{%if passed%}
+Тест пройден
+{%else%}
+Тест не пройден
+{%endif%}
+
+Водитель:
+
+Номер телефона:
+
+Kолонный:
+
+Гос номер:
+
+Модель транспортного средства:
+
+Дата: {{date}}
+
+{%for i in test%}
+
+{{i.count}}. {{i.query}}
+{%if i.correctAnswer == 1 and i.selectedAnswer == 1%}
+{{i.answer1}}
+{%elif i.correctAnswer != 1 and i.selectedAnswer == 1%}
+{{i.answer1}}
+{%elif i.correctAnswer == 1 and i.selectedAnswer != 1%}
+{{i.answer1}}
+{%else%}
+{{i.answer1}}
+{%endif%} {%if i.correctAnswer == 2 and i.selectedAnswer == 2%}
+{{i.answer2}}
+{%elif i.correctAnswer != 2 and i.selectedAnswer == 2%}
+{{i.answer2}}
+{%elif i.correctAnswer == 2 and i.selectedAnswer != 2%}
+{{i.answer2}}
+{%else%}
+{{i.answer2}}
+{%endif%} {%if i.answer3%} {%if i.correctAnswer == 3 and i.selectedAnswer == 3%}
+{{i.answer3}}
+{%elif i.correctAnswer != 3 and i.selectedAnswer == 3%}
+{{i.answer3}}
+{%elif i.correctAnswer == 3 and i.selectedAnswer != 3%}
+{{i.answer3}}
+{%else%}
+{{i.answer3}}
+{%endif%} {%endif%} {%if i.answer4%} {%if i.correctAnswer == 4 and i.selectedAnswer == 4%}
+{{i.answer4}}
+{%elif i.correctAnswer != 4 and i.selectedAnswer == 4%}
+{{i.answer4}}
+{%elif i.correctAnswer == 4 and i.selectedAnswer != 4%}
+{{i.answer4}}
+{%else%}
+{{i.answer4}}
+{%endif%} {%endif%} {%if i.answer5%} {%if i.correctAnswer == 5 and i.selectedAnswer == 5%}
+{{i.answer5}}
+{%elif i.correctAnswer != 5 and i.selectedAnswer == 5%}
+{{i.answer5}}
+{%elif i.correctAnswer == 5 and i.selectedAnswer != 5%}
+{{i.answer5}}
+{%else%}
+{{i.answer5}}
+{%endif%} {%endif%} {%if i.answer6%} {%if i.correctAnswer == 6 and i.selectedAnswer == 6%}
+{{i.answer6}}
+{%elif i.correctAnswer != 6 and i.selectedAnswer == 6%}
+{{i.answer6}}
+{%elif i.correctAnswer == 6 and i.selectedAnswer != 6%}
+{{i.answer6}}
+{%else%}
+{{i.answer6}}
+{%endif%} {%endif%} {%if i.answer7%} {%if i.correctAnswer == 7 and i.selectedAnswer == 7%}
+{{i.answer7}}
+{%elif i.correctAnswer != 7 and i.selectedAnswer == 7%}
+{{i.answer7}}
+{%elif i.correctAnswer == 7 and i.selectedAnswer != 7%}
+{{i.answer7}}
+{%else%}
+{{i.answer7}}
+{%endif%} {%endif%}
+Объяснение:
+{{i.explanation}}
+{%endfor%}

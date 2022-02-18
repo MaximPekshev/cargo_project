@@ -28,6 +28,10 @@ INSTALLED_APPS = [
     'autographapp',
     'django_cleanup',
     'django_crontab',
+
+
+    'mobiFuel',
+    'mobiGroup',
     
 ]
 
