@@ -118,6 +118,7 @@ class MileageRevenueStandardAdmin(admin.ModelAdmin):
 					'vehicle',
 					'mileage',
 					'revenue',
+					'net_income',
 					)
 
 admin.site.register(MileageRevenueStandard, MileageRevenueStandardAdmin)

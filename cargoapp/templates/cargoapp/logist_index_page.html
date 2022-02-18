@@ -1,0 +1,187 @@
+{% extends 'cargoapp/base.html' %}
+
+{% block content %}
+<nav class="fixed-bottom navbar-dark bg-dark">
+	{% comment %} {% for vehicle in vehicles %}
+  	<a class="navbar-brand" href="{% url 'show_index_page' %}?vehicle={{ vehicle.uid }}">{{ vehicle.car_number }}</a>
+	{% endfor %}
+	<a class="navbar-brand" href="{% url 'show_index_page' %}">Все авто</a> {% endcomment %}
+	
+	{% comment %} <a class="navbar-brand" href="{% url 'logout' %}" style="float: right;" >Выйти</a> {% endcomment %}
+	<a class="navbar-brand" type="button" data-bs-toggle="modal" data-bs-target="#modalLogout" style="float: right;" >Выйти</a>
+</nav>
+<div class="row pt-3 justify-content-between">
+	<!-- <div class="col-2 my-auto">
+		<div class="row">
+			<div class="col-8 my-auto"><input type="month" name="" value="2021-09"></div>
+			<div class="col-4"><button type="button" class="btn btn-dark">отобрать</button></div>
+		</div>
+	</div> -->
+	<div class="col-8" align="left">
+		<form id="super_logist_form" class="row justify-content-between" action="{% url 'show_index_page' %}" method="GET" >
+			{% if actual_vehicle %}
+			<div class="col-1 col-md-1 align-self-center">
+				<a style="width: 100%;" class="btn btn-dark btn-sm as-34px" href="{% url 'show_new_route_form' %}?vehicle={{ actual_vehicle.uid }}">+</a>
+			</div>
+			{% comment %} <div class="col-1 col-md-1 align-self-center"><a href="{% url 'show_new_route_form' %}?vehicle={{ actual_vehicle.uid }}"><button type="button" class="btn btn-dark">+</button></a></div> {% endcomment %}
+			{% endif %}
+			{% comment %} <div class="col-1 col-md-1 align-self-center">
+				<a href="{% url 'show_index_page' %}"><button type="button" class="btn-close" aria-label="Close"></button></a>
+			</div> {% endcomment %}
+			<div class="col-4 col-md-4 align-self-center">
+				<select class="js-example-basic-single form-control" name="vehicle" id="vehicle">
+					{% if checked_vehicle %}
+					<option value="">...</option>
+					<option selected value="{{ checked_vehicle.uid }}">{{ checked_vehicle }}</option>
+					{% else %}
+					<option selected value="">...</option>
+					{% endif %}
+					{% for vehicle in vehicles %}
+					<option value="{{ vehicle.uid }}">{{ vehicle.car_number }}</option>
+					{% endfor %}
+				</select>
+			</div>
+			<div class="col-3 col-md-3 align-self-center">
+				<input type="month" id="month" name="month" min="2021-10" class="form-control as-34px" value="{{ actual_month }}">
+			</div> 
+			<div class="row  {% if actual_vehicle %} col-4 col-md-4 {% else %} col-5 col-md-5 {% endif %} justify-content-start">
+				<div class="col-4 col-md-5 align-self-center">
+					<button style="width: 100%;" type="submit" class="btn btn-dark btn-sm as-34px">Отобрать</button>
+				</div>
+				<div class="col-4 col-md-5 align-self-center">
+					<a style="width: 100%;" class="btn btn-dark btn-sm as-34px" href="{% url 'show_index_page' %}">Очистить</a>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="col-2" align="right">Логист: {{ user.username }}</div>
+
+	{% comment %} <div class="col-2 {% if actual_vehicle %} offset-7 {% else %} offset-10 {% endif %} my-auto" align="right">Логист: {{ user.username }}</div>
+	{% if actual_vehicle %}
+	<div class="col-2 my-auto" align="right" >Автомобиль: {{ actual_vehicle.car_number }}</div>
+	{% endif %} {% endcomment %}
+</div>
+<div class="row justify-content-center mt-2">
+	<table class="table table-sm col-12">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th width="150">Дата с</th>
+				<th width="150">Дата по</th>
+				<th>Кол-во дней</th>
+				<th>Маршрут</th>
+				<th>Пробег, км</th>
+				<th>Валовый доход, руб</th>
+				<th>Топливо, руб</th>
+				<th>Зарплата/командир, руб</th>
+				<th>Прочие расходы, руб</th>
+				<th>Чистый доход, руб</th>
+				<th>Цена за км, руб/км</th>
+				<th>Платон</th>
+				<th>Прямые</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for item in routes %}
+			<!-- <tr onclick="window.location.href='{% url 'show_route' uid=item.uid %}'; return false"> -->
+			<tr>
+				<td>{{ item.id }}</td>
+				<td>{{ item.from_date|date:"Y-m-d" }}</td>
+				<td>{{ item.to_date|date:"Y-m-d" }}</td>
+				<td>{{ item.day_count }}</td>
+				<td><a href="{% url 'show_route' uid=item.uid %}">{{ item.a_point }} - {{ item.b_point }}</a></td>
+				<td>{{ item.route_length }}</td>
+				<td>{{ item.route_cost }}</td>
+				<td>{{ item.fuel_cost }}</td>
+				<td>{{ item.pay_check }}</td>
+				<td>{{ item.expenses_1 }}</td>
+				<td>{{ item.straight }}</td>
+				<td>{{ item.cost_of_km }}</td>
+				<td>{{ item.cost_of_platon }}</td>
+				<td>{{ item.get_straight }}</td>
+			</tr>
+			{% endfor %}
+			<tr style="background-color: #ffff99;">
+				<td colspan="2">Итого (факт)</td>
+				<td></td>
+				<td>{{ total_days }}</td>
+				<td></td>
+				<td>{{ total_route_length }}</td>
+				<td>{{ total_route_cost }}</td>
+				<td>{{ total_fuel_cost }}</td>
+				<td>{{ total_pay_check }}</td>
+				<td>{{ total_expenses_1 }}</td>
+				<td>{{ total_pure_income }}</td>
+				<td>{{ total_cost_of_km }}</td>
+				<td>{{ total_cost_of_platon }}</td>
+				<td></td>
+			</tr>
+
+			<tr style="background-color: #ccffcc;">
+				<td colspan="2">Итого (план)</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>{{ plan_total_route_length }}</td>
+				<td>{{ plan_total_route_cost }}</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>{{ plan_total_pure_income }}</td>
+				<td>{{ plan_total_cost_of_km }}</td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr style="background-color: #99ccff;">
+				<td colspan="2">Остаток до плана</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>{{ route_length_diff }}</td>
+				<td>{{ route_cost_diff }}</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>{{ pure_income_diff }}</td>
+				<td>{{ cost_of_km_diff }}</td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td colspan="2">% выполнения</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>{{ route_length_percent }}</td>
+				<td>{{ route_cost_percent }}</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>{{ pure_income_percent }}</td>
+				<td>{{ cost_of_km_percent }}</td>
+				<td></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="pb-5"></div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalLogout" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLogoutLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="modalLogoutLabel">Вы уверены что хотите выйти?</h5>
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+		  <a href="{% url 'logout' %}" class="btn btn-primary">Выйти</a>
+		</div>
+	  </div>
+	</div>
+</div>
+{% endblock %}
