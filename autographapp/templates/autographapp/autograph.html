@@ -2,7 +2,8 @@
 
 {% block content %}
 <nav class="fixed-bottom navbar-dark bg-dark">
-	<a class="navbar-brand" href="{% url 'logout' %}" style="float: right;" >Выйти</a>
+	<a class="navbar-brand" type="button" data-bs-toggle="modal" data-bs-target="#modalLogout" style="float: right;" >Выйти</a>
+    <a class="navbar-brand" href="{% url "show_menu_page" %}" style="float: right;" >Меню</a>
 </nav>
 <div class="row pt-3 justify-content-between">
     <div class="col-3" align="left">
@@ -34,6 +35,7 @@
 				<th>Расход по баку в л. на 100 км</th>
 				<th>Обороты макс</th>
 				<th>Количество остановок</th>
+                <th>Остановки более 5 мин.</th>
 				<th>Суточный пробег</th>
 			</tr>
 		</thead>
@@ -50,6 +52,7 @@
                 <td>{{ day.fuelConsumPer100km }}</td>
                 <td>{{ day.rotationMAX }}</td>
                 <td>{{ day.parkCount }}</td>
+                <td>{{ day.parkCount5MinMore }}</td>
                 <td>{{ day.totalDistance }}</td>
 			</tr>
             {% endfor %} 
@@ -58,4 +61,19 @@
 	<div class="pb-5"></div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="modalLogout" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLogoutLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="modalLogoutLabel">Вы уверены что хотите выйти?</h5>
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+		  <a href="{% url 'logout' %}" class="btn btn-primary">Выйти</a>
+		</div>
+	  </div>
+	</div>
+</div>
 {% endblock %}

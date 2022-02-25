@@ -1,0 +1,29 @@
+{% extends 'cargoapp/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-11 col-md-8 col-xl-6 shadow pt-5 pb-5 row justify-content-center">
+
+        <div class="col-12 row justify-content-center mb-2">
+            <a class="btn btn-warning col-10 col-md-8 col-xl-6 " href="{% url 'show_index_page'%}" >Сетка</a>
+        </div>
+
+        <div class="col-12 row justify-content-center mb-2">
+            <a class="btn btn-outline-dark col-10 col-md-8 col-xl-6" href="#" >Внеплановый ремонт</a>
+        </div>
+
+        <div class="col-12 row justify-content-center mb-2">
+            <a class="btn btn-outline-dark col-10 col-md-8 col-xl-6" href="#" >Запрос на выходные</a>
+        </div>
+
+        <div class="col-12 row justify-content-center mb-2">
+            <a class="btn btn-outline-dark col-10 col-md-8 col-xl-6" href="#" >Прием / Передача</a>
+        </div>
+
+        <div class="col-12 row justify-content-center mb-2">
+            <a class="btn btn-outline-dark col-10 col-md-8 col-xl-6" href="#" >Пересменка</a>
+        </div>
+
+    </div> 
+</div> 
+{% endblock %}

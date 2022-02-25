@@ -1,33 +1,161 @@
 {%load static%}
+<!DOCTYPE html>
+<html lang="en">
 
-Тест
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{%static 'css/mobi_group.css'%}">
+    <link rel="shortcut icon" href="{% static "favicon.png" %}" type="image/png" >
+    <title>Тест</title>
+</head>
 
-Водитель:
 
-Номер телефона:
+<body>
+    <div class="contact">
+        <h1>Тест</h1>
+        <div class="inputDiv">
+            <p>Водитель:</p>
+            <input id="fio" placeholder="Вводите ФИО" class="employe" type="text"> 
+        </div>
+        <div class="inputDiv">
+            <p>Номер телефона:</p>            
+            <input id="number" placeholder="Вводите номер телефона" class="company" type="text"> 
+        </div>
+        <div class="inputDiv">
+            <p>Kолонный:</p>            
+            <input id="columnar" placeholder="Kолонный" class="company" type="text"> 
+        </div>
+        <div class="inputDiv">
+            <p>Гос номер:</p>            
+            <input id="carNumber" placeholder="Вводите гос номер" class="company" type="text"> 
+        </div>
+        <div class="inputDiv">
+            <p>Модель транспортного средства:</p>            
+            <input id="carModel" placeholder="Вводите модель ТС" class="company" type="text"> 
+        </div>
+        <div class="inputDiv">
+            <p>Дата: {{date}}</p>            
+        </div>
+        <p id="errorText"></p>
+    </div>
+    <script>
+        testList = []
+    </script>
+    <div class="tests">
+        {%for i in test%}
+        <div class="test">
+            <p class="query">{{i.count}}. {{i.query}}</p>
+            <hr>
+            <div class="answer">
+                <input type="radio" id="{{i.id}}_answer1" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                <label for="{{i.id}}_answer1">{{i.answer1}}</label><br>
+            </div>
+            <div class="answer">
+                <input type="radio" id="{{i.id}}_answer2" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                <label for="{{i.id}}_answer2">{{i.answer2}}</label><br>
+            </div>
+            {%if i.answer3%}
+                <div class="answer">
+                    <input type="radio" id="{{i.id}}_answer3" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                    <label for="{{i.id}}_answer3">{{i.answer3}}</label><br>
+                </div>
+            {%endif%}
+            {%if i.answer4%}
+                <div class="answer">    
+                    <input type="radio" id="{{i.id}}_answer4" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                    <label for="{{i.id}}_answer4">{{i.answer4}}</label><br>
+                </div>
+            {%endif%}
+            {%if i.answer5%}
+                <div class="answer">    
+                    <input type="radio" id="{{i.id}}_answer5" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                    <label for="{{i.id}}_answer5">{{i.answer5}}</label><br>
+                </div>
+            {%endif%}
+            {%if i.answer6%}
+                <div class="answer">    
+                    <input type="radio" id="{{i.id}}_answer6" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                    <label for="{{i.id}}_answer6">{{i.answer6}}</label><br>
+                </div>
+            {%endif%}
+            {%if i.answer7%}
+                <div class="answer">    
+                    <input type="radio" id="{{i.id}}_answer7" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                    <label for="{{i.id}}_answer7">{{i.answer7}}</label><br> 
+                </div>
+            {%endif%}
+                
+        </div>    
+        {%endfor%}
+        <button class="button">Завершить</button>
+    </div>
+    <script>
+        function doSmth(a) {
+            a.sort()
+            for (var q=1, i=1; q<a.length; ++q) {
+              if (a[q] !== a[q-1]) {
+                a[i++] = a[q];
+              }
+            }
+          
+            a.length = i;
+            return a;
+        }
+        $('.button').on('click touch', function () {
+            carNumber = document.getElementById('carNumber').value
+            fio = document.getElementById('fio').value
+            number = document.getElementById('number').value
+            columnar = document.getElementById('columnar').value
+            carModel = document.getElementById('carModel').value
+            selectedCount =  doSmth(testList).length
 
-Kолонный:
+            checkedList = ''
 
-Гос номер:
+            for (i in doSmth(testList)) {
+                element = document.getElementsByName(testList[i])
+                for(var j = 0; j < element.length ; j++){
+                    if(element[j].checked){
+                        newList = 1+j+':'+testList[i]
+                        checkedList += newList+' '
+                    }                    
+                }
+            }
 
-Модель транспортного средства:
+            if (carNumber && fio && number && columnar && carModel  ){            
+                document.getElementById('errorText').innerHTML = ""
+                document.getElementsByClassName('contact')[0].classList.remove('errorContact')
+                if(selectedCount == '{{listLen}}'){
+                    $.ajax({
+                        type: 'GET',
+                        data: {
+                            carNumber:carNumber,
+                            fio:fio,
+                            number:number,
+                            columnar:columnar,
+                            carModel:carModel,
+                            checkedList:checkedList
+                        },
+                        success: function (id) {
+                            window.location.href = '/test/'+id.id
 
-Дата: {{date}}
+                        }      
+                    })            
+                }else{
+                    document.getElementById('errorText').innerHTML = "Вы не ответили на все вопросы!."
+                    window.scrollTo(0, 0);
+                }
+            }else{
+                document.getElementById('errorText').innerHTML = "Вы не заполнили все поля!"
+                document.getElementsByClassName('contact')[0].classList.add('errorContact')
+                window.scrollTo(0, 0);
+     
+            }
+        })
+    </script>
+    
+</body>
 
-{%for i in test%}
-
-{{i.count}}. {{i.query}}
-{{i.answer1}}
-{{i.answer2}}
-{%if i.answer3%}
-{{i.answer3}}
-{%endif%} {%if i.answer4%}
-{{i.answer4}}
-{%endif%} {%if i.answer5%}
-{{i.answer5}}
-{%endif%} {%if i.answer6%}
-{{i.answer6}}
-{%endif%} {%if i.answer7%}
-{{i.answer7}}
-{%endif%}
-{%endfor%} Завершить
+</html>

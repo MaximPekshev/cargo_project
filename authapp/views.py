@@ -24,7 +24,7 @@ def login(request):
 
 			auth.login(request, user)
 			
-			return redirect('show_index_page')
+			return redirect('show_menu_page')
 
 		else:
 

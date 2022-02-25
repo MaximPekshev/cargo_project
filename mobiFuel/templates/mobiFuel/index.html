@@ -1,20 +1,137 @@
 {%load static%}
-Ответственное лицо: {{request.user.username}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{%static 'css/mobi_fuel.css'%}">
+    <link rel="shortcut icon" href="{% static "favicon.png" %}" type="image/png" >
+    <title>Топливный отдел</title>
+</head>
 
 
-Гос номер
-Роснефть
-Адрес
-Газпром
-Адрес
-Татнефть
-Адрес
-Монополия
-Адрес
-Уфа
+<body>
+    <p class="nameFname">Ответственное лицо: {{request.user.username}}</p>
 
-Адрес
-{%for i in count%}
+   <div class="tableDiv">
+    <div class="manu">
+        <div><p>Гос номер</p></div>
+        <div><p>Роснефть</p></div>
+        <div><p>Адрес</p></div>
+        <div><p>Газпром</p></div>
+        <div><p>Адрес</p></div>
+        <div><p>Татнефть</p></div>
+        <div><p>Адрес</p></div>
+        <div><p>Монополия</p></div>
+        <div><p>Адрес</p></div>
+        <div><p>Уфа</p></div>
+        <div class="endBorder"><p>Адрес</p></div>
+    </div>
+        {%for i in count%}
+        <div id="div_{{i}}" class="inputDiv">
+            <div class="inputs">
+                <input id="gosNumber_{{i}}" type="text">
+                <input id="rosneft_{{i}}" type="number" class="max4">
+                <input id="rosneft_address_{{i}}" type="number" class="max3">
+                <input id="gazprom_{{i}}"type="number" class="max4">
+                <input id="gazprom_address_{{i}}" type="number" class="max3">
+                <input id="tatneft_{{i}}" type="number" class="max4">
+                <input id="tatneft_address_{{i}}" type="number" class="max3">
+                <input id="monopoly_{{i}}" type="number" class="max4">
+                <input id="monopoly_address_{{i}}" type="number" class="max3">
+                <input id="ufa_{{i}}" type="number" class="max4">
+                <input id="ufa_address_{{i}}" type="number" class="max3">
+                <button id="buton_{{i}}" class="SendButton"> Отправить</button>
+            </div> 
+        </div>
 
-Отправить
-{%endfor%}
+        {%endfor%}
+   </div>
+    
+</body>
+<script>
+    $('.max4').on('change keyup paste', function () {
+        if(this.value > 9999){
+            this.value = 9999
+        }
+        else if(this.value < 0){
+            this.value = ''
+
+        }
+    })
+    $('.max3').on('change keyup keydown keypress paste', function () {
+        if(this.value > 999){
+            this.value = 999
+        }
+        else if(this.value < 0){
+            this.value = ''
+        }
+    })
+
+    $('.SendButton').on('click touch', function () {
+        gasStation = ''
+
+
+
+        id = this.id.split('_')[1]
+        gosNumber = document.getElementById('gosNumber_'+id).value
+        rosneft = document.getElementById('rosneft_'+id).value
+        rosneft_address = document.getElementById('rosneft_address_'+id).value
+        gazprom = document.getElementById('gazprom_'+id).value
+        gazprom_address = document.getElementById('gazprom_address_'+id).value
+        tatneft = document.getElementById('tatneft_'+id).value
+        tatneft_address = document.getElementById('tatneft_address_'+id).value
+        monopoly = document.getElementById('monopoly_'+id).value
+        monopoly_address = document.getElementById('monopoly_address_'+id).value
+        ufa = document.getElementById('ufa_'+id).value
+        ufa_address = document.getElementById('ufa_address_'+id).value
+
+        if(rosneft && rosneft_address){
+            gasStation += 'rosneft:'+rosneft+','+'rosneft_address:'+rosneft_address+','
+        }
+        if(gazprom && gazprom_address){
+            gasStation += 'gazprom:'+gazprom+','+'gazprom_address:'+gazprom_address+','
+        }
+        if(tatneft && tatneft_address){
+            gasStation += 'tatneft:'+tatneft+','+'tatneft_address:'+tatneft_address+','
+        }
+        if(monopoly && monopoly_address){
+            gasStation += 'monopoly:'+monopoly+','+'monopoly_addres:'+monopoly_address+','
+        }
+        if(ufa && ufa_address){
+            gasStation += 'ufa:'+ufa+','+'ufa_addres:'+ufa_address+','
+        }
+
+      
+
+
+        if(gosNumber && gasStation){  
+            $.ajax({
+                type: 'GET',
+                data: {
+                    gosNumber:gosNumber,
+                    gasStation:gasStation,
+                }
+            })      
+            document.getElementById('div_'+id).classList.remove('error')
+            document.getElementById('div_'+id).classList.add('successfully')
+        }
+        else{
+            document.getElementById('div_'+id).classList.remove('successfully')
+            document.getElementById('div_'+id).classList.add('error')
+
+        }
+        
+
+                    
+           
+    })
+</script>
+
+</html>

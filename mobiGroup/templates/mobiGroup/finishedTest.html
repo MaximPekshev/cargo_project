@@ -1,82 +1,221 @@
 {%load static%}
-{%if passed%}
-Тест пройден
-{%else%}
-Тест не пройден
-{%endif%}
+<!DOCTYPE html>
+<html lang="en">
 
-Водитель:
 
-Номер телефона:
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{%static 'css/mobi_group.css'%}">
+    <link rel="shortcut icon" href="{% static "favicon.png" %}" type="image/png" >
+    <title>Тест</title>
+</head>
 
-Kолонный:
 
-Гос номер:
+<body>
+    <div class="contact">
+        {%if passed%}   
+            <h1 class="green">Тест пройден</h1>
+            {%else%}
+            <h1 class="red">Тест не пройден</h1>
+        {%endif%}
+        <div class="inputDiv">
+            <p>Водитель:</p>
+            <input id="fio" disabled value="{{fio}}" placeholder="Вводите ФИО" class="employe" type="text"> 
+        </div>
+        <div class="inputDiv">
+            <p>Номер телефона:</p>            
+            <input id="number" disabled value="{{number}}" placeholder="Вводите номер телефона" class="company" type="text"> 
+        </div>
+        <div class="inputDiv">
+            <p>Kолонный:</p>            
+            <input id="columnar" disabled value="{{columnar}}" placeholder="Kолонный" class="company" type="text"> 
+        </div>
+        <div class="inputDiv">
+            <p>Гос номер:</p>            
+            <input id="carNumber" disabled value="{{carNumber}}" placeholder="Вводите гос номер" class="company" type="text"> 
+        </div>
+        <div class="inputDiv">
+            <p>Модель транспортного средства:</p>            
+            <input id="carModel" disabled value="{{carModel}}" placeholder="Вводите модель ТС" class="company" type="text"> 
+        </div>
+        <div class="inputDiv">
+            <p>Дата: {{date}}</p>            
+        </div>
+        <p id="errorText"></p>
+    </div>
+    <script>
+        testList = []
+    </script>
+    <div class="tests">
+        {%for i in test%}
+        <div class="test">
+            <p class="query">{{i.count}}. {{i.query}}</p>
+            <hr>
+            {%if i.correctAnswer == 1 and i.selectedAnswer == 1%}
+                <div class="answer true">
+                    <input checked type="radio" disabled id="{{i.id}}_answer1" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                    <label for="{{i.id}}_answer1">{{i.answer1}}</label><br>
+                </div>
+            {%elif i.correctAnswer != 1 and i.selectedAnswer == 1%}
+                <div class="answer false">
+                    <input checked type="radio" disabled id="{{i.id}}_answer1" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                    <label for="{{i.id}}_answer1">{{i.answer1}}</label><br>
+                </div>
+            {%elif i.correctAnswer == 1 and i.selectedAnswer != 1%}
+                <div class="answer true">
+                    <input type="radio" disabled id="{{i.id}}_answer1" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                    <label for="{{i.id}}_answer1">{{i.answer1}}</label><br>
+                </div>
+            {%else%}
+                <div class="answer">
+                    <input type="radio" disabled id="{{i.id}}_answer1" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                    <label for="{{i.id}}_answer1">{{i.answer1}}</label><br>
+                </div>
+            {%endif%}
+            {%if i.correctAnswer == 2 and i.selectedAnswer == 2%}
+                <div class="answer true">
+                    <input checked type="radio" disabled id="{{i.id}}_answer2" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                    <label for="{{i.id}}_answer2">{{i.answer2}}</label><br>
+                </div>
+            {%elif i.correctAnswer != 2 and i.selectedAnswer == 2%}
+                <div class="answer false">
+                    <input checked type="radio" disabled id="{{i.id}}_answer2" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                    <label for="{{i.id}}_answer2">{{i.answer2}}</label><br>
+                </div>
+            {%elif i.correctAnswer == 2 and i.selectedAnswer != 2%}
+                <div class="answer true">
+                    <input type="radio" disabled id="{{i.id}}_answer2" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                    <label for="{{i.id}}_answer2">{{i.answer2}}</label><br>
+                </div>
+            {%else%}
+                <div class="answer">
+                    <input type="radio" disabled id="{{i.id}}_answer2" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                    <label for="{{i.id}}_answer2">{{i.answer2}}</label><br>
+                </div>
+            {%endif%}
+            {%if i.answer3%}
+                {%if i.correctAnswer == 3 and i.selectedAnswer == 3%}
+                    <div class="answer true">
+                        <input checked type="radio" disabled id="{{i.id}}_answer3" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer3">{{i.answer3}}</label><br>
+                    </div>
+                {%elif i.correctAnswer != 3 and i.selectedAnswer == 3%}
+                    <div class="answer false">
+                        <input checked type="radio" disabled id="{{i.id}}_answer3" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer3">{{i.answer3}}</label><br>
+                    </div>
+                {%elif i.correctAnswer == 3 and i.selectedAnswer != 3%}
+                    <div class="answer true">
+                        <input type="radio" disabled id="{{i.id}}_answer3" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer3">{{i.answer3}}</label><br>
+                    </div>
+                {%else%}
+                    <div class="answer">
+                        <input type="radio" disabled id="{{i.id}}_answer3" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer3">{{i.answer3}}</label><br>
+                    </div>                
+                {%endif%}
+            {%endif%}
+            {%if i.answer4%}                
+                {%if i.correctAnswer == 4 and i.selectedAnswer == 4%}
+                    <div class="answer true">    
+                        <input checked type="radio" disabled id="{{i.id}}_answer4" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer4">{{i.answer4}}</label><br>
+                    </div>
+                {%elif i.correctAnswer != 4 and i.selectedAnswer == 4%}
+                    <div class="answer false">    
+                        <input checked type="radio" disabled id="{{i.id}}_answer4" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer4">{{i.answer4}}</label><br>
+                    </div>
+                {%elif i.correctAnswer == 4 and i.selectedAnswer != 4%}
+                    <div class="answer true">    
+                        <input type="radio" disabled id="{{i.id}}_answer4" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer4">{{i.answer4}}</label><br>
+                    </div>
+                {%else%}
+                    <div class="answer">    
+                        <input type="radio" disabled id="{{i.id}}_answer4" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer4">{{i.answer4}}</label><br>
+                    </div>                
+                {%endif%}
+            {%endif%}
+            {%if i.answer5%}
+                {%if i.correctAnswer == 5 and i.selectedAnswer == 5%}
+                    <div class="answer true">    
+                        <input checked type="radio" disabled id="{{i.id}}_answer5" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer5">{{i.answer5}}</label><br>
+                    </div>
+                {%elif i.correctAnswer != 5 and i.selectedAnswer == 5%}
+                    <div class="answer false">    
+                        <input checked type="radio" disabled id="{{i.id}}_answer5" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer5">{{i.answer5}}</label><br>
+                    </div>
+                {%elif i.correctAnswer == 5 and i.selectedAnswer != 5%}
+                    <div class="answer true">    
+                        <input type="radio" disabled id="{{i.id}}_answer5" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer5">{{i.answer5}}</label><br>
+                    </div>
+                {%else%}
+                    <div class="answer">    
+                        <input type="radio" disabled id="{{i.id}}_answer5" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer5">{{i.answer5}}</label><br>
+                    </div>                
+                {%endif%}
+            {%endif%}
+            {%if i.answer6%}
+                {%if i.correctAnswer == 6 and i.selectedAnswer == 6%}
+                    <div class="answer true">    
+                        <input checked type="radio" disabled id="{{i.id}}_answer6" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer6">{{i.answer6}}</label><br>
+                    </div>
+                {%elif i.correctAnswer != 6 and i.selectedAnswer == 6%}
+                    <div class="answer false">    
+                        <input checked type="radio" disabled id="{{i.id}}_answer6" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer6">{{i.answer6}}</label><br>
+                    </div>
+                {%elif i.correctAnswer == 6 and i.selectedAnswer != 6%}
+                    <div class="answer true">    
+                        <input type="radio" disabled id="{{i.id}}_answer6" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer6">{{i.answer6}}</label><br>
+                    </div>
+                {%else%}
+                    <div class="answer">    
+                        <input type="radio" disabled id="{{i.id}}_answer6" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer6">{{i.answer6}}</label><br>
+                    </div>                
+                {%endif%}
+            {%endif%}
+            {%if i.answer7%}
+                {%if i.correctAnswer == 7 and i.selectedAnswer == 7%}
+                    <div class="answer true">    
+                        <input checked type="radio" disabled id="{{i.id}}_answer7" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer7">{{i.answer7}}</label><br> 
+                    </div>
+                {%elif i.correctAnswer != 7 and i.selectedAnswer == 7%}
+                    <div class="answer false">    
+                        <input checked type="radio" disabled id="{{i.id}}_answer7" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer7">{{i.answer7}}</label><br> 
+                    </div>
+                {%elif i.correctAnswer == 7 and i.selectedAnswer != 7%}
+                    <div class="answer true">    
+                        <input type="radio" disabled id="{{i.id}}_answer7" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer7">{{i.answer7}}</label><br> 
+                    </div>
+                {%else%}
+                    <div class="answer">    
+                        <input type="radio" disabled id="{{i.id}}_answer7" onclick="testList.push(this.name)" name="query_{{i.count}}_{{i.id}}" >
+                        <label for="{{i.id}}_answer7">{{i.answer7}}</label><br> 
+                    </div>                
+                {%endif%}
+            {%endif%}
+                <p class="explanation">Объяснение:<br><span>{{i.explanation}}</span></p>
+        </div>    
+        {%endfor%}
+    </div>    
+    
+</body>
 
-Модель транспортного средства:
-
-Дата: {{date}}
-
-{%for i in test%}
-
-{{i.count}}. {{i.query}}
-{%if i.correctAnswer == 1 and i.selectedAnswer == 1%}
-{{i.answer1}}
-{%elif i.correctAnswer != 1 and i.selectedAnswer == 1%}
-{{i.answer1}}
-{%elif i.correctAnswer == 1 and i.selectedAnswer != 1%}
-{{i.answer1}}
-{%else%}
-{{i.answer1}}
-{%endif%} {%if i.correctAnswer == 2 and i.selectedAnswer == 2%}
-{{i.answer2}}
-{%elif i.correctAnswer != 2 and i.selectedAnswer == 2%}
-{{i.answer2}}
-{%elif i.correctAnswer == 2 and i.selectedAnswer != 2%}
-{{i.answer2}}
-{%else%}
-{{i.answer2}}
-{%endif%} {%if i.answer3%} {%if i.correctAnswer == 3 and i.selectedAnswer == 3%}
-{{i.answer3}}
-{%elif i.correctAnswer != 3 and i.selectedAnswer == 3%}
-{{i.answer3}}
-{%elif i.correctAnswer == 3 and i.selectedAnswer != 3%}
-{{i.answer3}}
-{%else%}
-{{i.answer3}}
-{%endif%} {%endif%} {%if i.answer4%} {%if i.correctAnswer == 4 and i.selectedAnswer == 4%}
-{{i.answer4}}
-{%elif i.correctAnswer != 4 and i.selectedAnswer == 4%}
-{{i.answer4}}
-{%elif i.correctAnswer == 4 and i.selectedAnswer != 4%}
-{{i.answer4}}
-{%else%}
-{{i.answer4}}
-{%endif%} {%endif%} {%if i.answer5%} {%if i.correctAnswer == 5 and i.selectedAnswer == 5%}
-{{i.answer5}}
-{%elif i.correctAnswer != 5 and i.selectedAnswer == 5%}
-{{i.answer5}}
-{%elif i.correctAnswer == 5 and i.selectedAnswer != 5%}
-{{i.answer5}}
-{%else%}
-{{i.answer5}}
-{%endif%} {%endif%} {%if i.answer6%} {%if i.correctAnswer == 6 and i.selectedAnswer == 6%}
-{{i.answer6}}
-{%elif i.correctAnswer != 6 and i.selectedAnswer == 6%}
-{{i.answer6}}
-{%elif i.correctAnswer == 6 and i.selectedAnswer != 6%}
-{{i.answer6}}
-{%else%}
-{{i.answer6}}
-{%endif%} {%endif%} {%if i.answer7%} {%if i.correctAnswer == 7 and i.selectedAnswer == 7%}
-{{i.answer7}}
-{%elif i.correctAnswer != 7 and i.selectedAnswer == 7%}
-{{i.answer7}}
-{%elif i.correctAnswer == 7 and i.selectedAnswer != 7%}
-{{i.answer7}}
-{%else%}
-{{i.answer7}}
-{%endif%} {%endif%}
-Объяснение:
-{{i.explanation}}
-{%endfor%}
+</html>

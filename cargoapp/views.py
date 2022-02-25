@@ -14,6 +14,7 @@ from .models import Organization
 from .serializers import OrganizationSerializer
 from .models import Contracts
 from .serializers import ContractsSerializer
+from django.contrib	import auth
 
 from django.contrib.auth.models import Group
 
@@ -106,16 +107,56 @@ class DriverDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DriverSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     lookup_field = 'uid'
-    
+
+
+def show_menu_page(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_logistsupervisor = Group.objects.get(name="Старший логист").user_set.all()
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+        users_in_group_fuel_dep = Group.objects.get(name="Топливный отдел").user_set.all()
+        users_in_group_logist = Group.objects.get(name="Логист").user_set.all()
+
+        if request.user in users_in_group_vehicle_supervisor:
+
+            return render(request, 'cargoapp/menu/vehicle_sv_menu.html')
+        
+        elif request.user in users_in_group_logistsupervisor:
+
+            return render(request, 'cargoapp/menu/supervisor_menu.html')
+
+        elif request.user in users_in_group_driver:
+             
+            return render(request, 'cargoapp/menu/driver_menu.html')
+
+        elif request.user in users_in_group_fuel_dep:
+             
+            return render(request, 'cargoapp/menu/fuel_dep_menu.html')    
+
+        elif request.user in users_in_group_logist:
+
+            return render(request, 'cargoapp/menu/logist_menu.html')
+
+        else:
+
+            auth.logout(request)
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+    else:
+
+        return redirect('login') 
+        
 def show_index_page(request):
 
     if request.user.is_authenticated:
 
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
         users_in_group_logistsupervisor = Group.objects.get(name="Старший логист").user_set.all()
+        users_in_group_logist = Group.objects.get(name="Логист").user_set.all()
 
         if request.user in users_in_group_vehicle_supervisor:
-            # исправить таймдельта на 1
             if request.GET.get('date'):
                 date = datetime.datetime.strptime(request.GET.get('date'), "%Y-%m-%d")
             else:    
@@ -186,7 +227,7 @@ def show_index_page(request):
 
             return render(request, 'cargoapp/supervisor_index.html', context)
 
-        else:
+        elif request.user in users_in_group_logist:
             if request.GET.get('month'):
                 month = datetime.datetime.strptime(request.GET.get('month'), '%Y-%m')
             else:
@@ -300,6 +341,12 @@ def show_index_page(request):
             }
 
             return render(request, 'cargoapp/logist_index_page.html', context)
+
+        else:
+
+            auth.logout(request)
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')    
 
     else:
 
