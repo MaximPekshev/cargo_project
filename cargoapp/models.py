@@ -308,7 +308,7 @@ class Route(models.Model):
 	def get_straight(self):
 
 		if self.straight_boolean:
-			straight = (self.fuel_cost*Decimal(0.05)).quantize(Decimal("1.00"))
+			straight = (self.route_cost*Decimal(0.05)).quantize(Decimal("1.00"))
 		else:
 			straight = 0
 
