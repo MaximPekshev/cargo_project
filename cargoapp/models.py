@@ -222,7 +222,7 @@ class Route(models.Model):
 		else:
 			self.cost_of_km = 0
 
-		self.cost_of_platon = self.route_length*Decimal(1.6)
+		self.cost_of_platon = self.route_length*Decimal(2.54)
 
 		self.pure_income = self.route_cost - self.fuel_cost - self.pay_check - self.expenses_1 - self.cost_of_platon
 		
@@ -232,7 +232,7 @@ class Route(models.Model):
 			self.day_count = 0
 
 		if self.straight_boolean:
-			self.straight = self.pure_income - self.pure_income*Decimal(0.05)
+			self.straight = self.pure_income - self.fuel_cost*Decimal(0.05)
 		else:
 			self.straight = self.pure_income	
 
@@ -308,7 +308,7 @@ class Route(models.Model):
 	def get_straight(self):
 
 		if self.straight_boolean:
-			straight = (self.pure_income*Decimal(0.05)).quantize(Decimal("1.00"))
+			straight = (self.fuel_cost*Decimal(0.05)).quantize(Decimal("1.00"))
 		else:
 			straight = 0
 
