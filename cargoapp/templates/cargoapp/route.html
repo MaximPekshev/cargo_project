@@ -2,7 +2,7 @@
 
 {% block content %}
 <nav class="fixed-bottom navbar-dark bg-dark mt-5">
-	<a class="navbar-brand" href="{{ request.META.HTTP_REFERER }}">Назад</a>
+	<a class="navbar-brand" href="{% url 'show_index_page' %}">Назад</a>
 </nav>
 <div class="row pt-1">
 	<div class="col-2 {% if route.vehicle %} offset-8 {% else %} offset-10 {% endif %} my-auto" align="right">Логист: {{ user.username }}</div>

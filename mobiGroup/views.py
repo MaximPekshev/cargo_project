@@ -29,7 +29,6 @@ def test(request):
                 queryId = i.split(':')[1].split('_')[2]
                 correctQueryAnswer = Query.objects.get(pk=queryId).correctAnswer
                 selectedAnswers += str(queryId)+':'+str(queryAnswer)+','
-                print(selectedAnswers)
                 if int(queryAnswer) == int(correctQueryAnswer):
                     continue
                 else:
@@ -102,8 +101,6 @@ def finishedTest(request,token):
         if i:
             selectedAnswersDictonary[i.split(':')[0]] = i.split(':')[1]
     
-    # print(selectedAnswersDictonary)
-    
     test = []
     querys = Query.objects.all()
     
@@ -136,10 +133,6 @@ def finishedTest(request,token):
 
         test.append(dictonary)
     
-    
-    
-    # print(test)
-        
     bigData = {        
         'test': test,
         'carNumber':carNumber,
