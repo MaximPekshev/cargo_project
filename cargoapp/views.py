@@ -119,6 +119,7 @@ def show_menu_page(request):
         users_in_group_fuel_dep = Group.objects.get(name="Топливный отдел").user_set.all()
         users_in_group_logist = Group.objects.get(name="Логист").user_set.all()
         users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
+        users_in_group_hr_dep = Group.objects.get(name="Отдел кадров").user_set.all()
 
         if request.user in users_in_group_vehicle_supervisor:
 
@@ -142,7 +143,11 @@ def show_menu_page(request):
 
         elif request.user in users_in_group_vorotny:
 
-            return render(request, 'cargoapp/menu/vorotny_menu.html')    
+            return render(request, 'cargoapp/menu/vorotny_menu.html')
+
+        elif request.user in users_in_group_hr_dep:
+
+            return render(request, 'cargoapp/menu/hr_department.html')     
 
         else:
 

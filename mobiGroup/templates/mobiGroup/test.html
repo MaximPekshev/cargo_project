@@ -90,7 +90,11 @@
                 
         </div>    
         {%endfor%}
-        <button class="button">Завершить</button>
+        <div class="group-button">
+            <button class="button">Завершить</button>
+            <a class="menu" href="{% url 'show_menu_page' %}">Меню</a>
+        </div>    
+        
     </div>
     <script>
         function doSmth(a) {
