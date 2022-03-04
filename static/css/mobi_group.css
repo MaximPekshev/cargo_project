@@ -86,23 +86,55 @@ html {
 }
 
 .button {
-    width: 200px;
+    width: 100%;
     padding: 10px;
     font-size: 25px;
+    margin: 10px;
     -webkit-box-shadow: 0px 0px 19px 7px rgba(34, 60, 80, 0.11);
     -moz-box-shadow: 0px 0px 19px 7px rgba(34, 60, 80, 0.11);
     box-shadow: 0px 0px 19px 7px rgba(34, 60, 80, 0.11);
     border-radius: 15px;
     margin-top: 30px;
     cursor: pointer;
-    margin-bottom: 200px;
     background-color: green;
     color: white;
     border: 0;
+    text-align:center;
+    flex: 1;
 }
 .button:hover {
     background-color: rgba(0, 128, 0, 0.76);
 }
+
+.menu {
+    width: 100%;
+    padding: 10px;
+    font-size: 25px;
+    margin: 10px;
+    -webkit-box-shadow: 0px 0px 19px 7px rgba(34, 60, 80, 0.11);
+    -moz-box-shadow: 0px 0px 19px 7px rgba(34, 60, 80, 0.11);
+    box-shadow: 0px 0px 19px 7px rgba(34, 60, 80, 0.11);
+    border-radius: 15px;
+    margin-top: 30px;
+    cursor: pointer;
+    background-color: blue;
+    color: white;
+    border: 0;
+    text-align:center;
+    flex: 1;
+    text-decoration: none;
+}
+.menu:hover {
+    background-color: rgb(81, 81, 255);
+}
+
+.group-button {
+    width: 40%;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 200px;
+}
+
 #errorText{
     color: red;
     font-size: 20px;
@@ -139,6 +171,10 @@ html {
 
     }
     .test{
+        width: 80%;
+
+    }
+    .group-button{
         width: 80%;
 
     }
