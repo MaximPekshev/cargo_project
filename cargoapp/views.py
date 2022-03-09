@@ -151,8 +151,6 @@ def show_menu_page(request):
 
         else:
 
-            auth.logout(request)
-
             return render(request, 'cargoapp/menu/auth_role_error.html')
     else:
 
