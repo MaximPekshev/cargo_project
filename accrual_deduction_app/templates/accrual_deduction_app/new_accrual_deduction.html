@@ -1,0 +1,66 @@
+{% extends 'cargoapp/base.html' %}
+
+{% block content %}
+<nav class="fixed-bottom navbar-dark bg-dark">
+	<a class="navbar-brand" href="{{ request.META.HTTP_REFERER }}">Назад</a>
+</nav>
+<div class="row pt-1">
+	<div class="col-12 my-auto" align="right">Логист: {{ user.username }}</div>
+</div>
+<div class="row justify-content-center mt-2 mb-6">
+	<div align="center">
+		Новое начисление
+	</div>
+    <form class="col-10 col-sm-8 col-md-10 col-lg-6" method="POST" id="accrualForm" action="#" enctype="multipart/form-data">
+		{% csrf_token %}
+        <div class="form-group row mt-4">
+			<label for="inputFrom_date" class="col-md-2 col-form-label">Дата</label>
+			<div class="col-md-4">
+				<input type="date" class="form-control" name="input_date" id="input_date" required>
+			</div>
+			<label for="input_sum" class="col-md-2 col-form-label">Сумма</label>
+			<div class="col-md-4">
+				<input type="text" class="form-control" name="input_sum" id="input_sum" required>
+			</div>
+		</div>
+        <div class="form-group row mt-4">
+			<label for="input_vehicle" class="col-md-2 col-form-label">Автомобиль</label>
+
+			<div class="col-md-10">
+				<select class="js-example-basic-single form-control" name="input_vehicle" id="input_vehicle" required>
+                    <option selected value="">...</option>
+					{% for item in vehicles %}
+					<option value="{{ item.uid }}">{{ item }}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+        <div class="form-group row mt-4">
+			<label for="input_reason" class="col-md-2 col-form-label">Причина</label>
+
+			<div class="col-md-4">
+				<select class="js-example-basic-single form-control" name="input_reason" id="input_reason">
+                    <option selected value="">...</option>
+					{% for item in reasons %}
+					<option value="{{ item.id }}">{{ item.title }}</option>
+					{% endfor %}
+				</select>
+			</div>
+            <label for="input_type" class="col-md-2 col-form-label">Тип</label>
+			<div class="col-md-4">
+				<select class="js-example-basic-single form-control" name="input_type" id="input_type">
+                    <option selected value="">...</option>
+					{% for item in types %}
+					<option value="{{ item.0 }}">{{ item.1 }}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+        <div class="row justify-content-end mt-4">
+			<div class="form-group col-4 d-grid gap-2" align="right">
+				<button type="submit" class="btn btn-primary" form="accrualForm">Сохранить</button>
+			</div>
+		</div>
+    </form>    
+</div>    
+{% endblock %}

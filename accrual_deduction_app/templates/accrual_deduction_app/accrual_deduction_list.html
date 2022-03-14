@@ -1,0 +1,82 @@
+{% extends 'cargoapp/base.html' %}
+
+{% block content %}
+<nav class="fixed-bottom navbar-dark bg-dark">
+	<a class="navbar-brand" type="button" data-bs-toggle="modal" data-bs-target="#modalLogout" style="float: right;" >Выйти</a>
+	<a class="navbar-brand" href="{% url "show_menu_page" %}" style="float: right;" >Меню</a>
+</nav>
+<div class="row pt-3 justify-content-between">
+    <div class="col-12 col-md-10 col-lg-10" align="left">
+        <form id="super_logist_form" class="row justify-content-start" action="{% url 'show_accrual_deduction' %}" method="GET" >
+			<div class="col-12 col-md-1 align-self-center pb-1">
+				<a style="width: 100%;" class="btn btn-dark btn-sm as-34px" href="{% url 'new_accrual_deduction' %}">+</a>
+			</div>
+			<div class="col-12 col-md-4 align-self-center pb-1">
+				<input type="month" id="month" name="month" min="2021-10" class="form-control as-34px" value="{{ month }}">
+			</div> 
+			<div style="margin-left:0; margin-right:0;" class="row pb-1 {% if actual_vehicle %} col-12 col-md-5 col-lg-6 {% else %} col-12 col-md-5 col-lg-6 {% endif %} justify-content-lg-start justify-content-between">
+				<div class="col-6 col-md-6 col-lg-4 align-self-center">
+					<button style="width: 100%;" type="submit" class="btn btn-dark btn-sm as-34px">Отобрать</button>
+				</div>
+				<div class="col-6 col-md-6 col-lg-4 align-self-center">
+					<a style="width: 100%;" class="btn btn-dark btn-sm as-34px" href="{% url 'show_accrual_deduction' %}">Очистить</a>
+				</div>
+			</div>
+		</form>   
+    </div>
+	<div class="col-12 col-md-2 col-lg-2" align="right">Пользователь: {{ user.username }}</div>
+</div>
+<div class="row justify-content-center mt-2">
+    <div class="table-responsive col-12">
+        <table class="table table-sm ">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>ТС</th>
+                    <th>Логист</th>
+                    <th>Водитель</th>
+                    <th>Сумма подотчет</th>
+                    <th>Причина</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if AccrualDeduction %}
+                {% for item in AccrualDeduction %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.vehicle }}</td>
+                    <td>{{ item.logist }}</td>
+                    <td>{{ item.vehicle.driver }}</td>
+                    <td>{{ item.sum }}</td>
+                    <td>{{ item.reason }}.</td>
+                    <td>{{ item.type }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="7" align="center">За выбранный период данных нет</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+	<div class="pb-5"></div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalLogout" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLogoutLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="modalLogoutLabel">Вы уверены что хотите выйти?</h5>
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+		  <a href="{% url 'logout' %}" class="btn btn-primary">Выйти</a>
+		</div>
+	  </div>
+	</div>
+</div>
+{% endblock %}

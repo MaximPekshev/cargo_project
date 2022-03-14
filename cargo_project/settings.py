@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'autographapp',
     'django_cleanup',
     'django_crontab',
+    'accrual_deduction_app',
 
 
     'mobiFuel',

@@ -12,6 +12,7 @@ urlpatterns = [
     path('', include('cargoapp.urls')),
     path('auth/', include('authapp.urls')),
     path('autograph/', include('autographapp.urls')),
+    path('accrural-deduction/', include('accrual_deduction_app.urls')),
     path('api/v1/', include('api_app.urls')),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),

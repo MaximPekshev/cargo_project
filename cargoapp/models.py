@@ -411,6 +411,7 @@ class MileageRevenueStandard(models.Model):
 	mileage = models.DecimalField(verbose_name = 'Норматив пробега', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
 	revenue = models.DecimalField(verbose_name = 'Норматив выручки', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
 	net_income = models.DecimalField(verbose_name = 'Норматив чистого дохода', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
+	price_of_km = models.DecimalField(verbose_name = 'Норматив цена за километр', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
 
 
 	def __str__(self):

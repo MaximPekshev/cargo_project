@@ -269,12 +269,13 @@ def show_index_page(request):
                 total_cost_of_km = ((routes.aggregate(Sum('route_cost'))['route_cost__sum']/routes.aggregate(Sum('route_length'))['route_length__sum']).quantize(Decimal("1.00")))
             except:
                 total_cost_of_km = Decimal(0)
-                total_cost_of_km = total_cost_of_km.quantize(Decimal("1.00"))
+                total_cost_of_km = total_cost_of_km.quantize(Decimal("1.00"))  
 
-            try:
-                plan_total_cost_of_km = Decimal(revenueStandard/mileageStandard).quantize(Decimal("1.00"))
-            except:        
-                plan_total_cost_of_km = Decimal(0).quantize(Decimal("1.00"))
+            # try:
+            #     plan_total_cost_of_km = Decimal(revenueStandard/mileageStandard).quantize(Decimal("1.00"))
+            # except:        
+            #     plan_total_cost_of_km = Decimal(0).quantize(Decimal("1.00"))
+            plan_total_cost_of_km = Decimal(40).quantize(Decimal("1.00"))
 
             #фактические данные
             total_route_length = routes.aggregate(Sum('route_length'))['route_length__sum'].quantize(Decimal("1.00")) if routes else 0
