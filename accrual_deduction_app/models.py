@@ -14,7 +14,7 @@ TYPE = (
 
 class ReasonOfDeduction(models.Model):
 
-    title = models.CharField(max_length=25, verbose_name='Наименование')
+    title = models.CharField(max_length=250, verbose_name='Наименование')
 
     def __str__(self):
         return '{}'.format(self.title)
@@ -33,6 +33,9 @@ class AccrualDeduction(models.Model):
     sum = models.DecimalField(verbose_name = 'Сумма', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
     reason = models.ForeignKey(ReasonOfDeduction, verbose_name='Причина начисления/вычета', on_delete=models.CASCADE)
     type = models.CharField(max_length=1, verbose_name='Тип начисления/вычета', choices=TYPE)
+
+    comment = models.CharField(max_length = 512, verbose_name = 'Комментарий', null=True, blank=True, default='')
+    upload_status = models.BooleanField(verbose_name='Статус выгрузки 1С', default=False)
 
     def __str__(self):
         return '{}'.format(self.uid)
