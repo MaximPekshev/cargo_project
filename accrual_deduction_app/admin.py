@@ -10,6 +10,7 @@ class AccrualDeductionAdmin(admin.ModelAdmin):
     )
     readonly_fields = (
         'uid',
+        'driver',
     )
 admin.site.register(AccrualDeduction, AccrualDeductionAdmin)
 

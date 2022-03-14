@@ -1,5 +1,5 @@
 from django.db import models
-from cargoapp.models import Vehicle
+from cargoapp.models import Vehicle, Driver
 from django.conf import settings
 import uuid
 
@@ -28,6 +28,7 @@ class AccrualDeduction(models.Model):
     uid = models.SlugField(max_length=36, verbose_name='Идентификатор', unique=True)
     date = models.DateField(verbose_name='Дата')
     vehicle = models.ForeignKey(Vehicle, verbose_name='Автомобиль', on_delete=models.CASCADE)
+    driver = models.ForeignKey(Driver, verbose_name='Водитель', on_delete=models.CASCADE,null=True, blank=True, default=None)
     logist = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Логист', on_delete=models.CASCADE)
     sum = models.DecimalField(verbose_name = 'Сумма', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
     reason = models.ForeignKey(ReasonOfDeduction, verbose_name='Причина начисления/вычета', on_delete=models.CASCADE)
@@ -40,6 +41,8 @@ class AccrualDeduction(models.Model):
 
         if not self.uid:
             self.uid = get_uuid4()
+
+        self.driver = self.vehicle.driver  
             
         super(AccrualDeduction, self).save(*args, **kwargs)     
 

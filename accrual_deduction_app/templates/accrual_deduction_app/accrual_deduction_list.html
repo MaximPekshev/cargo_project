@@ -7,7 +7,7 @@
 </nav>
 <div class="row pt-3 justify-content-between">
     <div class="col-12 col-md-10 col-lg-10" align="left">
-        <form id="super_logist_form" class="row justify-content-start" action="{% url 'show_accrual_deduction' %}" method="GET" >
+        <form id="super_logist_form" class="row justify-content-start" action="{% url 'accrual_deduction_list' %}" method="GET" >
 			<div class="col-12 col-md-1 align-self-center pb-1">
 				<a style="width: 100%;" class="btn btn-dark btn-sm as-34px" href="{% url 'new_accrual_deduction' %}">+</a>
 			</div>
@@ -19,7 +19,7 @@
 					<button style="width: 100%;" type="submit" class="btn btn-dark btn-sm as-34px">Отобрать</button>
 				</div>
 				<div class="col-6 col-md-6 col-lg-4 align-self-center">
-					<a style="width: 100%;" class="btn btn-dark btn-sm as-34px" href="{% url 'show_accrual_deduction' %}">Очистить</a>
+					<a style="width: 100%;" class="btn btn-dark btn-sm as-34px" href="{% url 'accrual_deduction_list' %}">Очистить</a>
 				</div>
 			</div>
 		</form>   
@@ -45,12 +45,12 @@
                 {% for item in AccrualDeduction %}
                 <tr>
                     <td>{{ item.id }}</td>
-                    <td>{{ item.vehicle }}</td>
+                    <td><a href="{% url 'show_accrual_deduction' uid=item.uid %}">{{ item.vehicle }}</a></td>
                     <td>{{ item.logist }}</td>
-                    <td>{{ item.vehicle.driver }}</td>
+                    <td>{{ item.driver }}</td>
                     <td>{{ item.sum }}</td>
                     <td>{{ item.reason }}.</td>
-                    <td>{{ item.type }}</td>
+                    <td>{% if item.type == '1' %}Начисление{% elif item.type == '0' %}Вычет{% endif %}</td>
                 </tr>
                 {% endfor %}
                 {% else %}

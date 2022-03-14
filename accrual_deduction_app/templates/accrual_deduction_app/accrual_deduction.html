@@ -2,36 +2,40 @@
 
 {% block content %}
 <nav class="fixed-bottom navbar-dark bg-dark">
-	<a class="navbar-brand" href="{{ request.META.HTTP_REFERER }}">Назад</a>
+	<a class="navbar-brand" href="{% url 'accrual_deduction_list'%}">Назад</a>
 </nav>
 <div class="row pt-1">
 	<div class="col-12 my-auto" align="right">Логист: {{ user.username }}</div>
 </div>
 <div class="row justify-content-center mt-2 mb-6">
 	<div align="center">
-		Новое начисление
 	</div>
-    <form class="col-10 col-sm-8 col-md-10 col-lg-6" method="POST" id="accrualForm" action="{% url 'add_accrual_deduction' %}">
+    <form class="col-10 col-sm-8 col-md-10 col-lg-6 mb-5" method="POST" id="accrualForm" action="{% url 'save_accrual_deduction' uid=accrual_deduction.uid %}">
 		{% csrf_token %}
         <div class="form-group row mt-4">
 			<label for="input_date" class="col-md-2 col-form-label">Дата</label>
 			<div class="col-md-4">
-				<input type="date" class="form-control" name="input_date" id="input_date" required>
+				<input type="date" class="form-control"  value="{{ accrual_deduction.date|date:'Y-m-d' }}" name="input_date" id="input_date" required>
 			</div>
 			<label for="input_sum" class="col-md-2 col-form-label">Сумма</label>
 			<div class="col-md-4">
-				<input type="text" class="form-control" name="input_sum" id="input_sum" required>
+				<input type="text" class="form-control" name="input_sum" id="input_sum" value="{{ accrual_deduction.sum }}" required>
 			</div>
 		</div>
         <div class="form-group row mt-4">
 			<label for="input_vehicle" class="col-md-2 col-form-label">Автомобиль</label>
-
-			<div class="col-md-10">
+			<div class="col-md-4">
 				<select class="js-example-basic-single form-control" name="input_vehicle" id="input_vehicle" required>
-                    <option selected value="">...</option>
+                    <option selected value="{{ accrual_deduction.vehicle.uid }}">{{ accrual_deduction.vehicle }}</option>
 					{% for item in vehicles %}
 					<option value="{{ item.uid }}">{{ item }} - {{ item.driver }}</option>
 					{% endfor %}
+				</select>
+			</div>
+            <label for="input_vehicle" class="col-md-2 col-form-label">Водитель</label>
+			<div class="col-md-4">
+				<select class="js-example-basic-single form-control" name="input_driver" id="input_driver">
+                    <option selected value="{{ accrual_deduction.driver.uid }}">{{ accrual_deduction.driver }}</option>
 				</select>
 			</div>
 		</div>
@@ -40,7 +44,7 @@
 
 			<div class="col-md-4">
 				<select class="js-example-basic-single form-control" name="input_reason" id="input_reason">
-                    <option selected value="">...</option>
+                    <option selected value="{{ accrual_deduction.reason.id }}">{{ accrual_deduction.reason }}</option>
 					{% for item in reasons %}
 					<option value="{{ item.id }}">{{ item.title }}</option>
 					{% endfor %}
@@ -49,7 +53,11 @@
             <label for="input_type" class="col-md-2 col-form-label">Тип</label>
 			<div class="col-md-4">
 				<select class="js-example-basic-single form-control" name="input_type" id="input_type">
-                    <option selected value="">...</option>
+                    {% if accrual_deduction.type == '1' %}
+                    <option selected value="{{ accrual_deduction.type }}">Начисление</option>
+                    {% elif accrual_deduction.type == '0' %}
+                    <option selected value="{{ accrual_deduction.type }}">Вычет</option>
+                    {% endif %}
 					{% for item in types %}
 					<option value="{{ item.0 }}">{{ item.1 }}</option>
 					{% endfor %}
