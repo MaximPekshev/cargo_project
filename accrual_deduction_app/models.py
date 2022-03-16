@@ -2,6 +2,7 @@ from django.db import models
 from cargoapp.models import Vehicle, Driver
 from django.conf import settings
 import uuid
+from .core import upload_accrual
 
 
 def get_uuid4():
@@ -44,10 +45,29 @@ class AccrualDeduction(models.Model):
 
         if not self.uid:
             self.uid = get_uuid4()
-
-        self.driver = self.vehicle.driver  
             
-        super(AccrualDeduction, self).save(*args, **kwargs)     
+        if not self.driver:
+            self.driver = self.vehicle.driver  
+            
+        super(AccrualDeduction, self).save(*args, **kwargs)
+        if not self.upload_status:
+            upload_accrual(self)
+
+
+    def get_vehicle(self):
+        return '{}'.format(self.vehicle.uid) if self.vehicle else 0
+        
+    def get_driver(self):
+        return '{}'.format(self.driver.uid) if self.driver else 0
+    
+    def get_logist(self):
+        return '{}'.format(self.logist.uid) if self.logist else 0
+
+    def get_reason(self):
+        return '{}'.format(self.reason) if self.logist else 0
+
+    def get_comment(self):
+        return '{}'.format(self.comment) if self.logist else 0    
 
     class Meta:
         verbose_name = 'Начисление/Вычет'

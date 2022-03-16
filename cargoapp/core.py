@@ -3,12 +3,11 @@ import json
 from decouple import config
 import datetime
 from decimal import Decimal
-import xlrd
 
 def upload_route(route):
     if route:
-
-        url = 'http://1c.annasoft.ru:8081/test/hs/cargo/api/v1/routes'
+        
+        url = config('1C_ADDRESS') + 'api/v1/routes'
         header = {'Authorization' : config('1C_API_SECRET_KEY')}
 
         data = {
@@ -43,7 +42,7 @@ def upload_route(route):
         }
 
         answer = requests.post(url, headers=header, data=json.dumps(data))
-        print(answer.status_code)
+        # print(answer.status_code)
 
 def last_day_of_month(any_day):
     next_month = any_day.replace(day=28) + datetime.timedelta(days=4)
