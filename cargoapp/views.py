@@ -836,3 +836,119 @@ def delete_loa_img(request, uid):
 
     current_path = request.META['HTTP_REFERER']
     return redirect(current_path)
+
+
+def routes_list(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_logist = Group.objects.get(name="Логист").user_set.all()
+
+        if request.user in users_in_group_logist:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/routes_list/routes_list.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html') 
+
+def holiday_requests(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_hr_dep = Group.objects.get(name="Отдел кадров").user_set.all()
+
+        if request.user in users_in_group_hr_dep:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/hr_dep/holiday_request.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def columnar_daily_report(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/daily_report.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+
+#DRIVER
+
+def driver_extra_repair(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+
+        if request.user in users_in_group_driver:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/driver/extra_repair.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+#COLUMNAR
+
+def columnar_extra_repair(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/extra_repair.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+#LOGIST
+
+def logist_extra_repair(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_logist = Group.objects.get(name="Логист").user_set.all()
+
+        if request.user in users_in_group_logist:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/logist/extra_repair.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')

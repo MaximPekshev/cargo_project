@@ -1,0 +1,80 @@
+{% extends 'cargoapp/main_style/main_base.html'%}
+
+{% block content %}
+<p>Внеплановый ремонт</p>
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<form action="send_form__3-2.py" name="form__3-2" class="form__3-2" method="post" enctype="multipart/form-data">
+					<input type="text" name="form__3-2__input-1" id="form__3-2__input-1" class="form__3-2__input" placeholder="н 320 ук 716rus" disabled>
+					<input type="text" name="form__3-2__input-2" id="form__3-2__input-2" class="form__3-2__input" placeholder="8456 ВА" disabled>
+					<input type="text" name="form__3-2__input-3" id="form__3-2__input-3" class="form__3-2__input" placeholder="TermoKing SLXi200" disabled>
+
+					<input type="text" name="form__3-2__input-4" id="form__3-2__input-4" class="form__3-2__input" placeholder="ФИО" disabled>
+					<input type="tel" name="form__3-2__input-5" id="form__3-2__input-5" class="form__3-2__input" placeholder="Телефон" disabled>
+
+					<label for="form__3-2__checkbox-6" class="form__3-2__label">
+						<input type="checkbox" name="form__3-2__checkbox-6" id="form__3-2__checkbox-6" class="form__3-2__checkbox" value="Тягач">
+						Тягач
+					</label>
+					<label for="form__3-2__checkbox-7" class="form__3-2__label">
+						<input type="checkbox" name="form__3-2__checkbox-7" id="form__3-2__checkbox-7" class="form__3-2__checkbox" value="Полуприцеп">
+						Полуприцеп
+					</label>
+					<label for="form__3-2__checkbox-8" class="form__3-2__label">
+						<input type="checkbox" name="form__3-2__checkbox-8" id="form__3-2__checkbox-8" class="form__3-2__checkbox" value ="Реф">
+						Реф
+					</label>
+					<label for="form__3-2__input-9" class="form__3-2__label">
+						<input type="file" name="form__3-2__input-9" id="form__3-2__input-9" class="form__3-2__input">
+						Фото
+					</label>
+
+					<textarea name="form__3-2__textarea-1" id="form__3-2__textarea-1" class="form__3-2__textarea" placeholder="Комментарий" cols="30" rows="10"></textarea>
+
+					<input type="text" name="form__3-2__input-g1-1" id="form__3-2__input-g1-1" class="form__3-2__input" placeholder="Автопоезд может двигаться дальше?" disabled>
+					<div class="row">
+						<label for="form__3-2__radio-g1-1" class="form__3-2__label">
+							<input type="radio" name="form__3-2__radio-g1" id="form__3-2__radio-g1-1" class="form__3-2__radio" value="Да">Да
+						</label>
+						<label for="form__3-2__radio-g1-2" class="form__3-2__label">
+							<input type="radio" name="form__3-2__radio-g1" id="form__3-2__radio-g1-2" class="form__3-2__radio" value="Нет">Нет
+						</label>
+					</div>
+
+					<input type="text" name="form__3-2__input-g2-1" id="form__3-2__input-g2-1" class="form__3-2__input" placeholder="Требуется эвакуатор" disabled>
+					<div class="row">
+						<label for="form__3-2__radio-g2-1" class="form__3-2__label">
+							<input type="radio" name="form__3-2__radio-g2" id="form__3-2__radio-g2-1" class="form__3-2__radio" value="Да">Да
+						</label>
+						<label for="form__3-2__radio-g2-2" class="form__3-2__label">
+							<input type="radio" name="form__3-2__radio-g2" id="form__3-2__radio-g2-2" class="form__3-2__radio" value="Нет">Нет
+						</label>
+					</div>
+
+					<input type="text" name="form__3-2__input-g3-1" id="form__3-2__input-g3-1" class="form__3-2__input" placeholder="Требуется перецеп" disabled>
+					<div class="row">
+						<label for="form__3-2__radio-g3-1" class="form__3-2__label">
+							<input type="radio" name="form__3-2__radio-g3" id="form__3-2__radio-g3-1" class="form__3-2__radio" value="Да">Да
+						</label>
+						<label for="form__3-2__radio-g3-2" class="form__3-2__label">
+							<input type="radio" name="form__3-2__radio-g3" id="form__3-2__radio-g3-2" class="form__3-2__radio" value="Нет">Нет
+						</label>
+					</div>
+
+					<input type="text" name="form__3-2__input-g4-1" id="form__3-2__input-g4-1" class="form__3-2__input" placeholder="Требуется перегруз" disabled>
+					<div class="row">
+						<label for="form__3-2__radio-g4-1" class="form__3-2__label">
+							<input type="radio" name="form__3-2__radio-g4" id="form__3-2__radio-g4-1" class="form__3-2__radio" value="Да">Да
+						</label>
+						<label for="form__3-2__radio-g4-2" class="form__3-2__label">
+							<input type="radio" name="form__3-2__radio-g4" id="form__3-2__radio-g4-2" class="form__3-2__radio" value="Нет">Нет
+						</label>
+					</div>
+
+					<button type="submit" name="form__3-2__button-1" id="form__3-2__button-1" class="form__3-2__button" value="Отправить">Отправить</button>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}
