@@ -1,0 +1,23 @@
+{% extends 'cargoapp/main_style/main_base.html'%}
+
+{% block content %}
+<p>Регистрация внепланового ремонта</p>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form action="send_form__3-5.py" name="form__3-5" class="form__3-5">
+                <input type="text" name="form__3-5__input-1" id="form__3-5__input-1" class="form__3-5__input" placeholder="н 320 ук 716rus" disabled>
+                <input type="text" name="form__3-5__input-2" id="form__3-5__input-2" class="form__3-5__input" placeholder="8456 ВА" disabled>
+                <input type="text" name="form__3-5__input-3" id="form__3-5__input-3" class="form__3-5__input" placeholder="" disabled>
+
+                <button type="submit" form="id_form" name="form__3-5__button-1" id="form__3-5__button-1" class="form__3-5__button" value="Где ремонтировать">Где ремонтировать</button>
+                <input type="date" name="form__3-5__input-4" id="form__3-5__input-4" class="form__3-5__input" disabled>
+                <input type="date" name="form__3-5__input-5" id="form__3-5__input-5" class="form__3-5__input" disabled>
+                <input type="email" name="form__3-5__input-6" id="form__3-5__input-6" class="form__3-5__input" placeholder="e-mail адрес" disabled>
+
+                <button type="submit" form="id_form" name="form__3-5__button-2" id="form__3-5__button-2" class="form__3-5__button" value="Зарегистрировать">Зарегистрировать</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

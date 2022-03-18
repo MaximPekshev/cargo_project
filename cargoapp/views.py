@@ -913,6 +913,224 @@ def driver_extra_repair(request):
 
             return render(request, 'cargoapp/menu/auth_role_error.html')
 
+def driver_holiday_requests(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+
+        if request.user in users_in_group_driver:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/driver/holiday_requests.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def driver_new_holiday_request(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+
+        if request.user in users_in_group_driver:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/driver/new_holiday_request.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def driver_holiday_request(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+
+        if request.user in users_in_group_driver:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/driver/holiday_request.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def driver_hr_change_date(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+
+        if request.user in users_in_group_driver:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/driver/hr_change_date.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def driver_hr_without_changer(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+
+        if request.user in users_in_group_driver:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/driver/hr_without_changer.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def driver_hr_drive_loaded(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+
+        if request.user in users_in_group_driver:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/driver/hr_drive_loaded.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def driver_hr_accept(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+
+        if request.user in users_in_group_driver:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/driver/hr_accept.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def driver_shift_change(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+
+        if request.user in users_in_group_driver:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/driver/shift_change/shift_change.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def driver_shift_change_hand_over(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+
+        if request.user in users_in_group_driver:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/driver/shift_change/hand_over.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def driver_shift_change_accept(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+
+        if request.user in users_in_group_driver:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/driver/shift_change/accept.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+
+def driver_shift_change_accept_acc(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+
+        if request.user in users_in_group_driver:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/driver/shift_change/accept_acc.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def driver_shift_change_hand_over_acc(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+
+        if request.user in users_in_group_driver:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/driver/shift_change/hand_over_acc.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+
 #COLUMNAR
 
 def columnar_extra_repair(request):
@@ -933,6 +1151,135 @@ def columnar_extra_repair(request):
 
             return render(request, 'cargoapp/menu/auth_role_error.html')
 
+def columnar_extra_repair_registration(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/extra_repair_registration.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')            
+
+def columnar_holiday_requests(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/holiday_requests.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def columnar_single_holiday_requests(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/single_holiday_request.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def columnar_hr_change_date(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/hr_change_date.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+
+def columnar_hr_without_changer(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/hr_without_changer.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')            
+
+def columnar_hr_drive_loaded(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/hr_drive_loaded.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+
+def columnar_shift_change_list(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/shift_change/shift_change_list.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')            
+
+
 #LOGIST
 
 def logist_extra_repair(request):
@@ -948,6 +1295,254 @@ def logist_extra_repair(request):
             }
 
             return render(request, 'cargoapp/logist/extra_repair.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def logist_holiday_requests(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_logist = Group.objects.get(name="Логист").user_set.all()
+
+        if request.user in users_in_group_logist:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/logist/holiday_requests.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def logist_holiday_request(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_logist = Group.objects.get(name="Логист").user_set.all()
+
+        if request.user in users_in_group_logist:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/logist/holiday_request.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+#GATE
+
+def gate_shift_change_list(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/shift_change/shift_change_list.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+
+def gate_shift_change_single(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/shift_change/shift_change_single.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def gate_shift_change_inspection(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/shift_change/shift_change_inspection_0.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def gate_shift_change_inspection_1(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/shift_change/shift_change_inspection_1.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def gate_shift_change_inspection_2(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/shift_change/shift_change_inspection_2.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def gate_shift_change_inspection_3(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/shift_change/shift_change_inspection_3.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def gate_shift_change_inspection_4(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/shift_change/shift_change_inspection_4.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def gate_shift_change_inspection_5(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/shift_change/shift_change_inspection_5.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def gate_shift_change_inspection_6(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/shift_change/shift_change_inspection_6.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def gate_shift_change_inspection_7(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/shift_change/shift_change_inspection_7.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def gate_shift_change_complete(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/shift_change/shift_change_complete.html', context)
 
         else:
 

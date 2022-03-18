@@ -1,0 +1,17 @@
+{% extends 'cargoapp/main_style/main_base.html'%}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form action="send_form__2-26.py" name="form__2-26" class="form__2-26">
+                <button form="id_form" type="submit" name="form__2-26__button-1" id="form__2-26__button-1" class="form__2-26__button" value="Прием/передача">Прием/передача</button>
+                <button form="id_form" type="submit" name="form__2-26__button-2" id="form__2-26__button-2" class="form__2-26__button" value="н 320 ук716rus"><a href="{% url 'gate_shift_change_single' %}">н 320 ук716rus</a></button>
+                <button form="id_form" type="submit" name="form__2-26__button-3" id="form__2-26__button-3" class="form__2-26__button" value="а 720 ук716rus"><a href="{% url 'gate_shift_change_single' %}">а 720 ук716rus</a></button>
+                <button form="id_form" type="submit" name="form__2-26__button-4" id="form__2-26__button-4" class="form__2-26__button" value="с 950 ах 716rus"><a href="{% url 'gate_shift_change_single' %}">с 950 ах 716rus</a></button>
+                <button form="id_form" type="submit" name="form__2-26__button-5" id="form__2-26__button-5" class="form__2-26__button" value="а 220 ре 716rus"><a href="{% url 'gate_shift_change_single' %}">а 220 ре 716rus</a></button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

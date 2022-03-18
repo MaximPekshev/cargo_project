@@ -1,0 +1,29 @@
+{% extends 'cargoapp/main_style/main_base.html'%}
+
+{% block content %}
+<p>Запрос на выходные</p>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form action="send_form__8-14.py" name="form__8-14" class="form__8-14">
+                <input type="text" name="form__8-14__input-1" id="form__8-14__input-1" class="form__8-14__input" placeholder="Пересменка" disabled>
+                <input type="text" name="form__8-14__input-2" id="form__8-14__input-2" class="form__8-14__input" placeholder="ФИО водителя" disabled>
+                <input type="tel" name="form__8-14__input-3" id="form__8-14__input-3" class="form__8-14__input" placeholder="Телефон" disabled>
+                <input type="date" name="form__8-14__input-4" id="form__8-14__input-4" class="form__8-14__input" disabled>
+                <input type="text" name="form__8-14__input-5" id="form__8-14__input-5" class="form__8-14__input" placeholder="База 3" disabled>
+                <input type="text" name="form__8-14__input-6" id="form__8-14__input-6" class="form__8-14__input" placeholder="Гружёный" disabled>
+                <input type="text" name="form__8-14__input-7" id="form__8-14__input-7" class="form__8-14__input" placeholder="н 320 ук 716rus" disabled>
+                <input type="text" name="form__8-14__input-8" id="form__8-14__input-8" class="form__8-14__input" placeholder="8456 ВА" disabled>
+                <input type="text" name="form__8-14__input-9" id="form__8-14__input-9" class="form__8-14__input" placeholder="" disabled>
+                <input type="text" name="form__8-14__input-10" id="form__8-14__input-10" class="form__8-14__input" placeholder="ФИО сдает авто">
+                <input type="tel" name="form__8-14__input-11" id="form__8-14__input-11" class="form__8-14__input" placeholder="№ тел. сдает авто">
+                <div class="row">
+                    <button form="id_form" type="submit" name="form__8-14__button-1" id="form__8-14__button-1" class="form__8-14__button" value="Принять">Принять</button>
+                    <button form="id_form" type="submit" name="form__8-14__button-2" id="form__8-14__button-2" class="form__8-14__button" value="Отклонить">Отклонить</button>
+                </div>
+                <button form="id_form" type="submit" name="form__8-14__button-3" id="form__8-14__button-3" class="form__8-14__button" value="Назад">Назад</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'cargoapp/main_style/main_base.html'%}
+
+{% block content %}
+<p>Пригнать груженым</p>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form action="send_form__8-6.py" name="form__8-6" class="form__8-6">
+                <select name="form__8-6__select-1" id="form__8-6__select-1" class="form__8-6__select">
+                    <option value="Водитель 0">Водитель 0</option>
+                    <option value="Водитель 1">Водитель 1</option>
+                </select>
+                <input type="tel" name="form__8-6__input-1" id="form__8-6-input-1" class="form__8-6__input" placeholder="номер телефона" readonly>
+                <input type="date" name="form__8-6__input-2" id="form__8-6-input-2" class="form__8-6__input" readonly>
+                <input type="text" name="form__8-6__input-3" id="form__8-6-input-3" class="form__8-6__input" placeholder="База Челны" readonly>
+                <input type="text" name="form__8-6__input-4" id="form__8-6-input-4" class="form__8-6__input" placeholder="Гружёный" readonly>
+                <input type="text" name="form__8-6__input-5" id="form__8-6-input-5" class="form__8-6__input" placeholder="н 320 ук 716rus" readonly>
+                <input type="text" name="form__8-6__input-6" id="form__8-6-input-6" class="form__8-6__input" placeholder="8456 ВА" readonly>
+                <input type="text" name="form__8-6__input-7" id="form__8-6-input-7" class="form__8-6__input" placeholder="" disabled readonly>
+                <input type="text" name="form__8-6__input-8" id="form__8-6-input-8" class="form__8-6__input" placeholder="ФИО сдает авто" readonly>
+                <input type="tel" name="form__8-6__input-9" id="form__8-6-input-9" class="form__8-6__input" placeholder="№ тел сдает авто" readonly>
+                <button form="id_form" type="submit" name="form__8-6__button-1" id="form__8-6__button-1" class="form__8-6__button" value="Согласовать">Согласовать</button>
+                <button form="id_form" type="submit" name="form__8-6__button-2" id="form__8-6__button-2" class="form__8-6__button" value="Назад в меню"><a href="{% url 'columnar_holiday_requests' %}">Назад в меню</a></button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

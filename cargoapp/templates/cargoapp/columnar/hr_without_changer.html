@@ -1,0 +1,21 @@
+{% extends 'cargoapp/main_style/main_base.html'%}
+
+{% block content %}
+<p>Без сменщика</p>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form action="send_form__8-33.py" name="form__8-33" class="form__8-33">
+                <select name="form__8-33__select-1" id="form__8-33__select-1" class="form__8-33__select">
+                    <option value="Челны">Челны</option>
+                    <option value="Омск">Омск</option>
+                    <option value="Иркутс">Иркутс</option>
+                </select>
+
+                <button form="id_form" type="submit" name="form__8-33__button-1" id="form__8-33__button-1" class="form__8-33__button" value="Отправить">Отправить</button>
+                <button form="id_form" type="submit" name="form__8-33__button-2" id="form__8-33__button-2" class="form__8-33__button" value="Назад в меню"><a href="{% url 'columnar_single_holiday_requests' %}">Назад в меню</a></button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

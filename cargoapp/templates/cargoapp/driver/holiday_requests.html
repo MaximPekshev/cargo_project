@@ -1,0 +1,15 @@
+{% extends 'cargoapp/main_style/main_base.html'%}
+
+{% block content %}
+<p>Запросы на выходной</p>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form action="send_form__8-2.py" name="form__8-2" class="form__8-2">
+                <button type="submit" form="id_form" name="form__8-2__button-4" id="form__8-2__button-4" class="form__8-2__button" value="Сменщик отклонил"><a href="{% url 'driver_new_holiday_request' %}">Новый</a></button>
+                <button type="submit" form="id_form" name="form__8-2__button-5" id="form__8-2__button-5" class="form__8-2__button" value="Отправить"><a href="{% url 'driver_holiday_request' %}">Согласованный запрос</a></button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'cargoapp/main_style/main_base.html'%}
+
+{% block content %}
+<p>Запросы на выходные</p>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form action="send_form__8-4.py" name="form__8-4" class="form__8-4">
+                <input type="text" name="form__8-4__input-1" id="form__8-4__input-1" class="form__8-4__input" placeholder="Запрос на выходные">
+                <button form="id_form" type="submit" name="form__8-4__button-1" id="form__8-4__button-1" class="form__8-4__button" value=""><a href="{% url 'columnar_single_holiday_requests' %}">н 320 ук 716rus</a></button>
+                <button form="id_form" type="submit" name="form__8-4__button-2" id="form__8-4__button-2" class="form__8-4__button" value=""><a href="{% url 'columnar_single_holiday_requests' %}">н 720 хв 716rus</a></button>
+                <button form="id_form" type="submit" name="form__8-4__button-3" id="form__8-4__button-3" class="form__8-4__button" value=""><a href="{% url 'columnar_single_holiday_requests' %}">н 322 ук 716rus</a></button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

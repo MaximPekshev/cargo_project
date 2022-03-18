@@ -1,0 +1,23 @@
+{% extends 'cargoapp/main_style/main_base.html'%}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form action="send_form__8-5.py" name="form__8-5" class="form__8-5">
+                <input type="text" name="form__8-5__input-1" id="form__8-5__input-1" class="form__8-5__input" placeholder="н 320 ук 716rus" readonly>
+                <input type="text" name="form__8-5__input-2" id="form__8-5__input-2" class="form__8-5__input" placeholder="8456 ВА" readonly>
+                <input type="text" name="form__8-5__input-3" id="form__8-5__input-3" class="form__8-5__input" placeholder="" disabled readonly>
+                <input type="text" name="form__8-5__input-4" id="form__8-5__input-4" class="form__8-5__input" placeholder="ФИО водителя" readonly>
+                <input type="text" name="form__8-5__input-5" id="form__8-5__input-5" class="form__8-5__input" placeholder="адрес" readonly>
+                <input type="date" name="form__8-5__input-6" id="form__8-5__input-6" class="form__8-5__input" readonly>
+                <input type="date" name="form__8-5__input-7" id="form__8-5__input-7" class="form__8-5__input" readonly>
+                <button form="id_form" type="submit" name="form__8-5__button-1" id="form__8-5__button-1" class="form__8-5__button" value="Пригнать гружоным"><a href="{% url 'columnar_hr_drive_loaded' %}">Пригнать гружоным</a></button>
+                <button form="id_form" type="submit" name="form__8-5__button-2" id="form__8-5__button-2" class="form__8-5__button" value="БЕЗ сменщика"><a href="{% url 'columnar_hr_without_changer' %}">БЕЗ сменщика</a></button>
+                <button form="id_form" type="submit" name="form__8-5__button-3" id="form__8-5__button-3" class="form__8-5__button" value="Пункт3 выбрать др.дат"><a href="{% url 'columnar_hr_change_date' %}">Выбрать др.дат</a></button>
+                <button form="id_form" type="submit" name="form__8-5__button-4" id="form__8-5__button-4" class="form__8-5__button" value="Согласовать">Согласовать</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

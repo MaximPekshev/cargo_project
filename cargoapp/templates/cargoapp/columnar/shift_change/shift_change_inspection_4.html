@@ -1,0 +1,89 @@
+{% extends 'cargoapp/main_style/main_base.html'%}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form action="send_form__2-12.py" name="form__2-12" class="form__2-12" method="post" enctype="multipart/form-data">
+                <input type="text" name="form__2-12__input-1" id="form__2-12__input-1" class="form__2-12__input" placeholder="н 320 ук716rus">
+                <input type="text" name="form__2-12__input-2" id="form__2-12__input-2" class="form__2-12__input" placeholder="8088 AA">
+                <input type="text" name="form__2-12__input-3" id="form__2-12__input-3" class="form__2-12__input" placeholder="" disabled>
+                <input type="text" name="form__2-12__input-4" id="form__2-12__input-4" class="form__2-12__input" placeholder="тягач" disabled>
+                <input type="text" name="form__2-12__input-5" id="form__2-12__input-5" class="form__2-12__input" placeholder="тягач" disabled>
+
+                <select name="form__2-12__select-1" id="form__2-12__select-1">
+                    <option value="1. Трещина на лобовом стекле">1. Трещина на лобовом стекле</option>
+                    <option value="2. Скол на лобовом стекле">2. Скол на лобовом стекле</option>
+                    <option value="3. Нет защиты сеток фар">3. Нет защиты сеток фар</option>
+                    <option value="4. Вмятина на правом баке">4. Вмятина на правом баке</option>
+                    <option value="5. Вмятина на левом баке">5. Вмятина на левом баке</option>
+                    <option value="6. Шины на ведущей оси">6. Шины на ведущей оси</option>
+                    <option value="7. Повреждение бампера с правой стороны">7. Повреждение бампера с правой стороны</option>
+                    <option value="8. Повреждение бампера с левой стороны">8. Повреждение бампера с левой стороны</option>
+                    <option value="9. Повреждено бордюрное зеркало">9. Повреждено бордюрное зеркало</option>
+                    <option value="10. Поврежден корпус правого зеркала">10. Поврежден корпус правого зеркала</option>
+                    <option value="11. Поврежден корпус левого зеркала">11. Поврежден корпус левого зеркала</option>
+                    <option value="12. Повреждено стекло левого ПТФ">12. Повреждено стекло левого ПТФ</option>
+                    <option value="13. Повреждено стекло правого ПТФ">13. Повреждено стекло правого ПТФ</option>
+                    <option value="14. Повреждено стекло левой фары">14. Повреждено стекло левой фары</option>
+                    <option value="15. Повреждено стекло правой фары">15. Повреждено стекло правой фары</option>
+                    <option value="16. Нечитаемый гос. номер">16. Нечитаемый гос. номер</option>
+                    <option value="17. Поврежден гос. номер">17. Поврежден гос. номер</option>
+                    <option value="18. Повреждена левая подножка">18. Повреждена левая подножка</option>
+                    <option value="19. Повреждена правая подножка">19. Повреждена правая подножка</option>
+                    <option value="20. Поврежден бампер">20. Поврежден бампер</option>
+                    <option value="21. Повреждена юбка бампера">21. Повреждена юбка бампера</option>
+                    <option value="22. Поврежден верхний козырек">22. Поврежден верхний козырек</option>
+                    <option value="23. Неисправен задний правый фонарь">23. Неисправен задний правый фонарь</option>
+                    <option value="24. Неисправен задний левый фонарь">24. Неисправен задний левый фонарь</option>
+                    <option value="25. Повреждено заднее правое крыло">25. Повреждено заднее правое крыло</option>
+                    <option value="26. Повреждено заднее левое крыло">26. Повреждено заднее левое крыло</option>
+                    <option value="27. Нет накладки спойлера">27. Нет накладки спойлера</option>
+                    <option value="28. Поврежден правый дефлектор">28. Поврежден правый дефлектор</option>
+                    <option value="29. Поврежден левый дефлектор">29. Поврежден левый дефлектор</option>
+                    <option value="30. Повреждена решетка капота">30. Повреждена решетка капота</option>
+                    <option value="31. Потемнел отражатель правой фары">31. Потемнел отражатель правой фары</option>
+                    <option value="32. Потемнел отражатель левой фары">32. Потемнел отражатель левой фары</option>
+                    <option value="33. Потемнел отражатель правой ПТФ">33. Потемнел отражатель правой ПТФ</option>
+                    <option value="34. Потемнел отражатель левой ПТФ">34. Потемнел отражатель левой ПТФ</option>
+                </select>
+                <img src="#" alt="Тягач фото" class="form__2-12__img-1">
+                <input type="text" name="form__2-12__input-6" id="form__2-12__input-6" class="form__2-12__input" placeholder="ППЦ" disabled>
+                <select name="form__2-12__select-2" id="form__2-12__select-2">
+                    <option value="1. Поврежден тент с правой стороны">1. Поврежден тент с правой стороны</option>
+                    <option value="2. Поврежден тент с левой стороны">2. Поврежден тент с левой стороны</option>
+                    <option value="3. Поврежден правый отбойник">3. Поврежден правый отбойник</option>
+                    <option value="4. Поврежден левый отбойник">4. Поврежден левый отбойник</option>
+                    <option value="5. Поврежден боковой габарит с правой стороны">5. Поврежден боковой габарит с правой стороны</option>
+                    <option value="6. Поврежден боковой габарит с левой стороны">6. Поврежден боковой габарит с левой стороны</option>
+                    <option value="7. Поврежден правый рожок">7. Поврежден правый рожок</option>
+                    <option value="8. Поврежден левый рожок">8. Поврежден левый рожок</option>
+                    <option value="9. Поврежден правый фонарь">9. Поврежден правый фонарь</option>
+                    <option value="10. Поврежден левый фонарь">10. Поврежден левый фонарь</option>
+                    <option value="11. Поврежден задний правый отбойник">11. Поврежден задний правый отбойник</option>
+                    <option value="12. Поврежден задний левый отбойник">12. Поврежден задний левый отбойник</option>
+                    <option value="13. Поврежден задний бампер">13. Поврежден задний бампер</option>
+                    <option value="14. Повреждена правая дверь">14. Повреждена правая дверь</option>
+                    <option value="15. Повреждена левая дверь">15. Повреждена левая дверь</option>
+                    <option value="16. Повреждена петля правой двери">16. Повреждена петля правой двери</option>
+                    <option value="17. Повреждена петля левой двери">17. Повреждена петля левой двери</option>
+                    <option value="18. Поврежден ящик">18. Поврежден ящик</option>
+                    <option value="19. Повреждена защитная крышка правого фонаря">19. Повреждена защитная крышка правого фонаря</option>
+                    <option value="20. Повреждена защитная крышка левого фонаря">20. Повреждена защитная крышка левого фонаря</option>
+                    <option value="21. Нечитаемый гос. Номер">21. Нечитаемый гос. Номер</option>
+                    <option value="22. Нет рекламы">22. Нет рекламы</option>
+                </select>
+                <img src="#" alt="ППЦ фото" class="form__2-12__img-2">
+
+                <input type="file" name="form__2-12__input-7" id="form__2-12__input-7" class="form__2-12__input">
+                <input type="file" name="form__2-12__input-8" id="form__2-12__input-8" class="form__2-12__input">
+
+                <div class="row">
+                    <button form="id_form" type="submit" name="form__2-12__button-1" class="form__2-12__button" value="Назад">Назад</button>
+                    <button form="id_form" type="submit" name="form__2-12__button-2" class="form__2-12__button" value="Далее"><a href="{% url 'gate_shift_change_inspection_5' %}">Далее</a></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
