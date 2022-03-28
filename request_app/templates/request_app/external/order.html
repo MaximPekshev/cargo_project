@@ -1,0 +1,177 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{%static 'css/request_app/external/external_request_app.css'%}">
+    <script src="{% static 'js/select2.min.js' %}"></script>
+    <link rel="shortcut icon"
+              href="{% static "favicon.png" %}"
+              type="image/png">
+    <title>Груз</title>
+</head>
+
+
+<body>
+    <p class="nameFname">Ответственное лицо: {{request.user.username}}</p>
+
+   <!-- <div class="tableDiv">
+    <div class="manu">
+        <div><p>От куда</p></div>
+        <div><p>Куда</p></div>
+        <div><p>Дата погрузки</p></div>
+        <div><p>Цена</p></div>
+        <div class="endBorder"><p>Открыть</p></div>
+    </div>
+        {%for i in 'count'%}
+        <div id="div_{{i}}" class="inputDiv">
+            <div class="inputs">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <button id="buton_{{i}}" class="SendButton"><a href="">Открыть</a></button>
+            </div> 
+        </div>
+
+        {%endfor%} -->
+   </div>
+   <div class="order">
+       <div class="left">
+           <p><span>ИД: </span>{{data.order_id}}</p>
+           {% if j.comment%}
+           <p><span>Комментарий: </span>{{data.comment}}</p>
+           {% endif %}
+           <p><span>Цена: </span>{{data.price}} {{data.order_price_currency}}</p>
+           <p><span>Продолжительность аукциона: </span>{{data.auction_duration}} дней</p>
+           <p><span>Грузовик: </span>{{data.truck.types.truck_type}}</p>
+           <p><span>Грузоподъемность: </span>{{data.truck.carrying_capacity}} тон</p>
+           <p><span>Звук: </span>{{data.truck.volume}}</p>
+
+       </div>
+       <div class="right">
+           {% for j in data.route%}        
+           <div>
+                {% if j.waypoint_type == 'loading'%}
+                   <p class="type"><span>Тип: </span>Загрузка</p>
+                {% elif j.waypoint_type == 'unloading' %}
+                   <p class="type"><span>Тип: </span>Выгрузка</p>
+                {% endif %}
+                {% if j.contact_person%}
+                    <p><span>Контакт: </span>{{j.contact_person}}</p>                
+                {% endif %}
+                {% if j.arrival_date_start and j.arrival_time_start%}
+                    <p><span>Начало:</span> {{j.arrival_date_start}} {{j.arrival_time_start}}</p>
+                {% elif j.arrival_date_start and not j.arrival_time_start%}
+                    <p><span>Начало:</span> {{j.arrival_date_start}}</p>
+                {% endif %}
+                {% if j.arrival_date_end and j.arrival_time_end%}
+                    <p><span>Конец: </span> {{j.arrival_date_end}} {{j.arrival_time_end}}</p>
+                {% elif j.arrival_date_end and not j.arrival_time_end%}
+                    <p><span>Конец: </span> {{j.arrival_date_end}}</p>
+                {% endif %}
+                {% if j.counteragent%}
+                    <p><span>Kонтрагент: </span>{{j.counteragent}}</p>                
+                {% endif %}
+                {% if j.address.free_form%}
+                    <p><span>Адресс: </span>{{j.address.free_form}}</p>                
+                {% endif %}
+                
+                
+                
+           </div>
+           <br>
+           {% endfor %}            
+       </div>
+        
+            
+            
+    </div>
+</body>
+<script>
+    $('.max4').on('change keyup paste', function () {
+        if(this.value > 9999){
+            this.value = 9999
+        }
+        else if(this.value < 0){
+            this.value = ''
+ 
+        }
+    })
+    $('.max3').on('change keyup keydown keypress paste', function () {
+        if(this.value > 999){
+            this.value = 999
+        }
+        else if(this.value < 0){
+            this.value = ''
+        }
+    })
+
+    $('.SendButton').on('click touch', function () {
+        gasStation = ''
+
+
+
+        id = this.id.split('_')[1]
+        gosNumber = document.getElementById('gosNumber_'+id).value
+        rosneft = document.getElementById('rosneft_'+id).value
+        rosneft_address = document.getElementById('rosneft_address_'+id).value
+        gazprom = document.getElementById('gazprom_'+id).value
+        gazprom_address = document.getElementById('gazprom_address_'+id).value
+        tatneft = document.getElementById('tatneft_'+id).value
+        tatneft_address = document.getElementById('tatneft_address_'+id).value
+        monopoly = document.getElementById('monopoly_'+id).value
+        monopoly_address = document.getElementById('monopoly_address_'+id).value
+        ufa = document.getElementById('ufa_'+id).value
+        ufa_address = document.getElementById('ufa_address_'+id).value
+
+        if(rosneft && rosneft_address){
+            gasStation += 'rosneft:'+rosneft+','+'rosneft_address:'+rosneft_address+','
+        }
+        if(gazprom && gazprom_address){
+            gasStation += 'gazprom:'+gazprom+','+'gazprom_address:'+gazprom_address+','
+        }
+        if(tatneft && tatneft_address){
+            gasStation += 'tatneft:'+tatneft+','+'tatneft_address:'+tatneft_address+','
+        }
+        if(monopoly && monopoly_address){
+            gasStation += 'monopoly:'+monopoly+','+'monopoly_addres:'+monopoly_address+','
+        }
+        if(ufa && ufa_address){
+            gasStation += 'ufa:'+ufa+','+'ufa_addres:'+ufa_address+','
+        }
+
+      
+
+
+        if(gosNumber && gasStation){  
+            $.ajax({
+                type: 'GET',
+                data: {
+                    gosNumber:gosNumber,
+                    gasStation:gasStation,
+                }
+            })      
+            document.getElementById('div_'+id).classList.remove('error')
+            document.getElementById('div_'+id).classList.add('successfully')
+        }
+        else{
+            document.getElementById('div_'+id).classList.remove('successfully')
+            document.getElementById('div_'+id).classList.add('error')
+
+        }
+        
+
+                    
+           
+    })
+</script>
+
+</html>

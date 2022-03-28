@@ -17,7 +17,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('mobi-fuel/', include('mobiFuel.urls')),
-    path('mobi-group/', include('mobiGroup.urls'))
+    path('mobi-group/', include('mobiGroup.urls')),
+    path('requests/', include('request_app.urls')),
 ]
 
 

@@ -33,6 +33,7 @@ INSTALLED_APPS = [
 
     'mobiFuel',
     'mobiGroup',
+    'request_app',
     
 ]
 

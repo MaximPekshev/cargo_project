@@ -1,0 +1,94 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{%static 'css/request_app/external/external_request_app.css'%}">
+    <script src="{% static 'js/select2.min.js' %}"></script>
+    <link rel="shortcut icon"
+              href="{% static "favicon.png" %}"
+              type="image/png">
+    <title>Поиск грузов</title>
+</head>
+
+
+<body>
+    <p class="nameFname">Ответственное лицо: {{request.user.username}}</p>
+
+   <!-- <div class="tableDiv">
+    <div class="manu">
+        <div><p>От куда</p></div>
+        <div><p>Куда</p></div>
+        <div><p>Дата погрузки</p></div>
+        <div><p>Цена</p></div>
+        <div class="endBorder"><p>Открыть</p></div>
+    </div>
+        {%for i in 'count'%}
+        <div id="div_{{i}}" class="inputDiv">
+            <div class="inputs">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <button id="buton_{{i}}" class="SendButton"><a href="">Открыть</a></button>
+            </div> 
+        </div>
+
+        {%endfor%} -->
+   </div>
+    {% for i in date%}
+   <div class="order">
+       <div class="left">
+           <p><span>Заказ: </span>{{i.order_human_name}}</p>
+           {% if j.comment%}
+           <p><span>Комментарий: </span>{{i.comment}}</p>
+           {% endif %}
+           <p><span>Цена: </span>{{i.price}} {{i.order_price_currency}}</p>
+           <p><span>Продолжительность аукциона: </span>{{i.auction_duration}} дней</p>
+           <a target="_blank" href="https://atrucks.su/a/{{i.order_id}}">Подробнее</a>
+
+       </div>
+       <div class="right">
+           {% for j in i.route%}        
+           <div>
+                {% if j.waypoint_type == 'loading'%}
+                   <p class="type"><span>Тип: </span>Загрузка</p>
+                {% elif j.waypoint_type == 'unloading' %}
+                   <p class="type"><span>Тип: </span>Выгрузка</p>
+                {% endif %}
+                {% if j.contact_person%}
+                    <p><span>Контакт: </span>{{j.contact_person}}</p>                
+                {% endif %}
+                {% if j.arrival_date_start and j.arrival_time_start%}
+                    <p><span>Начало:</span> {{j.arrival_date_start}} {{j.arrival_time_start}}</p>
+                {% elif j.arrival_date_start and not j.arrival_time_start%}
+                    <p><span>Начало:</span> {{j.arrival_date_start}}</p>
+                {% endif %}
+                {% if j.arrival_date_end and j.arrival_time_end%}
+                    <p><span>Конец: </span> {{j.arrival_date_end}} {{j.arrival_time_end}}</p>
+                {% elif j.arrival_date_end and not j.arrival_time_end%}
+                    <p><span>Конец: </span> {{j.arrival_date_end}}</p>
+                {% endif %}
+                {% if j.counteragent%}
+                    <p><span>Kонтрагент: </span>{{j.counteragent}}</p>                
+                {% endif %}
+                {% if j.address.free_form%}
+                    <p><span>Адресс: </span>{{j.address.free_form}}</p>                
+                {% endif %}
+
+           </div>
+           <br>
+           {% endfor %}            
+       </div>     
+    </div>
+    {% endfor %}
+</body>
+
+</html>
