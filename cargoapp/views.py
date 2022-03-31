@@ -1279,6 +1279,23 @@ def columnar_shift_change_list(request):
 
             return render(request, 'cargoapp/menu/auth_role_error.html')            
 
+def columnar_maintenance_schedule_menu(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+
+        if request.user in users_in_group_vehicle_supervisor:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/maintenance_schedule/menu.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
 
 #LOGIST
 

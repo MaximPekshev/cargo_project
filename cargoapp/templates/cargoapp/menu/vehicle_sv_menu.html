@@ -37,6 +37,10 @@
             <div class="col-12 row justify-content-center mb-2">
                 <a class="btn btn-outline-dark col-11" href="#" >Пересменка</a>
             </div>
+
+            <div class="col-12 row justify-content-center mb-2">
+                <a class="btn btn-outline-dark col-11" href="{% url 'columnar_maintenance_schedule_menu'%}" >Графики ТО</a>
+            </div>
     
             <div class="col-12 row justify-content-center mb-2">
                 <a class="btn btn-outline-danger col-11" href="{% url 'show_autograph_upload_menu' %}" >Загрузка данных</a>
@@ -50,7 +54,33 @@
     </div>
     <div class="row col-12 col-md-8 col-xl-9 justify-content-center mt-4">
         <div class="col-12 col-md-12 col-xl-12 shadow pt-5 pb-5 row justify-content-center">
-            <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A0ed832c6b2691bef1306d4c5cca96d0a94dd71c33ed8c4f9b100f99abd69176d&amp;source=constructor" width="1280" height="700" frameborder="0"></iframe>
+            <div class="col-10 col-md-10 col-xl-10">
+                <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A0ed832c6b2691bef1306d4c5cca96d0a94dd71c33ed8c4f9b100f99abd69176d&amp;source=constructor" width="100%" height="700" frameborder="0"></iframe>
+            </div>
+            <div class="col-2 col-md-2 col-xl-2">
+                <div class="alert alert-primary" role="alert">
+                    в456вв 
+                    <span class="badge rounded-pill bg-primary" style="margin-left: 15%;">На линии</span>
+                    <span class="badge rounded-pill bg-light text-dark">(1)</span>
+                </div>
+                <div style="background-color: #aa80ff;" class="alert alert-secondary" role="alert">
+                    а555аа <span class="badge rounded-pill bg-primary" style="margin-left: 15%;">Встал по ДТП </span>
+                    <span class="badge rounded-pill bg-light text-dark">(1)</span>
+                </div>
+                <div class="alert alert-success" role="alert">
+                    т345ее <span class="badge rounded-pill bg-primary" style="margin-left: 15%;">Без водителя </span>
+                    <span class="badge rounded-pill bg-light text-dark">(2)</span>
+                </div>
+                <div class="alert alert-danger" role="alert">
+                    а888аа <span class="badge rounded-pill bg-primary" style="margin-left: 15%;">Без водителя</span>
+                    <span class="badge rounded-pill bg-light text-dark">(2)</span>
+                </div>
+                <div class="alert alert-warning" role="alert">
+                    е667ар <span class="badge rounded-pill bg-primary" style="margin-left: 15%;">Выходной</span>
+                    <span class="badge rounded-pill bg-light text-dark">(1)</span>
+                </div>
+                
+            </div>    
         </div>
     </div>        
 </div> 

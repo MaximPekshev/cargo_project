@@ -26,6 +26,7 @@ from .views import columnar_hr_change_date
 from .views import columnar_hr_without_changer
 from .views import columnar_hr_drive_loaded
 from .views import columnar_shift_change_list
+from .views import columnar_maintenance_schedule_menu
 #logist
 from .views import logist_extra_repair
 from .views import logist_holiday_requests
@@ -76,6 +77,7 @@ urlpatterns = [
 	path('columnar/holiday-requests/', 	columnar_holiday_requests , name='columnar_holiday_requests'),
 	path('columnar/single-holiday-request/', 	columnar_single_holiday_requests , name='columnar_single_holiday_requests'),
 	path('columnar/shift-change/list/', 	columnar_shift_change_list , name='columnar_shift_change_list'),
+	path('columnar/maintenance-schedule/menu/', 	columnar_maintenance_schedule_menu , name='columnar_maintenance_schedule_menu'),
 	
 
 	#logist
