@@ -4,6 +4,7 @@
 <nav class="fixed-bottom navbar-dark bg-dark">
 	<a class="navbar-brand" type="button" data-bs-toggle="modal" data-bs-target="#modalLogout" style="float: right;" >Выйти</a>
 	<a class="navbar-brand" href="{% url "show_menu_page" %}" style="float: right;" >Меню</a>
+	<a class="navbar-brand" type="button" data-bs-toggle="modal" data-bs-target="#modalCalc" style="float: right;" >Расчет маршрута</a>
 </nav>
 <div class="row pt-3 justify-content-between">
 	<div class="col-12 col-md-12 col-lg-10" align="left">
@@ -173,4 +174,186 @@
 	  </div>
 	</div>
 </div>
+
+<div class="modal" id="modalCalc" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLogoutLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="modalLogoutLabel">Калькулятор маршрута</h5>
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-body row" id="routeCalculator">
+			<div class="form-group col-6">
+				<label for="fuel_consum">Расход топлива, л.</label>
+				<input onKeyPress="inputFilter()" type="text" class="form-control" id="fuel_consum" placeholder="Расход топлива" value="34">
+			</div>
+			<div class="form-group col-6">
+				<label for="salary">Коэффициент ЗП</label>
+				<input onKeyPress="inputFilter()" type="text" class="form-control" id="salary" placeholder="Коэффициент ЗП+командировочные" value="8">
+			</div>
+			<div class="form-group col-6 mb-4">
+				<label for="fuel_cost">Стоимость топлива, руб.</label>
+				<input onKeyPress="inputFilter()" type="text" class="form-control" id="fuel_cost" placeholder="Стоимость топлива" value="52">
+			</div>
+			<div class="form-group col-6">
+				<label for="platon">Платон коэффициент</label>
+				<input onKeyPress="inputFilter()" type="text" class="form-control" id="platon" placeholder="Платон" value="2.34">
+			</div>
+
+			<div class="form-group col-6">
+				<label for="mileage">Пробег, км</label>
+				<input onKeyPress="inputFilter()" type="text" class="form-control" id="mileage" placeholder="">
+			</div>
+			<div class="form-group col-6 ">
+				<label for="income">Валовый доход, руб</label>
+				<input onKeyPress="inputFilter()" type="text" class="form-control" id="income" placeholder="">
+			</div>
+			<div class="form-group col-12 mb-4">
+				<label for="other">Прочие расходы, руб</label>
+				<input onKeyPress="inputFilter()" type="text" class="form-control" id="other" placeholder="">
+			</div>
+
+
+			<div class="form-group col-6">
+				<label for="calcFuel">Диз. Топливо, руб</label>
+				<input type="text" class="form-control" id="calcFuel" placeholder="..." disabled>
+			</div>
+			<div class="form-group col-6">
+				<label for="calcSalary">Зарплата/ командир, руб</label>
+				<input type="text" class="form-control" id="calcSalary" placeholder="..." disabled>
+			</div>
+
+			<div class="form-group col-6">
+				<label for="calcPureIncome">Чистый доход, руб</label>
+				<input type="text" class="form-control" id="calcPureIncome" placeholder="..." disabled>
+			</div>
+			<div class="form-group col-6">
+				<label for="calcKMPrice">Цена за км, руб/км</label>
+				<input type="text" class="form-control" id="calcKMPrice" placeholder="..." disabled>
+			</div>
+			<div class="form-group col-6">
+				<label for="calcPlaton">Платон, руб</label>
+				<input type="text" class="form-control" id="calcPlaton" placeholder="..." disabled>
+			</div>
+		</div>
+		<div class="modal-footer">
+		  <button id="calculate" type="button" class="btn btn-secondary">Рассчитать</button>
+		  <a data-bs-dismiss="modal" class="btn btn-primary">Закрыть</a>
+		</div>
+	  </div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block custom_script %}
+<script type="text/javascript">
+
+    window.onload = function() {
+        document.getElementById('calculate').addEventListener('click', calculateRoute, false);
+    };
+
+    const calculateRoute = async (evt) => {
+        evt.preventDefault();
+        let routeCalculator = document.getElementById('routeCalculator');
+		let flag = false;
+
+		let fuel_consum = document.getElementById('fuel_consum');
+		if (fuel_consum != null&& !fuel_consum.value == "") {
+			fuel_consum = parseFloat(fuel_consum.value).toFixed(2);
+		} else {
+			fuel_consum.placeholder = "Обязательное поле!!";
+			flag = true;
+		}
+
+		let salary = document.getElementById('salary');
+		if (salary != null&& !salary.value == "") {
+			salary = parseFloat(salary.value).toFixed(2);
+		} else {
+			salary.placeholder = "Обязательное поле!!";
+			flag = true;
+		}
+
+		let fuel_cost = document.getElementById('fuel_cost');
+		if (fuel_cost != null&& !fuel_cost.value == "") {
+			fuel_cost = parseFloat(fuel_cost.value).toFixed(2);
+		} else {
+			fuel_cost.placeholder = "Обязательное поле!!";
+			flag = true;
+		}
+
+		let platon = document.getElementById('platon');
+		if (platon != null&& !platon.value == "") {
+			platon = parseFloat(platon.value).toFixed(2);
+		} else {
+			platon.placeholder = "Обязательное поле!!";
+			flag = true;
+		}
+
+		let mileage = document.getElementById('mileage');
+		if (mileage != null&& !mileage.value == "") {
+			mileage = parseFloat(mileage.value).toFixed(2);
+		} else {
+			mileage.placeholder = "Обязательное поле!!";
+			flag = true;
+		}
+
+		let income = document.getElementById('income');
+		if (income != null&& !income.value == "") {
+			income = parseFloat(income.value).toFixed(2);
+		} else {
+			income.placeholder = "Обязательное поле!!";
+			flag = true;
+		}
+
+		let other = document.getElementById('other');
+		if (other != null&& !other.value == "") {
+			other = parseFloat(other.value).toFixed(2);
+		} else {
+			other =  parseFloat("0").toFixed(2);
+		}
+		
+		if (!flag) {
+			let calcFuel = fuel_consum*mileage/100*fuel_cost;
+			let valFuelCost = document.getElementById('calcFuel');
+			valFuelCost.value = calcFuel;
+
+			let calcSalary = mileage*salary;
+			let valSalary = document.getElementById('calcSalary');
+			valSalary.value = calcSalary;
+
+
+			let calcPlaton = mileage*platon;
+			let valPlaton = document.getElementById('calcPlaton');
+			valPlaton.value = calcPlaton;
+			
+			let calcPureIncome = income-calcFuel-calcSalary-other-calcPlaton;
+			let valPureIncome = document.getElementById('calcPureIncome');
+			valPureIncome.value = calcPureIncome;
+
+			let calcKMPrice = income/mileage;
+			let valKMPrice = document.getElementById('calcKMPrice');
+			valKMPrice.value = calcKMPrice.toFixed(2);
+
+		} else {
+			document.getElementById('calcFuel').value = "";
+			document.getElementById('calcSalary').value = "";
+			document.getElementById('calcPureIncome').value = "";
+			document.getElementById('calcKMPrice').value = "";
+			document.getElementById('calcPlaton').value = "";
+		}
+        
+    };
+
+	function inputFilter(){
+		if (event.keyCode < 48 || event.keyCode > 57) {
+			console.log(event.keyCode);
+			if (event.keyCode != 46){
+				event.returnValue= false;
+			}
+		}
+		
+	};
+	
+</script>
 {% endblock %}
