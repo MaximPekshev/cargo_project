@@ -48,9 +48,10 @@
 			<thead>
 				<tr>
 					<th>#</th>
-					<th width="150">Дата с</th>
-					<th width="150">Дата по</th>
+					<th width="7%">Дата с</th>
+					<th width="7%">Дата по</th>
 					<th>Кол-во дней</th>
+					<th width="10%">Авто</th>
 					<th>Маршрут</th>
 					<th>Пробег, км</th>
 					<th>Валовый доход, руб</th>
@@ -71,6 +72,7 @@
 					<td>{{ item.from_date|date:"Y-m-d" }}</td>
 					<td>{{ item.to_date|date:"Y-m-d" }}</td>
 					<td>{{ item.day_count }}</td>
+					<td>{{ item.vehicle }}</td>
 					<td><a href="{% url 'show_route' uid=item.uid %}">{{ item.a_point }} - {{ item.b_point }}</a></td>
 					<td>{{ item.route_length }}</td>
 					<td>{{ item.route_cost }}</td>
@@ -88,6 +90,7 @@
 					<td></td>
 					<td>{{ total_days }}</td>
 					<td></td>
+					<td></td>
 					<td>{{ total_route_length }}</td>
 					<td>{{ total_route_cost }}</td>
 					<td>{{ total_fuel_cost }}</td>
@@ -101,6 +104,7 @@
 
 				<tr style="background-color: #ccffcc;">
 					<td colspan="2">Итого (план)</td>
+					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -119,6 +123,7 @@
 					<td></td>
 					<td></td>
 					<td></td>
+					<td></td>
 					<td>{{ route_length_diff }}</td>
 					<td>{{ route_cost_diff }}</td>
 					<td></td>
@@ -131,6 +136,7 @@
 				</tr>
 				<tr>
 					<td colspan="2">% выполнения</td>
+					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>

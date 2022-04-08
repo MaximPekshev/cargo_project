@@ -120,6 +120,8 @@ def show_menu_page(request):
         users_in_group_logist = Group.objects.get(name="Логист").user_set.all()
         users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
         users_in_group_hr_dep = Group.objects.get(name="Отдел кадров").user_set.all()
+        users_in_group_insurance = Group.objects.get(name="Страховка").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
         if request.user in users_in_group_vehicle_supervisor:
 
@@ -147,7 +149,15 @@ def show_menu_page(request):
 
         elif request.user in users_in_group_hr_dep:
 
-            return render(request, 'cargoapp/menu/hr_department.html')     
+            return render(request, 'cargoapp/menu/hr_department.html')
+
+        elif request.user in users_in_group_insurance:
+
+            return render(request, 'cargoapp/menu/insurance_menu.html')
+
+        elif request.user in users_in_group_chief_column:
+
+            return render(request, 'cargoapp/menu/chief_column_menu.html')             
 
         else:
 
@@ -163,6 +173,7 @@ def show_index_page(request):
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
         users_in_group_logistsupervisor = Group.objects.get(name="Старший логист").user_set.all()
         users_in_group_logist = Group.objects.get(name="Логист").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
         if request.user in users_in_group_vehicle_supervisor:
             if request.GET.get('date'):
@@ -350,6 +361,19 @@ def show_index_page(request):
             }
 
             return render(request, 'cargoapp/logist_index_page.html', context)
+
+        elif request.user in users_in_group_chief_column:
+
+            if request.GET.get('date'):
+                date = datetime.datetime.strptime(request.GET.get('date'), "%Y-%m-%d")
+            else:    
+                date = datetime.datetime.now() -  datetime.timedelta(days=1)
+
+            context = {
+                'vehicles' : AutographDailyIndicators.objects.filter(date=date.date()),
+                'date' : date.strftime("%Y-%m-%d"),
+            }
+            return render(request, 'autographapp/autograph.html', context)    
 
         else:
 
@@ -1138,8 +1162,9 @@ def columnar_extra_repair(request):
     if request.user.is_authenticated:
 
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1156,8 +1181,10 @@ def columnar_extra_repair_registration(request):
     if request.user.is_authenticated:
 
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vehicle_supervisor:
+
+        if request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1174,8 +1201,9 @@ def columnar_holiday_requests(request):
     if request.user.is_authenticated:
 
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1192,8 +1220,9 @@ def columnar_single_holiday_requests(request):
     if request.user.is_authenticated:
 
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1210,8 +1239,9 @@ def columnar_hr_change_date(request):
     if request.user.is_authenticated:
 
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1229,8 +1259,9 @@ def columnar_hr_without_changer(request):
     if request.user.is_authenticated:
 
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1247,8 +1278,9 @@ def columnar_hr_drive_loaded(request):
     if request.user.is_authenticated:
 
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1266,8 +1298,9 @@ def columnar_shift_change_list(request):
     if request.user.is_authenticated:
 
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1284,14 +1317,53 @@ def columnar_maintenance_schedule_menu(request):
     if request.user.is_authenticated:
 
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
             }
 
             return render(request, 'cargoapp/columnar/maintenance_schedule/menu.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def columnar_maintenance_schedule_auto(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+
+        if request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/maintenance_schedule/schedule_auto.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def columnar_maintenance_schedule_ref(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+
+        if request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/maintenance_schedule/schedule_ref.html', context)
 
         else:
 
@@ -1361,8 +1433,9 @@ def gate_shift_change_list(request):
 
         users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1381,8 +1454,9 @@ def gate_shift_change_single(request):
 
         users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1400,8 +1474,9 @@ def gate_shift_change_inspection(request):
 
         users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1419,8 +1494,9 @@ def gate_shift_change_inspection_1(request):
 
         users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1438,8 +1514,9 @@ def gate_shift_change_inspection_2(request):
 
         users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1457,8 +1534,9 @@ def gate_shift_change_inspection_3(request):
 
         users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1476,8 +1554,9 @@ def gate_shift_change_inspection_4(request):
 
         users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1495,8 +1574,9 @@ def gate_shift_change_inspection_5(request):
 
         users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1514,8 +1594,9 @@ def gate_shift_change_inspection_6(request):
 
         users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1533,8 +1614,9 @@ def gate_shift_change_inspection_7(request):
 
         users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
@@ -1552,14 +1634,75 @@ def gate_shift_change_complete(request):
 
         users_in_group_vorotny = Group.objects.get(name="Воротный").user_set.all()
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
 
-        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor:
+        if request.user in users_in_group_vorotny or request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
 
             context = {
 
             }
 
             return render(request, 'cargoapp/columnar/shift_change/shift_change_complete.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+
+# INSURANCE
+
+def insurance_trac_insurance(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_insurance = Group.objects.get(name="Страховка").user_set.all()
+
+        if request.user in users_in_group_insurance:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/insurance/trac_insurance.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+
+def insurance_trailer_insurance(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_insurance = Group.objects.get(name="Страховка").user_set.all()
+
+        if request.user in users_in_group_insurance:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/insurance/trailer_insurance.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+# CHIEF COLUMN
+
+def chief_column_daily_report(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+
+        if request.user in users_in_group_chief_column:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/chief_column/daily_report.html', context)
 
         else:
 

@@ -27,6 +27,12 @@ from .views import columnar_hr_without_changer
 from .views import columnar_hr_drive_loaded
 from .views import columnar_shift_change_list
 from .views import columnar_maintenance_schedule_menu
+from .views import columnar_maintenance_schedule_auto
+from .views import columnar_maintenance_schedule_ref
+
+#chief column
+from .views import chief_column_daily_report
+
 #logist
 from .views import logist_extra_repair
 from .views import logist_holiday_requests
@@ -39,6 +45,10 @@ from .views import gate_shift_change_inspection
 from .views import gate_shift_change_inspection_1, gate_shift_change_inspection_2, gate_shift_change_inspection_3, gate_shift_change_inspection_4
 from .views import gate_shift_change_inspection_5, gate_shift_change_inspection_6, gate_shift_change_inspection_7
 from .views import gate_shift_change_complete
+
+#insurance
+from .views import insurance_trac_insurance
+from .views import insurance_trailer_insurance
 
 urlpatterns = [
 	path('', 	show_menu_page , name='show_menu_page'),
@@ -78,8 +88,12 @@ urlpatterns = [
 	path('columnar/single-holiday-request/', 	columnar_single_holiday_requests , name='columnar_single_holiday_requests'),
 	path('columnar/shift-change/list/', 	columnar_shift_change_list , name='columnar_shift_change_list'),
 	path('columnar/maintenance-schedule/menu/', 	columnar_maintenance_schedule_menu , name='columnar_maintenance_schedule_menu'),
-	
+	path('columnar/maintenance-schedule/auto/', 	columnar_maintenance_schedule_auto , name='columnar_maintenance_schedule_auto'),
+	path('columnar/maintenance-schedule/ref/', 	columnar_maintenance_schedule_ref , name='columnar_maintenance_schedule_ref'),
 
+	#chief column
+	path('chief-column/daily-report/', 	chief_column_daily_report , name='chief_column_daily_report'),
+	
 	#logist
 	path('logist/extra-repair/', 	logist_extra_repair , name='logist_extra_repair'),
 	path('logist/holiday-requests/', 	logist_holiday_requests , name='logist_holiday_requests'),
@@ -97,5 +111,10 @@ urlpatterns = [
 	path('gate/shift-change/single/inspection/6/', 	gate_shift_change_inspection_6 , name='gate_shift_change_inspection_6'),
 	path('gate/shift-change/single/inspection/7/', 	gate_shift_change_inspection_7 , name='gate_shift_change_inspection_7'),
 	path('gate/shift-change/single/complete/', 	gate_shift_change_complete , name='gate_shift_change_complete'),
+
+	#insurance
+
+	path('insurance/trac-insurance/', 	insurance_trac_insurance , name='insurance_trac_insurance'),
+	path('insurance/trailer-insurance/', 	insurance_trailer_insurance , name='insurance_trailer_insurance'),
 	
 ]
