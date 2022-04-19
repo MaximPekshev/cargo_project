@@ -89,6 +89,67 @@
        </div>     
     </div>
     {% endfor %}
+
+    {% comment %} + annasoft {% endcomment %}
+    {% for torgtrans_order in torgtrans_data %}
+   <div class="order">
+       <div class="left">
+           <p><span>Заказ: </span>{{ torgtrans_order.id }}</p>
+           {% if torgtrans_order.comment %}
+           <p><span>Комментарий: </span>{{ torgtrans_order.comment }}</p>
+           {% endif %}
+           <p><span>Цена: </span>{% if torgtrans_order.auction.start_gross_price %}{{ torgtrans_order.auction.start_gross_price }} {{ torgtrans_order.auction.currency }}{% else %} не указана {% endif %}</p>
+           <p><span>Продолжительность аукциона: </span> дней</p>
+           <a target="_blank" href="https://torgtrans.com/customer/order-details/{{ torgtrans_order.id }}">Подробнее</a>
+
+       </div>
+       <div class="right">
+           <div>   
+               {% for depo in torgtrans_order.loading_depots %}
+                <p class="type"><span>Тип: </span>Загрузка</p>
+                {% if depo.contact_name or depo.contact_name %}
+                <p><span>Контакт: </span>{% if depo.contact_name %}{{ depo.contact_name }}{% endif %}{% if depo.contact_phone %}{{ depo.contact_phone }}{% endif %}</p>
+                {% endif %}
+                {% if depo.date_start %}
+                <p><span>Начало:</span> {{ depo.date_start }}</p>
+                {% endif %}
+                {% if depo.date_end %}
+                <p><span>Конец: </span> {{ depo.date_end }}</p>
+                {% endif %}
+                {% if depo.contact_company %}
+                <p><span>Kонтрагент: </span>{{ depo.contact_company }}</p>
+                {% endif %}
+                {% if depo.location.formatted %}
+                <p><span>Адрес: </span>{{ depo.location.formatted }}</p>
+                {% endif %}
+                <br>
+               {% endfor %} 
+
+               {% for depo in torgtrans_order.unloading_depots %}
+                <p class="type"><span>Тип: </span>Выгрузка</p>
+                {% if depo.contact_name or depo.contact_name %}
+                <p><span>Контакт: </span>{% if depo.contact_name %}{{ depo.contact_name }}{% endif %}{% if depo.contact_phone %}{{ depo.contact_phone }}{% endif %}</p>
+                {% endif %}
+                {% if depo.date_start %}
+                <p><span>Начало:</span> {{ depo.date_start }}</p>
+                {% endif %}
+                {% if depo.date_end %}
+                <p><span>Конец: </span> {{ depo.date_end }}</p>
+                {% endif %}
+                {% if depo.contact_company %}
+                <p><span>Kонтрагент: </span>{{ depo.contact_company }}</p>
+                {% endif %}
+                {% if depo.location.formatted %}
+                <p><span>Адрес: </span>{{ depo.location.formatted }}</p>
+                {% endif %}
+                <br>
+                {% endfor %}
+           </div>
+           <br>           
+       </div>     
+    </div>
+    {% endfor %}
+    {% comment %} - annasoft {% endcomment %}
 </body>
 
 </html>

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import LogistUser, Vehicle, Driver, Route, City
-from .models import Organization, Contracts
+from .models import Organization, Contracts, Constant
 from .models import MileageRevenueStandard, MileageThresholds, DailyIndicators
 
 class LogistUserAdmin(admin.ModelAdmin):
@@ -71,6 +71,8 @@ class CityAdmin(admin.ModelAdmin):
 					'code',
 					'title',
 					'reduction',
+					'lon',
+					'lat',
 					)
 	readonly_fields = ('code',)
 
@@ -146,3 +148,11 @@ class DailyIndicatorsAdmin(admin.ModelAdmin):
 list_filter = ('route',)
 
 admin.site.register(DailyIndicators,DailyIndicatorsAdmin)
+
+class ConstantAdmin(admin.ModelAdmin):
+	list_display = (
+					'date',
+					'title',
+					'value',
+					)
+admin.site.register(Constant, ConstantAdmin)

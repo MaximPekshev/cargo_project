@@ -1,5 +1,10 @@
 import xlrd
 from cargoapp.models import City, Vehicle
+from cargoapp.cityCordinates import cityCordinates
+from decouple import config
+import requests
+import ast
+import time
 
 def import_cities():
 
@@ -19,6 +24,51 @@ def import_cities():
         )
 
         city.save()
+
+def import_coordinates():
+
+    for city in cityCordinates:
+        
+        strCity = city
+        strLon = cityCordinates.get(city).get('lon')
+        strLat = cityCordinates.get(city).get('lat')
+
+        try:
+            bd_city = City.objects.filter(title=strCity.capitalize()).first()
+        except City.DoesNotExist:
+            bd_city = City(
+                code = strCity.capitalize(),
+                title = strCity.capitalize(),
+                reduction = 'г',
+            )
+            bd_city.save()
+
+        if bd_city:
+            bd_city.lon = strLon
+            bd_city.lat = strLat
+            bd_city.save()
+
+def import_coordinates_from_api():
+
+    for city in City.objects.all():
+        if not city.lon or not city.lat:
+            time.sleep(3)
+            url = 'http://api.openweathermap.org/data/2.5/weather?q=' + \
+            city.title.lower() +'&APPID='+ config('OPENWEATHERMAP_API_KEY')
+            response = requests.post(url)
+            data = response.text.encode("utf-8")
+            dict_str = data.decode("UTF-8")
+            mydata = ast.literal_eval(dict_str)
+            dictionary = mydata
+            if 'coord' in dictionary:
+                lon = dictionary['coord']['lon']
+                lat = dictionary['coord']['lat']
+                city.lon = lon
+                city.lat = lat
+                city.save()
+
+
+
 
 def import_nav_id():
 

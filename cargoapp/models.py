@@ -152,10 +152,6 @@ class  Vehicle(models.Model):
 			
 		return 0
 
-	# def get_last_autograph_day(self):
-	# 	days = get_last_autograph_day(self)
-	# 	return days
-
 	class Meta:
 		verbose_name = 'Автомобиль'
 		verbose_name_plural = 'Автомобили'
@@ -211,8 +207,16 @@ class Route(models.Model):
 
 		if not self.uid:
 			self.uid = get_uuid4()
+		
+		fuel_price = Constant.filter(title="Стоимость топлива").order_by('date').last()
+		if not fuel_price:
+			fuel_price = 52
 
-		self.fuel_cost = 32*self.route_length/100*52
+		fuel_consump = Constant.filter(title="Расход топлива").order_by('date').last()
+		if not fuel_consump:
+			fuel_consump = 32	
+
+		self.fuel_cost = fuel_consump*self.route_length/100*fuel_price
 
 		self.set_pay_check()
 
@@ -222,7 +226,12 @@ class Route(models.Model):
 		else:
 			self.cost_of_km = 0
 
-		self.cost_of_platon = self.route_length*Decimal(2.54)
+
+		fuel_consump = Constant.filter(title="Платон").order_by('date').last()
+		if not fuel_consump:
+			fuel_consump = Decimal(2.54)
+
+		self.cost_of_platon = self.route_length*fuel_consump
 
 		self.pure_income = self.route_cost - self.fuel_cost - self.pay_check - self.expenses_1 - self.cost_of_platon
 		
@@ -341,6 +350,9 @@ class City(models.Model):
 	code = models.CharField(max_length = 25, verbose_name = 'Код КЛАДР', unique=True)
 	title = models.CharField(max_length = 30, verbose_name = 'Наименование', null=True, blank=True, default='')
 	reduction = models.CharField(max_length = 5, verbose_name = 'Сокращение', null=True, blank=True, default='')
+
+	lon = models.CharField(max_length = 10, verbose_name = 'Широта', null=True, blank=True, default='')
+	lat = models.CharField(max_length = 10, verbose_name = 'Долгота', null=True, blank=True, default='')
 
 	def __str__(self):
 		return '{}'.format(self.title)
@@ -470,3 +482,20 @@ class DailyIndicators(models.Model):
 	class Meta:
 		verbose_name = 'Дневные показатели'
 		verbose_name_plural = 'Дневные показатели'
+
+class Constant(models.Model):
+
+	date = models.DateField('Дата', auto_now_add = False)
+	title = models.CharField(max_length = 100, verbose_name = 'Наименование', null=True, blank=True)
+	value = models.DecimalField(verbose_name = 'Значение', max_digits=15, decimal_places=2)
+
+	def __str__(self):
+		return '{}'.format(self.pk)
+
+	def save(self, *args, **kwargs):
+
+		super(Constant, self).save(*args, **kwargs)
+
+	class Meta:
+		verbose_name = 'Константа'
+		verbose_name_plural = 'Константы'

@@ -39,7 +39,7 @@
             <option selected value="none">Загрузка/Выгрузка</option>
           </select>
           <br><br>
-        <!-- <input id="number" placeholder="Радиус 50/100/200" type="number"> -->
+        <input id="radius" placeholder="Радиус 50/100/200" type="number">
         <button class="submitButton">Найти</button>
     </div>
     <script>
@@ -49,18 +49,23 @@
             
             city = document.getElementById("city")
             city_value = city.options[city.selectedIndex].value
-
-            if (city_value){
+            radius = document.getElementById('radius').value
+            if (city_value && radius){
                 if (value != 'none'){
-                    location.href = 'search/city='+city_value+';load='+value
+                    location.href = 'search/city=' + city_value + ';load=' + value + ';radius=' + radius + '/'+'?city=' + city_value + '&load=' + value + '&radius=' + radius
                 }else{
-                    location.href = 'search/city='+city_value
-
+                    location.href = 'search/city=' + city_value +';radius=' + radius + '/'+'?city=' + city_value + '&radius=' + radius
+                }
+                document.getElementById('city').style.border = '1px solid black'
+            } else if (city_value && !radius) {
+                if (value != 'none'){
+                    location.href = 'search/city=' + city_value + ';load=' + value + '/'+'?city=' + city_value + '&load=' + value
+                }else{
+                    location.href = 'search/city='+ city_value + '/'+'?city=' + city_value
                 }
                 document.getElementById('city').style.border = '1px solid black'
             }else{
                 location.href = 'search/'
-
             }
         })
     </script>
