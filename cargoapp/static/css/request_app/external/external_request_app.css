@@ -122,7 +122,7 @@ input::-webkit-inner-spin-button {
     font-size: 20px;
     border-radius: 10px;
     border: 0;
-    background:green;
+    background:rgb(26, 37, 187);
     color: white;
     padding: 10px;
     cursor: pointer;
@@ -161,7 +161,7 @@ input::-webkit-inner-spin-button {
     line-height: 40px;
     border-radius: 10px;
     color: white;
-    background-color: green;
+    background-color: rgb(26, 37, 187);
     text-decoration: none;
     font-weight: bold;
     text-align: center;
@@ -170,6 +170,14 @@ input::-webkit-inner-spin-button {
     color: gray;
     font-weight: bold;
 }
+.vatPrice{
+    margin: 0;
+    display: flex;
+}
+.vat{
+    display: flex;
+    margin: 16px 0;
+}
 .right div p{
     margin: 5px 0; 
 }
@@ -177,6 +185,11 @@ input::-webkit-inner-spin-button {
     font-size: 20px;
     color: rgb(1, 1, 41);
     margin-bottom: 5px;
+}
+.notFound{
+    width: 100%;
+    text-align: center;
+    margin-top: 150px;
 }
 .right div p span{
     color: gray;

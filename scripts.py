@@ -1,10 +1,11 @@
 import xlrd
-from cargoapp.models import City, Vehicle
+from cargoapp.models import City, Vehicle, Driver
 from cargoapp.cityCordinates import cityCordinates
 from decouple import config
 import requests
 import ast
 import time
+from datetime import datetime
 
 def import_cities():
 
@@ -85,3 +86,18 @@ def import_nav_id():
         except:
             print('Автомобиль с VIN: ' + sh.cell(rx, 0).value + ' в базе данных не найден')
                 
+
+def import_employment_date():
+
+    book = xlrd.open_workbook("tempfiles/drivers.xls")
+    sh = book.sheet_by_index(0)
+
+    for rx in range(sh.nrows):
+
+        try:
+            driver = Driver.objects.get(uid=str(sh.cell(rx, 0).value))
+            driver.employment_date = datetime.strptime(sh.cell(rx, 1).value, '%Y-%m-%d')
+            driver.save()
+            print('driver:' + driver.title + '. employment_date: ' + sh.cell(rx, 1).value + ' записан в БД')
+        except:
+            print('Водитель с UID: ' + sh.cell(rx, 0).value + ' в базе данных не найден')

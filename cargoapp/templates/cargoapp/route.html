@@ -92,7 +92,7 @@
 			<label for="inputDriver" class="col-2 col-form-label">Водитель</label>
 			<div class="col-4">
 				<div class="form-group">
-					<select class="form-control" id="inputDriver" name="inputDriver">
+					<select class="form-control js-example-basic-single" id="inputDriver" name="inputDriver">
 						{% if route.driver %}
 						<option selected value="{{ route.driver.uid }}">{{ route.driver.title }}</option>
 						<option value="">...</option>
@@ -111,7 +111,7 @@
 			<label for="inputOrganization" class="col-2 col-form-label">Организация</label>
 			<div class="col-4">
 				<div class="form-group">
-					<select class="form-control" id="inputOrganization" name="inputOrganization">
+					<select class="form-control js-example-basic-single" id="inputOrganization" name="inputOrganization">
 						{% if route.organization %}
 						<option selected value="{{ route.organization.uid }}">{{ route.organization.title }}</option>
 						<option value="">...</option>
@@ -158,7 +158,7 @@
 			<label for="inputContract" class="col-2 col-form-label">Договор</label>
 			<div class="col-4">
 				<div class="form-group">
-					<select class="form-control" id="inputContract" name="inputContract" {% if not contracts and not route.contract %}disabled{% endif %}>
+					<select class="form-control js-example-basic-single" id="inputContract" name="inputContract" {% if not contracts and not route.contract %}disabled{% endif %}>
 						{% if route.contract %}
 						<option selected value="{{ route.contract.uid }}">{{ route.contract.number }} от {{ route.contract.date  }}</option>
 						<option value="">...</option>

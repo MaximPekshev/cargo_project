@@ -18,94 +18,100 @@
     <title>Поиск грузов</title>
 </head>
 
-
 <body>
     <p class="nameFname">Ответственное лицо: {{request.user.username}}</p>
+    {%if status == 200%}
+        {%if date%}    
+            {% for i in date%}
+            <div class="order">
+                <div class="left">
+                        <p><span>ИД: </span>{{i.order_id}}</p>
+                        {%if i.order_human_name%}
+                            <p><span>Номер: </span>{{i.order_human_name}}</p>
+                        {%endif%}
+                        {% if i.comment%}
+                            <p><span>Комментарий: </span>{{i.comment}}</p>
+                        {% endif %}
+                        {%if i.price != '0.00'%}
+                            <div class="vat">
+                                <span>Цена: </span> <p class="vatPrice" id="price_{{i.order_id}}">{{i.price}}</p> {{i.order_price_currency}}
+                            </div>
+                            {%if i.order_price_vat_type != 'with_vat'%}
+                                <script>
+                                    document.getElementById('price_{{i.order_id}}').innerHTML  = +document.getElementById('price_{{i.order_id}}').innerHTML + document.getElementById('price_{{i.order_id}}').innerHTML * 0.2 + '.00'
+                                </script>
+                            {%endif%}
+                        {%endif%}
+                        
+                        {% if i.truck.carrying_capacity and i.truck.volume%}
+                            <p><span>Вид ТС: </span>{{i.truck.carrying_capacity}} ({{i.truck.volume}}м³)</p>
+                        {% endif %}
+                        
+                        {% if i.truck.types.truck_type%}
+                            <p><span>Тип ТС: </span>{{i.truck.types.truck_type}}</p>
+                        {% endif %}
+                    <p><span>Продолжительность аукциона: </span>{{i.auction_duration}} дней</p>
+                    <a target="_blank" href="https://atrucks.su/a/{{i.order_id}}">Подробнее</a>
 
-   <!-- <div class="tableDiv">
-    <div class="manu">
-        <div><p>От куда</p></div>
-        <div><p>Куда</p></div>
-        <div><p>Дата погрузки</p></div>
-        <div><p>Цена</p></div>
-        <div class="endBorder"><p>Открыть</p></div>
-    </div>
-        {%for i in 'count'%}
-        <div id="div_{{i}}" class="inputDiv">
-            <div class="inputs">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <button id="buton_{{i}}" class="SendButton"><a href="">Открыть</a></button>
-            </div> 
-        </div>
+                </div>
+                <div class="right">
+                    {% for j in i.route%}        
+                    <div>
+                            {% if j.waypoint_type == 'loading'%}
+                            <p class="type"><span>Тип: </span>Загрузка</p>
+                            {% elif j.waypoint_type == 'unloading' %}
+                            <p class="type"><span>Тип: </span>Выгрузка</p>
+                            {% endif %}
+                            {% if j.contact_person%}
+                                <p><span>Контакт: </span>{{j.contact_person}}</p>                
+                            {% endif %}
+                            {% if j.arrival_date_start and j.arrival_time_start%}
+                                <p><span>Начало:</span> {{j.arrival_date_start}} {{j.arrival_time_start}}</p>
+                            {% elif j.arrival_date_start and not j.arrival_time_start%}
+                                <p><span>Начало:</span> {{j.arrival_date_start}}</p>
+                            {% endif %}
+                            {% if j.arrival_date_end and j.arrival_time_end%}
+                                <p><span>Конец: </span> {{j.arrival_date_end}} {{j.arrival_time_end}}</p>
+                            {% elif j.arrival_date_end and not j.arrival_time_end%}
+                                <p><span>Конец: </span> {{j.arrival_date_end}}</p>
+                            {% endif %}
+                            {% if j.counteragent%}
+                                <p><span>Kонтрагент: </span>{{j.counteragent}}</p>                
+                            {% endif %}
+                            {% if j.address.free_form%}
+                                <p><span>Адресс: </span>{{j.address.free_form}}</p>                
+                            {% endif %}
 
-        {%endfor%} -->
-   </div>
-    {% for i in date%}
-   <div class="order">
-       <div class="left">
-           <p><span>Заказ: </span>{{i.order_human_name}}</p>
-           {% if j.comment%}
-           <p><span>Комментарий: </span>{{i.comment}}</p>
-           {% endif %}
-           <p><span>Цена: </span>{{i.price}} {{i.order_price_currency}}</p>
-           <p><span>Продолжительность аукциона: </span>{{i.auction_duration}} дней</p>
-           <a target="_blank" href="https://atrucks.su/a/{{i.order_id}}">Подробнее</a>
+                    </div>
+                    <br>
+                    {% endfor %}            
+                </div>     
+                </div>
+                {% endfor %}
+        {%else%}
+        <h2 class="notFound">Нечего не найденно</h2>
+        {%endif%}
+    {%else%}
+    <h2 class="notFound">Ошибка API</h2>
+    {%endif%}
 
-       </div>
-       <div class="right">
-           {% for j in i.route%}        
-           <div>
-                {% if j.waypoint_type == 'loading'%}
-                   <p class="type"><span>Тип: </span>Загрузка</p>
-                {% elif j.waypoint_type == 'unloading' %}
-                   <p class="type"><span>Тип: </span>Выгрузка</p>
-                {% endif %}
-                {% if j.contact_person%}
-                    <p><span>Контакт: </span>{{j.contact_person}}</p>                
-                {% endif %}
-                {% if j.arrival_date_start and j.arrival_time_start%}
-                    <p><span>Начало:</span> {{j.arrival_date_start}} {{j.arrival_time_start}}</p>
-                {% elif j.arrival_date_start and not j.arrival_time_start%}
-                    <p><span>Начало:</span> {{j.arrival_date_start}}</p>
-                {% endif %}
-                {% if j.arrival_date_end and j.arrival_time_end%}
-                    <p><span>Конец: </span> {{j.arrival_date_end}} {{j.arrival_time_end}}</p>
-                {% elif j.arrival_date_end and not j.arrival_time_end%}
-                    <p><span>Конец: </span> {{j.arrival_date_end}}</p>
-                {% endif %}
-                {% if j.counteragent%}
-                    <p><span>Kонтрагент: </span>{{j.counteragent}}</p>                
-                {% endif %}
-                {% if j.address.free_form%}
-                    <p><span>Адресс: </span>{{j.address.free_form}}</p>                
-                {% endif %}
-
-           </div>
-           <br>
-           {% endfor %}            
-       </div>     
-    </div>
-    {% endfor %}
 
     {% comment %} + annasoft {% endcomment %}
     {% for torgtrans_order in torgtrans_data %}
-   <div class="order">
-       <div class="left">
-           <p><span>Заказ: </span>{{ torgtrans_order.id }}</p>
-           {% if torgtrans_order.comment %}
-           <p><span>Комментарий: </span>{{ torgtrans_order.comment }}</p>
-           {% endif %}
-           <p><span>Цена: </span>{% if torgtrans_order.auction.start_gross_price %}{{ torgtrans_order.auction.start_gross_price }} {{ torgtrans_order.auction.currency }}{% else %} не указана {% endif %}</p>
-           <p><span>Продолжительность аукциона: </span> дней</p>
-           <a target="_blank" href="https://torgtrans.com/customer/order-details/{{ torgtrans_order.id }}">Подробнее</a>
+    <div class="order">
+        <div class="left">
+            <p><span>Заказ: </span>{{ torgtrans_order.id }}</p>
+            {% if torgtrans_order.comment %}
+            <p><span>Комментарий: </span>{{ torgtrans_order.comment }}</p>
+            {% endif %}
+            <p><span>Цена: </span>{% if torgtrans_order.auction.start_gross_price %}{{ torgtrans_order.auction.start_gross_price }} {{ torgtrans_order.auction.currency }}{% else %} не указана {% endif %}</p>
+            <p><span>Продолжительность аукциона: </span> дней</p>
+            <a target="_blank" href="https://torgtrans.com/customer/order-details/{{ torgtrans_order.id }}">Подробнее</a>
 
-       </div>
-       <div class="right">
-           <div>   
-               {% for depo in torgtrans_order.loading_depots %}
+        </div>
+        <div class="right">
+            <div>   
+                {% for depo in torgtrans_order.loading_depots %}
                 <p class="type"><span>Тип: </span>Загрузка</p>
                 {% if depo.contact_name or depo.contact_name %}
                 <p><span>Контакт: </span>{% if depo.contact_name %}{{ depo.contact_name }}{% endif %}{% if depo.contact_phone %}{{ depo.contact_phone }}{% endif %}</p>
@@ -123,9 +129,9 @@
                 <p><span>Адрес: </span>{{ depo.location.formatted }}</p>
                 {% endif %}
                 <br>
-               {% endfor %} 
+                {% endfor %} 
 
-               {% for depo in torgtrans_order.unloading_depots %}
+                {% for depo in torgtrans_order.unloading_depots %}
                 <p class="type"><span>Тип: </span>Выгрузка</p>
                 {% if depo.contact_name or depo.contact_name %}
                 <p><span>Контакт: </span>{% if depo.contact_name %}{{ depo.contact_name }}{% endif %}{% if depo.contact_phone %}{{ depo.contact_phone }}{% endif %}</p>
@@ -144,12 +150,16 @@
                 {% endif %}
                 <br>
                 {% endfor %}
-           </div>
-           <br>           
-       </div>     
+            </div>
+            <br>           
+        </div>     
     </div>
     {% endfor %}
     {% comment %} - annasoft {% endcomment %}
 </body>
 
 </html>
+
+
+
+
