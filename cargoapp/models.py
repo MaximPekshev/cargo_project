@@ -398,7 +398,7 @@ class Contracts(models.Model):
 	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', unique=True)
 	title = models.CharField(max_length = 100, verbose_name = 'Наименование', null=True, blank=True)
 	number = models.CharField(max_length = 50, verbose_name = 'Номер', null=True, blank=True)
-	date = models.DateField('Дата', auto_now_add = False)
+	date = models.DateField('Дата', auto_now_add = False, blank=True, null=True, default=now)
 
 	organization = models.ForeignKey(Organization, verbose_name = 'Организация', on_delete=models.PROTECT, related_name='organization', null=True, blank=True)
 	contragent = models.ForeignKey(Organization, verbose_name = 'Контрагент', on_delete=models.PROTECT, related_name='contragent', null=True, blank=True)

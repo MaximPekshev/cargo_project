@@ -89,7 +89,7 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 	list_filter = ('is_contragent',)
 
-	search_fields = ('title', 'full_title', )
+	search_fields = ('title', 'full_title', 'inn', )
 
 	readonly_fields = ('uid',)
 
