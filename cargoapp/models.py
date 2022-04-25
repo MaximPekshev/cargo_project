@@ -208,11 +208,11 @@ class Route(models.Model):
 		if not self.uid:
 			self.uid = get_uuid4()
 		
-		fuel_price = Constant.objects.filter(title="Стоимость топлива").order_by('date').last().value
+		fuel_price = Constant.objects.filter(title="Стоимость топлива", date__lte=self.from_date).order_by('date').last().value
 		if not fuel_price:
 			fuel_price = 52
 
-		fuel_consump = Constant.objects.filter(title="Расход топлива").order_by('date').last().value
+		fuel_consump = Constant.objects.filter(title="Расход топлива", date__lte=self.from_date).order_by('date').last().value
 		if not fuel_consump:
 			fuel_consump = 32	
 
@@ -227,7 +227,7 @@ class Route(models.Model):
 			self.cost_of_km = 0
 
 
-		paton_consump = Constant.objects.filter(title="Платон").order_by('date').last().value
+		paton_consump = Constant.objects.filter(title="Платон", date__lte=self.from_date).order_by('date').last().value
 		if not paton_consump:
 			paton_consump = Decimal(2.54)
 

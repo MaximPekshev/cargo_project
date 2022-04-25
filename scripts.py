@@ -9,22 +9,28 @@ from datetime import datetime
 
 def import_cities():
 
-    book = xlrd.open_workbook("city.xls")
+    book = xlrd.open_workbook("tempfiles/city.xls")
     sh = book.sheet_by_index(0)
 
     for rx in range(sh.nrows):
-        
-        sh.cell(rx, 1)
-        
-        city = City(
 
-            code = str(sh.cell_value(rx, 2)).split('.')[0],
-            title =  sh.cell_value(rx, 0),
-            reduction = sh.cell_value(rx, 1),
+        try:
+            city = City.objects.filter(title=sh.cell(rx, 0).capitalize())
+            print(sh.cell(rx, 0).value)
+        except:
+            sh.cell(rx, 1)
+            
+            city = City(
 
-        )
+                code = str(sh.cell_value(rx, 2)).split('.')[0],
+                title =  sh.cell_value(rx, 0),
+                reduction = sh.cell_value(rx, 1),
 
-        city.save()
+            )
+
+            city.save()
+
+            print(sh.cell(rx, 0).value + 'успешно записан в БД')
 
 def import_coordinates():
 
@@ -53,7 +59,7 @@ def import_coordinates_from_api():
 
     for city in City.objects.all():
         if not city.lon or not city.lat:
-            time.sleep(3)
+            time.sleep(1)
             url = 'http://api.openweathermap.org/data/2.5/weather?q=' + \
             city.title.lower() +'&APPID='+ config('OPENWEATHERMAP_API_KEY')
             response = requests.post(url)
@@ -67,8 +73,6 @@ def import_coordinates_from_api():
                 city.lon = lon
                 city.lat = lat
                 city.save()
-
-
 
 
 def import_nav_id():
@@ -85,6 +89,21 @@ def import_nav_id():
             print('nav_id: ' + str(int(sh.cell(rx, 1).value)) + ' записан в БД')
         except:
             print('Автомобиль с VIN: ' + sh.cell(rx, 0).value + ' в базе данных не найден')
+
+def import_nav_id_by_car_number():
+
+    book = xlrd.open_workbook("tempfiles/nav_id.xls")
+    sh = book.sheet_by_index(0)
+
+    for rx in range(sh.nrows):
+
+        try: 
+            vehicle = Vehicle.objects.get(car_number=sh.cell(rx, 0).value)
+            vehicle.nav_id = str(int(sh.cell(rx, 1).value))
+            vehicle.save()
+            print('nav_id: ' + str(int(sh.cell(rx, 1).value)) + ' записан в БД')
+        except:
+            print('Автомобиль с номером: ' + sh.cell(rx, 0).value + ' в базе данных не найден')
                 
 
 def import_employment_date():

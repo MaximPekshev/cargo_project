@@ -14,6 +14,7 @@ from .models import Organization
 from .serializers import OrganizationSerializer
 from .models import Contracts
 from .serializers import ContractsSerializer
+from .models import Constant
 from django.contrib	import auth
 
 from django.contrib.auth.models import Group
@@ -286,7 +287,9 @@ def show_index_page(request):
             #     plan_total_cost_of_km = Decimal(revenueStandard/mileageStandard).quantize(Decimal("1.00"))
             # except:        
             #     plan_total_cost_of_km = Decimal(0).quantize(Decimal("1.00"))
-            plan_total_cost_of_km = Decimal(40).quantize(Decimal("1.00"))
+            plan_total_cost_of_km = Constant.objects.filter(title="Стоимость километра", date__lte=datetime.datetime.now()).order_by('date').last().value
+            if not plan_total_cost_of_km:
+                plan_total_cost_of_km = Decimal(50).quantize(Decimal("1.00"))
 
             #фактические данные
             total_route_length = routes.aggregate(Sum('route_length'))['route_length__sum'].quantize(Decimal("1.00")) if routes else 0
