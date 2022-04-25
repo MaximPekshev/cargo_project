@@ -71,10 +71,12 @@ class CityAdmin(admin.ModelAdmin):
 					'code',
 					'title',
 					'reduction',
+					'region_code',
 					'lon',
 					'lat',
 					)
 	readonly_fields = ('code',)
+	search_fields = ('code', 'title', )
 
 admin.site.register(City, CityAdmin)
 

@@ -8,29 +8,41 @@ import time
 from datetime import datetime
 
 def import_cities():
-
-    book = xlrd.open_workbook("tempfiles/city.xls")
+    # from scripts import import_cities
+    book = xlrd.open_workbook("tempfiles/addresses.xlsx")
     sh = book.sheet_by_index(0)
 
     for rx in range(sh.nrows):
 
-        try:
-            city = City.objects.filter(title=sh.cell(rx, 0).capitalize())
-            print(sh.cell(rx, 0).value)
-        except:
-            sh.cell(rx, 1)
-            
-            city = City(
+    
+        city = City.objects.filter(title=sh.cell_value(rx, 3)).first()
 
-                code = str(sh.cell_value(rx, 2)).split('.')[0],
-                title =  sh.cell_value(rx, 0),
-                reduction = sh.cell_value(rx, 1),
+        if city:
 
-            )
-
+            city.region_code = sh.cell_value(rx, 0)
             city.save()
 
-            print(sh.cell(rx, 0).value + 'успешно записан в БД')
+        else:
+            
+            if sh.cell_value(rx, 3):
+                city = City(
+                    title =  sh.cell_value(rx, 3),
+                    reduction = sh.cell_value(rx, 1),
+                    region_code = str(sh.cell_value(rx, 0)).split(".")[0],
+                )
+                if type(sh.cell_value(rx, 2)) is float:
+                    code = str(sh.cell_value(rx, 2)).split(".")[0]
+                elif type(sh.cell_value(rx, 2))is str:
+                    code = sh.cell_value(rx, 2).replace(" ", "")
+                else:
+                    code = None    
+
+                if code:
+                    code_city = City.objects.filter(code=code).first()
+                    if not code_city:
+                        city.code = code
+                        city.save()  
+                        print(sh.cell_value(rx, 3) + ' успешно записан в БД')
 
 def import_coordinates():
 

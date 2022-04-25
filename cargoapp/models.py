@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import AbstractBaseUser
 # from .core import get_last_autograph_day
+from simple_history.models import HistoricalRecords
 from decimal import Decimal
 
 import uuid
@@ -197,7 +198,7 @@ class Route(models.Model):
 	control_penalty = models.BooleanField(verbose_name='Штраф контроля', default=False)
 
 	cargo_description = models.CharField(max_length = 256, verbose_name = 'Описание груза', null=True, blank=True, default='')
-
+	history = HistoricalRecords()
 
 	def __str__(self):
 
@@ -353,6 +354,8 @@ class City(models.Model):
 
 	lon = models.CharField(max_length = 10, verbose_name = 'Широта', null=True, blank=True, default='')
 	lat = models.CharField(max_length = 10, verbose_name = 'Долгота', null=True, blank=True, default='')
+
+	region_code = models.CharField(max_length = 5, verbose_name = 'Код субъекта', null=True, blank=True, default='')
 
 	def __str__(self):
 		return '{}'.format(self.title)
