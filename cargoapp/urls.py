@@ -2,6 +2,7 @@ from django.urls import path
 from .views import show_index_page, show_route, route_save, route_add, show_new_route_form
 from .views import delete_req_img, delete_loa_img, show_menu_page
 from .views import routes_list, holiday_requests, columnar_daily_report
+from .views import documents_menu, documents_agreement, documents_familiarize, documents_all, documents_add, documents_report
 #driver
 from .views import driver_extra_repair
 from .views import driver_holiday_requests
@@ -29,6 +30,7 @@ from .views import columnar_shift_change_list
 from .views import columnar_maintenance_schedule_menu
 from .views import columnar_maintenance_schedule_auto
 from .views import columnar_maintenance_schedule_ref
+from .views import columnar_vehicle_condition
 
 #chief column
 from .views import chief_column_daily_report
@@ -61,7 +63,13 @@ urlpatterns = [
 	path('routes/save/<str:uid>/', 	route_save , name='route_save'),
 	path('routes-list/', 	routes_list , name='routes_list'),
 	path('hr/holiday-requests/', 	holiday_requests , name='holiday_requests'),
-	
+	path('documents/menu/', 	documents_menu , name='documents_menu'),
+	path('documents/agreement/', 	documents_agreement , name='documents_agreement'),
+	path('documents/familiarize/', 	documents_familiarize , name='documents_familiarize'),
+	path('documents/all/', 	documents_all , name='documents_all'),
+	path('documents/add/', 	documents_add , name='documents_add'),
+	path('documents/report/', 	documents_report , name='documents_report'),
+
 	#driver
 	path('driver/extra-repair/', 	driver_extra_repair , name='driver_extra_repair'),
 	path('driver/holiday-request/accept/', 	driver_hr_accept , name='driver_hr_accept'),
@@ -90,9 +98,11 @@ urlpatterns = [
 	path('columnar/maintenance-schedule/menu/', 	columnar_maintenance_schedule_menu , name='columnar_maintenance_schedule_menu'),
 	path('columnar/maintenance-schedule/auto/', 	columnar_maintenance_schedule_auto , name='columnar_maintenance_schedule_auto'),
 	path('columnar/maintenance-schedule/ref/', 	columnar_maintenance_schedule_ref , name='columnar_maintenance_schedule_ref'),
+	path('columnar/vehicle/condition/', 	columnar_vehicle_condition , name='columnar_vehicle_condition'),
 
 	#chief column
 	path('chief-column/daily-report/', 	chief_column_daily_report , name='chief_column_daily_report'),
+
 	
 	#logist
 	path('logist/extra-repair/', 	logist_extra_repair , name='logist_extra_repair'),

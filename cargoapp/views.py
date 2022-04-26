@@ -123,6 +123,10 @@ def show_menu_page(request):
         users_in_group_hr_dep = Group.objects.get(name="Отдел кадров").user_set.all()
         users_in_group_insurance = Group.objects.get(name="Страховка").user_set.all()
         users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+        users_in_group_hr_director = Group.objects.get(name="Директор по персоналу").user_set.all()
+
+        if request.user in users_in_group_hr_director:
+            return render(request, 'cargoapp/menu/hr_director_menu.html')
 
         if request.user in users_in_group_vehicle_supervisor:
 
@@ -1158,6 +1162,57 @@ def driver_shift_change_hand_over_acc(request):
             return render(request, 'cargoapp/menu/auth_role_error.html')
 
 
+def documents_menu(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+        users_in_group_hr_director = Group.objects.get(name="Директор по персоналу").user_set.all()
+
+        if request.user in users_in_group_chief_column:
+            return render(request, 'cargoapp/documents/chief_column_menu.html')
+        if request.user in users_in_group_hr_director:
+            return render(request, 'cargoapp/documents/hr_director_menu.html')
+        else:
+            return render(request, 'cargoapp/documents/menu.html')
+
+def documents_agreement(request):
+
+    if request.user.is_authenticated:
+        return render(request, 'cargoapp/documents/agreement.html')
+
+def documents_familiarize(request):
+
+    if request.user.is_authenticated:
+        return render(request, 'cargoapp/documents/familiarize.html')
+
+def documents_all(request):
+
+    if request.user.is_authenticated:
+        return render(request, 'cargoapp/documents/all.html')
+
+def documents_add(request):
+
+     if request.user.is_authenticated:
+
+        users_in_group_hr_director = Group.objects.get(name="Директор по персоналу").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+
+        if request.user in users_in_group_hr_director or request.user in users_in_group_chief_column:
+
+            return render(request, 'cargoapp/documents/add.html')
+
+def documents_report(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_hr_director = Group.objects.get(name="Директор по персоналу").user_set.all()
+
+        if request.user in users_in_group_hr_director:
+
+            return render(request, 'cargoapp/documents/report.html')
+
+
 #COLUMNAR
 
 def columnar_extra_repair(request):
@@ -1371,6 +1426,26 @@ def columnar_maintenance_schedule_ref(request):
         else:
 
             return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def columnar_vehicle_condition(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+
+        if request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/columnar/vehicle/condition.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+         
 
 #LOGIST
 

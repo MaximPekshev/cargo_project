@@ -4,21 +4,21 @@
 <div class="row justify-content-center mt-4">
     <div class="col-11 col-md-8 col-xl-6 shadow pt-5 pb-5 row justify-content-center">
 
-        <div class="col-12 row justify-content-center mb-2">
-            <a class="btn btn-outline-dark col-10 col-md-8 col-xl-6 " href="{% url 'insurance_trac_insurance' %}" >Страхование тягача</a>
+        {% comment %} <div class="col-12 row justify-content-center mb-2">
+            <a class="btn btn-warning col-10 col-md-8 col-xl-6 " href="{% url 'holiday_requests' %}" >Запросы на выходные</a>
         </div>
 
-        <div class="col-12 row justify-content-center mb-2">
-            <a class="btn btn-outline-dark col-10 col-md-8 col-xl-6 " href="{% url 'insurance_trailer_insurance' %}" >Страхование полуприцепа</a>
-        </div>
+		<div class="col-12 row justify-content-center mb-2">
+            <a class="btn btn-outline-dark col-10 col-md-8 col-xl-6" href="#" >Медицинский осмотр</a>
+        </div> {% endcomment %}
 
-		    <div class="col-12 row justify-content-center mb-2">
+		<div class="col-12 row justify-content-center mb-2">
             <a class="btn btn-outline-dark col-10 col-md-8 col-xl-6" target="_blank" href="https://padlet.com/o2rusrt116/fm7hf1cgjhsd6qzr" >Заметки</a>
         </div>
 
-        <div class="col-12 row justify-content-center mb-2">
-          <a class="btn btn-outline-dark col-10 col-md-8 col-xl-6" href="{% url 'documents_menu' %}" >Документы</a>
-        </div>
+		<div class="col-12 row justify-content-center mb-2">
+			<a class="btn btn-outline-dark col-10 col-md-8 col-xl-6" href="{% url 'documents_menu' %}" >Документы</a>
+		</div>
 
         <div class="col-12 row justify-content-center mb-2 mt-2">
             <a class="btn btn-outline-primary col-10 col-md-8 col-xl-6" href="" data-bs-toggle="modal" data-bs-target="#modalLogout">Выйти</a>
