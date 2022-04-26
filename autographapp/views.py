@@ -24,18 +24,18 @@ from django.http import HttpResponse
 
 
 def autographAuth():
-
-	login = config('AUTOGRAPH_LOGIN')
-	password = config('AUTOGRAPH_PASSWORD')
-	autograph_path = config('AUTOGRAPH_BASE_PATH')
-
-	authURL = '{}Login?UserName={}&Password={}'.format(
-	    autograph_path, login, password)
-	answer = requests.get(authURL)
-	if answer.status_code == 200:
-		return answer.text
-	else:
-		return None
+    
+    login = config('AUTOGRAPH_LOGIN')
+    password = config('AUTOGRAPH_PASSWORD')
+    autograph_path = config('AUTOGRAPH_BASE_PATH')
+    authURL = '{}Login?UserName={}&Password={}'.format(
+        autograph_path, login, password)
+    answer = requests.get(authURL)
+    print(answer)
+    if answer.status_code == 200:
+        return answer.text
+    else:
+        return None
 
 
 def enumDevices(session):
