@@ -31,7 +31,6 @@ def autographAuth():
     authURL = '{}Login?UserName={}&Password={}'.format(
         autograph_path, login, password)
     answer = requests.get(authURL)
-    print(answer)
     if answer.status_code == 200:
         return answer.text
     else:
@@ -196,11 +195,12 @@ def upload_autograph_data(request, input_date):
                             if stages:
                                 for i in stages:
                                     if i.get("Name") == "Motion":
+                                        index_of_total_duration = i.get("Params").index("TotalDuration")
                                         motion = i.get("Items")
                                 if motion:
                                     for motion_item in motion:
                                         if motion_item.get("Caption") == "Остановка":
-                                            totalParkDuration = datetime.datetime.strptime(motion_item.get("Values")[12], '%H:%M:%S').time()
+                                            totalParkDuration = datetime.datetime.strptime(motion_item.get("Values")[index_of_total_duration], '%H:%M:%S').time()
                                             if totalParkDuration > datetime.time(0, 5, 0):
                                                 parkCount5MinMore += 1
                                                 
