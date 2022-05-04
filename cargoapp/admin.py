@@ -18,6 +18,7 @@ class DriverAdmin(admin.ModelAdmin):
 					)
 	readonly_fields = ('uid',)
 	exclude = ['first_name', 'second_name', 'third_name']
+	search_fields = ('title', )
 
 	def experience(self, obj):
 
@@ -62,6 +63,7 @@ class VehicleAdmin(admin.ModelAdmin):
 
 	list_filter = ('logist',)
 	readonly_fields = ('uid', 'nav_id')
+	search_fields = ('vin', 'car_number', 'nav_id', )
 
 admin.site.register(Vehicle, VehicleAdmin)
 

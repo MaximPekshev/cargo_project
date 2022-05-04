@@ -12,11 +12,13 @@ from django.conf import settings
 import datetime
 
 from django.utils.timezone import now
+# from django.utils import timezone
 
 from django.contrib.auth.hashers import make_password
 from django.conf import settings
 
 from django.db.models import Sum
+
 
 NDS_RATE = (
 	('TP', '20%'),
@@ -131,6 +133,10 @@ class  Vehicle(models.Model):
 	car_number = models.CharField(max_length = 15, verbose_name = 'Гос номер', null=True, blank=True)
 	logist = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="logist", verbose_name='Логист', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 	driver = models.ForeignKey(Driver, verbose_name='Водитель', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
+	title = models.CharField(max_length=50, verbose_name="Название", null=True, blank=True, default='')
+
+	release_date = models.DateField('Дата выпуска', auto_now_add = False, blank=True, null=True, default=None)
+	consignment = models.CharField(max_length=2, verbose_name="Партия", null=True, blank=True, default="")
 
 	employment_date = models.DateField('Дата приема на работу', auto_now_add = False, blank=True, null=True, default=now)
 	nav_id = models.CharField(max_length=15, verbose_name="Nav ID", null=True, blank=True)
@@ -152,6 +158,12 @@ class  Vehicle(models.Model):
 			return int((now().date()-self.employment_date).days/ (365.25))	
 			
 		return 0
+
+	def get_casco_insurance(self):
+		pass
+
+	def get_osago_insurance(self):
+		pass	
 
 	class Meta:
 		verbose_name = 'Автомобиль'

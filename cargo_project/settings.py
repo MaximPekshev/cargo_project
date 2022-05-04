@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django_cleanup',
     'django_crontab',
     'accrual_deduction_app',
+    'insurance_app',
 
 
     'mobiFuel',
