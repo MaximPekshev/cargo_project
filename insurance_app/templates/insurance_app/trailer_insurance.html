@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Страхование. Полуприцепы</title>
+
+	          <!-- Bootstrap CSS + JS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="{% static 'css/insurance/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/insurance/sticky-table.css' %}">
+</head>
+<body>
+	<div class="container-fuid">
+		<h1 class="text-center">Страхование полуприцепов.</h1>
+		<div class="table-wrap">
+			<form name="form__table__1" class="table-container form__table__1">
+				<table class="table table-hover caption-top table__1">
+					<thead class="head-sticky text-center">
+						<tr>
+							<th class="count"><p></p></th>
+							<th colspan="4" class="text-center"><p>Данные</p></th>
+							<th colspan="3" class="text-center"><p>КАСКО</p></th>
+							<th><p></p></th>
+						</tr>
+						<tr>
+							<th><p>#</p></th>
+							<th><p>Гос. номер</p></th>
+							<th><p>Марка</p></th>
+							<th><p>Год выпуска (лизинг) (покупки)</p></th>
+							<th><p>VIN</p></th>
+							<th><p>Окончание</p></th>
+							<th><p>Начало</p></th>
+							<th><p>СК</p></th>
+							<th><p>Собственник\ у&nbsp;кого ПТС</p></th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- tr*100>td>input[name=form__input-$$$$-1][id=form__input-$$$$-1]^td>input[name=form__input-$$$$-2][id=form__input-$$$$-2]^td>input[name=form__input-$$$$-3][id=form__input-$$$$-3]^td>input[name=form__input-$$$$-4][id=form__input-$$$$-4]^td>input[name=form__input-$$$$-5][id=form__input-$$$$-5]^td>input[name=form__input-$$$$-6][id=form__input-$$$$-6]^td>input[name=form__input-$$$$-7][id=form__input-$$$$-7]^td>input[name=form__input-$$$$-8][id=form__input-$$$$-8]^td>input[name=form__input-$$$$-9][id=form__input-$$$$-9] -->
+						{% for item in insurance %}
+						<tr>
+							<td><input type="text" name="form__input-0001-1" id="form__input-0001-1"></td>
+							<td><input type="text" name="form__input-0001-2" id="form__input-0001-2" value="{{ item.trailer.number }}"></td>
+							<td><input type="text" name="form__input-0001-3" id="form__input-0001-3" value="{{ item.trailer.title }}"></td>
+							<td><input type="text" name="form__input-0001-4" id="form__input-0001-4" value="{{ item.trailer.release_date|date:"Y" }} {% if item.trailer.consignment %} ({{ item.trailer.consignment }}) {% endif %}"></td>
+							<td><input type="text" name="form__input-0001-5" id="form__input-0001-5" value="{{ item.trailer.vin }}"></td>
+							<td><input type="text" name="form__input-0001-6" id="form__input-0001-6" value="{{ item.to_date|date:"d.m.Y" }}"></td>
+							<td><input type="text" name="form__input-0001-7" id="form__input-0001-7" value="{{ item.from_date|date:"d.m.Y"}}"></td>
+							<td><input type="text" name="form__input-0001-8" id="form__input-0001-8" value="{{ item.contragent }}"></td>
+							<td><input type="text" name="form__input-0001-9" id="form__input-0001-9" value="{{ item.owner }}"></td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 import xlrd
-from cargoapp.models import City, Vehicle, Driver
-from insurance_app.models import VehicleInsurance, ContragentInsurance, OwnerInsurance
+from cargoapp.models import City, Vehicle, Driver, Trailer
+from insurance_app.models import VehicleInsurance, ContragentInsurance, OwnerInsurance, TrailerInsurance
 from cargoapp.cityCordinates import cityCordinates
 from decouple import config
 import requests
@@ -226,6 +226,88 @@ def import_insurance_contract():
         else:
             print('Автомобиля с vin: ' + car_vin + ' нет в БД')
 
+
+def import_trailer_insurance_contract():
+
+    book = xlrd.open_workbook("tempfiles/insurance.xlsx")
+    sh = book.sheet_by_index(1)
+    for rx in range(sh.nrows):
+
+        trailer_number =  sh.cell_value(rx, 0).replace(' ', '')#str
+        trailer_title = sh.cell_value(rx, 1) #str
+        trailer_year = sh.cell_value(rx, 2) #str 2016(2)
+        trailer_vin = sh.cell_value(rx, 3) #str 
+        if sh.cell_value(rx, 4) != '-':
+            if type(sh.cell_value(rx, 4)) is float:
+                casco_date_to = datetime(*xlrd.xldate_as_tuple(sh.cell_value(rx, 4), 0)).date() #datetime
+            elif type(sh.cell_value(rx, 4)) is str:
+                casco_date_to = datetime.strptime(sh.cell_value(rx, 4), '%d.%m.%Y').date()         
+        else:
+            casco_date_to = None             
+        if sh.cell_value(rx, 5) != '-':
+            if type(sh.cell_value(rx, 5)) is float:
+                casco_date_from = datetime(*xlrd.xldate_as_tuple(sh.cell_value(rx, 5), 0)).date() #datetime
+            elif type(sh.cell_value(rx, 5)) is str:
+                casco_date_from = datetime.strptime(sh.cell_value(rx, 5), '%d.%m.%Y').date() 
+        else:
+            casco_date_from = None
+        if sh.cell_value(rx, 6) != '-': 
+            casco_contragent = str(sh.cell_value(rx, 6)) #str
+        else:
+            casco_contragent = None
+        if sh.cell_value(rx, 7) != '-': 
+            owner_contragent = str(sh.cell_value(rx, 7)) #str
+        else:
+            owner_contragent = None
+        
+        trailer = Trailer.objects.filter(vin=trailer_vin).first()
+        if not trailer:
+            if type(sh.cell_value(rx, 2)) is float:
+                trailer_year = str(trailer_year)
+            if trailer_year:
+                release_date = trailer_year.split('(')[0].split('.')[0]
+                try:
+                    consignment = trailer_year.split('(')[1][0]
+                except:
+                    consignment = ''
+
+                release_date = release_date + '.01.01'
+
+            trailer = Trailer(
+                vin= trailer_vin,
+                number=trailer_number,
+                title=trailer_title,
+                release_date = datetime.strptime(release_date, '%Y.%m.%d').date(),
+                consignment = consignment,
+            )
+            trailer.save()
+
+        if casco_date_from:
+
+            new_casco_vehicle_insurance = TrailerInsurance(
+                trailer=trailer,
+                type='1',
+                from_date = casco_date_from,
+                to_date=casco_date_to,
+            )
+            new_casco_vehicle_insurance.save()
+
+            if casco_contragent:
+                try:
+                    contragent_insurance = ContragentInsurance.objects.get(title = casco_contragent.upper())
+                except ContragentInsurance.DoesNotExist:
+                    contragent_insurance = ContragentInsurance(title=casco_contragent.upper())
+                    contragent_insurance.save()
+                new_casco_vehicle_insurance.contragent =  contragent_insurance
+                new_casco_vehicle_insurance.save()
+            if owner_contragent:
+                try:
+                    owner_insurance = OwnerInsurance.objects.get(title = owner_contragent.upper())
+                except OwnerInsurance.DoesNotExist:
+                    owner_insurance = OwnerInsurance(title=owner_contragent.upper())
+                    owner_insurance.save()
+                new_casco_vehicle_insurance.owner =  owner_insurance
+                new_casco_vehicle_insurance.save()    
 
 
         # print(car_number)

@@ -1727,45 +1727,6 @@ def gate_shift_change_complete(request):
             return render(request, 'cargoapp/menu/auth_role_error.html')
 
 
-# INSURANCE
-
-def insurance_trac_insurance(request):
-
-    if request.user.is_authenticated:
-
-        users_in_group_insurance = Group.objects.get(name="Страховка").user_set.all()
-
-        if request.user in users_in_group_insurance:
-
-            context = {
-
-            }
-
-            return render(request, 'cargoapp/insurance/trac_insurance.html', context)
-
-        else:
-
-            return render(request, 'cargoapp/menu/auth_role_error.html')
-
-
-def insurance_trailer_insurance(request):
-
-    if request.user.is_authenticated:
-
-        users_in_group_insurance = Group.objects.get(name="Страховка").user_set.all()
-
-        if request.user in users_in_group_insurance:
-
-            context = {
-
-            }
-
-            return render(request, 'cargoapp/insurance/trailer_insurance.html', context)
-
-        else:
-
-            return render(request, 'cargoapp/menu/auth_role_error.html')
-
 # CHIEF COLUMN
 
 def chief_column_daily_report(request):

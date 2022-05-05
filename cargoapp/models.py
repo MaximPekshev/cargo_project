@@ -168,8 +168,48 @@ class  Vehicle(models.Model):
 	class Meta:
 		verbose_name = 'Автомобиль'
 		verbose_name_plural = 'Автомобили'
-		
 
+class  Trailer(models.Model):
+
+	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', unique=True)
+	vin = models.CharField(max_length=20, verbose_name="VIN", null=True, blank=True)
+	number = models.CharField(max_length = 15, verbose_name = 'Гос номер', null=True, blank=True)
+	# logist = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="logist", verbose_name='Логист', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
+	title = models.CharField(max_length=50, verbose_name="Название", null=True, blank=True, default='')
+	release_date = models.DateField('Дата выпуска', auto_now_add = False, blank=True, null=True, default=None)
+	consignment = models.CharField(max_length=2, verbose_name="Партия", null=True, blank=True, default="")
+	employment_date = models.DateField('Дата приема на работу', auto_now_add = False, blank=True, null=True, default=now)
+	# columnar = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="columnar", verbose_name='Колонный', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
+
+	def __str__(self):
+
+		return '{}'.format(self.number)
+
+	def save(self, *args, **kwargs):
+
+		if not self.uid:
+			self.uid = get_uuid4()
+
+		super(Trailer, self).save(*args, **kwargs)
+
+	def get_experience(self):
+
+		if self.employment_date:
+
+			return int((now().date()-self.employment_date).days/ (365.25))	
+			
+		return 0
+
+	def get_casco_insurance(self):
+		pass
+
+	def get_osago_insurance(self):
+		pass	
+
+	class Meta:
+		verbose_name = 'Полуприцеп'
+		verbose_name_plural = 'Полуприцепы'		
+# модель маршрута
 class Route(models.Model):
 
 	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', unique=True)
@@ -240,11 +280,11 @@ class Route(models.Model):
 			self.cost_of_km = 0
 
 
-		paton_consump = Constant.objects.filter(title="Платон", date__lte=self.from_date).order_by('date').last().value
-		if not paton_consump:
-			paton_consump = Decimal(2.54)
+		platon_consump = Constant.objects.filter(title="Платон", date__lte=self.from_date).order_by('date').last().value
+		if not platon_consump:
+			platon_consump = Decimal(2.54)
 
-		self.cost_of_platon = self.route_length*paton_consump
+		self.cost_of_platon = self.route_length*platon_consump
 
 		self.pure_income = self.route_cost - self.fuel_cost - self.pay_check - self.expenses_1 - self.cost_of_platon
 		

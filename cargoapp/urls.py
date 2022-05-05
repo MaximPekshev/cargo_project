@@ -48,10 +48,6 @@ from .views import gate_shift_change_inspection_1, gate_shift_change_inspection_
 from .views import gate_shift_change_inspection_5, gate_shift_change_inspection_6, gate_shift_change_inspection_7
 from .views import gate_shift_change_complete
 
-#insurance
-from .views import insurance_trac_insurance
-from .views import insurance_trailer_insurance
-
 urlpatterns = [
 	path('', 	show_menu_page , name='show_menu_page'),
 	path('main/', 	show_index_page , name='show_index_page'),
@@ -124,7 +120,7 @@ urlpatterns = [
 
 	#insurance
 
-	path('insurance/trac-insurance/', 	insurance_trac_insurance , name='insurance_trac_insurance'),
-	path('insurance/trailer-insurance/', 	insurance_trailer_insurance , name='insurance_trailer_insurance'),
+	# path('insurance/trac-insurance/', 	insurance_trac_insurance , name='insurance_trac_insurance'),
+	# path('insurance/trailer-insurance/', 	insurance_trailer_insurance , name='insurance_trailer_insurance'),
 	
 ]

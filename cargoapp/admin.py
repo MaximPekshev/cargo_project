@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import LogistUser, Vehicle, Driver, Route, City
+from .models import LogistUser, Vehicle, Driver, Route, City, Trailer
 from .models import Organization, Contracts, Constant
 from .models import MileageRevenueStandard, MileageThresholds, DailyIndicators
 
@@ -66,6 +66,19 @@ class VehicleAdmin(admin.ModelAdmin):
 	search_fields = ('vin', 'car_number', 'nav_id', )
 
 admin.site.register(Vehicle, VehicleAdmin)
+
+class TrailerAdmin(admin.ModelAdmin):
+
+	list_display = (
+					'vin',
+					'number',
+					'title',
+					)
+
+	readonly_fields = ('uid',)
+	search_fields = ('vin', 'number',)
+
+admin.site.register(Trailer, TrailerAdmin)
 
 
 class CityAdmin(admin.ModelAdmin):

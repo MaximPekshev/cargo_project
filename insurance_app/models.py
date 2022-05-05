@@ -2,7 +2,7 @@ from django.db import models
 from select import select
 from django.utils.timezone import now
 
-from cargoapp.models import Vehicle
+from cargoapp.models import Vehicle, Trailer
 
 INSURANCE_TYPE = (
 	('0', 'ОСАГО'),
@@ -25,6 +25,23 @@ class VehicleInsurance(models.Model):
     class Meta:
         verbose_name = 'Страховка автомобиля'
         verbose_name_plural = 'Страховки автомобилей'
+
+class TrailerInsurance(models.Model):
+
+    trailer = models.ForeignKey(Trailer, verbose_name='Полуприцеп', on_delete=models.CASCADE)
+    type = models.CharField(max_length=2, verbose_name='Тип страховки', choices=INSURANCE_TYPE)
+    from_date = models.DateField('Дата С', auto_now_add = False, blank=True, null=True, default=now)
+    to_date = models.DateField('Дата По', auto_now_add = False, blank=True, null=True,  default=now)
+    contragent = models.ForeignKey('ContragentInsurance', verbose_name = 'Страховая компания', on_delete=models.PROTECT, default=None, null=True, blank=True)
+    owner = models.ForeignKey('OwnerInsurance', verbose_name = 'Собственник', on_delete=models.PROTECT, default=None, null=True, blank=True)
+
+    def __str__(self):
+
+        return '{}'.format(self.id)
+
+    class Meta:
+        verbose_name = 'Страховка полуприцепа'
+        verbose_name_plural = 'Страховки полуприцепов'        
 
 
 class ContragentInsurance(models.Model):
