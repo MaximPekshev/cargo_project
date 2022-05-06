@@ -41,7 +41,7 @@
 						<!-- tr*100>td>input[name=form__input-$$$$-1][id=form__input-$$$$-1]^td>input[name=form__input-$$$$-2][id=form__input-$$$$-2]^td>input[name=form__input-$$$$-3][id=form__input-$$$$-3]^td>input[name=form__input-$$$$-4][id=form__input-$$$$-4]^td>input[name=form__input-$$$$-5][id=form__input-$$$$-5]^td>input[name=form__input-$$$$-6][id=form__input-$$$$-6]^td>input[name=form__input-$$$$-7][id=form__input-$$$$-7]^td>input[name=form__input-$$$$-8][id=form__input-$$$$-8]^td>input[name=form__input-$$$$-9][id=form__input-$$$$-9] -->
 						{% for item in insurance %}
 						<tr>
-							<td><input type="text" name="form__input-0001-1" id="form__input-0001-1"></td>
+							<td><input type="text" name="form__input-0001-1" id="form__input-0001-1" value="{{forloop.counter}}"></td>
 							<td><input type="text" name="form__input-0001-2" id="form__input-0001-2" value="{{ item.trailer.number }}"></td>
 							<td><input type="text" name="form__input-0001-3" id="form__input-0001-3" value="{{ item.trailer.title }}"></td>
 							<td><input type="text" name="form__input-0001-4" id="form__input-0001-4" value="{{ item.trailer.release_date|date:"Y" }} {% if item.trailer.consignment %} ({{ item.trailer.consignment }}) {% endif %}"></td>

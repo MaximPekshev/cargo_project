@@ -151,15 +151,19 @@ def import_insurance_contract():
             osago_date_to = None             
         osago_contragent = sh.cell_value(rx, 5) #str 
         if sh.cell_value(rx, 6) != '-':
-            casco_date_from = datetime(*xlrd.xldate_as_tuple(sh.cell_value(rx, 6), 0)).date() #datetime 
-        else:
-            casco_date_from = None     
+            if type(sh.cell_value(rx, 6)) is float:
+                casco_date_to = datetime(*xlrd.xldate_as_tuple(sh.cell_value(rx, 6), 0)).date() #datetime 
+            elif type(sh.cell_value(rx, 6)) is str:
+                casco_date_to = datetime.strptime(sh.cell_value(rx, 6), '%d.%m.%Y').date()
+            else:
+                casco_date_to = None     
         if sh.cell_value(rx, 7) != '-':
             if type(sh.cell_value(rx, 7)) is float:
-                casco_date_to = datetime(*xlrd.xldate_as_tuple(sh.cell_value(rx, 7), 0)).date() #datetime 
+                casco_date_from = datetime(*xlrd.xldate_as_tuple(sh.cell_value(rx, 7), 0)).date() #datetime 
             elif type(sh.cell_value(rx, 7)) is str:
-                casco_date_to = datetime.strptime(sh.cell_value(rx, 7), '%d.%m.%Y').date()
-            casco_date_to = None     
+                casco_date_from = datetime.strptime(sh.cell_value(rx, 7), '%d.%m.%Y').date()
+            else:    
+                casco_date_from = None     
         casco_contragent = sh.cell_value(rx, 8) #str
 
         owner_contragent = sh.cell_value(rx, 9) #str

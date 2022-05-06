@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.models import Group
-from .models import TrailerInsurance
+from .models import TrailerInsurance, VehicleInsurance
+from cargoapp.models import Vehicle
+import datetime
 
 def insurance_trac_insurance(request):
 
@@ -9,9 +11,18 @@ def insurance_trac_insurance(request):
         users_in_group_insurance = Group.objects.get(name="Страховка").user_set.all()
 
         if request.user in users_in_group_insurance:
-
+            insurance = []
+            for vehicle in Vehicle.objects.all().order_by('release_date', 'consignment'):
+                osago = VehicleInsurance.objects.filter(vehicle=vehicle, type=0, to_date__gte=datetime.datetime.now()).order_by('to_date').first()
+                casco = VehicleInsurance.objects.filter(vehicle=vehicle, type=1, to_date__gte=datetime.datetime.now()).order_by('to_date').first()
+                if osago or casco:
+                    insurance.append([
+                        vehicle,
+                        osago,
+                        casco,
+                        ])
             context = {
-
+                'insurance': insurance,
             }
 
             return render(request, 'insurance_app/trac_insurance.html', context)
