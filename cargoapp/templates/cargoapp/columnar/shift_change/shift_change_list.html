@@ -3,13 +3,15 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col">
-            <form action="send_form__2-26.py" name="form__2-26" class="form__2-26">
-                <button form="id_form" type="submit" name="form__2-26__button-1" id="form__2-26__button-1" class="form__2-26__button" value="Прием/передача">Прием/передача</button>
-                <button form="id_form" type="submit" name="form__2-26__button-2" id="form__2-26__button-2" class="form__2-26__button" value="н 320 ук716rus"><a href="{% url 'gate_shift_change_single' %}">н 320 ук716rus</a></button>
-                <button form="id_form" type="submit" name="form__2-26__button-3" id="form__2-26__button-3" class="form__2-26__button" value="а 720 ук716rus"><a href="{% url 'gate_shift_change_single' %}">а 720 ук716rus</a></button>
-                <button form="id_form" type="submit" name="form__2-26__button-4" id="form__2-26__button-4" class="form__2-26__button" value="с 950 ах 716rus"><a href="{% url 'gate_shift_change_single' %}">с 950 ах 716rus</a></button>
-                <button form="id_form" type="submit" name="form__2-26__button-5" id="form__2-26__button-5" class="form__2-26__button" value="а 220 ре 716rus"><a href="{% url 'gate_shift_change_single' %}">а 220 ре 716rus</a></button>
+        <div class="col mx-auto">
+            <form name="form__2-6" class="w-100 form__2-6">
+                <div class="d-grid gap-2 mt-3 mb-auto">
+                    <button type="button" name="form__2-6__button-1" id="form__2-6__button-1" class="btn btn-warning btn-lg mb-2 form__2-6__button" value="Прием/передача" disabled>Прием/передача</button>
+                    <button type="button" name="form__2-6__button-2" id="form__2-6__button-2" class="btn btn-warning btn-lg form__2-6__button" value="н 320 ук716rus"><a href="{% url 'gate_shift_change_single' %}">н 320 ук716rus</a></button>
+                    <button type="button" name="form__2-6__button-3" id="form__2-6__button-3" class="btn btn-warning btn-lg form__2-6__button" value="а 720 ук716rus"><a href="{% url 'gate_shift_change_single' %}">а 720 ук716rus</a></button>
+                    <button type="button" name="form__2-6__button-4" id="form__2-6__button-4" class="btn btn-warning btn-lg form__2-6__button" value="с 950 ах 716rus"><a href="{% url 'gate_shift_change_single' %}">с 950 ах 716rus</a></button>
+                    <button type="button" name="form__2-6__button-5" id="form__2-6__button-5" class="btn btn-warning btn-lg form__2-6__button" value="а 220 ре 716rus"><a href="{% url 'gate_shift_change_single' %}">а 220 ре 716rus</a></button>
+                </div>
             </form>
         </div>
     </div>

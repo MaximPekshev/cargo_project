@@ -32,6 +32,7 @@ def upload_accrual(accrual_deduction):
         }
 
         answer = requests.post(url, headers=header, data=json.dumps(data))
+        print(answer, answer.status_code)
         if answer.status_code == 200:
             # print(answer.status_code)
             accrual_deduction.upload_status = True

@@ -1,21 +1,34 @@
 {% extends 'cargoapp/main_style/main_base.html'%}
 
 {% block content %}
-<p>Регистрация внепланового ремонта</p>
 <div class="container">
     <div class="row">
-        <div class="col">
-            <form action="send_form__3-5.py" name="form__3-5" class="form__3-5">
-                <input type="text" name="form__3-5__input-1" id="form__3-5__input-1" class="form__3-5__input" placeholder="н 320 ук 716rus" disabled>
-                <input type="text" name="form__3-5__input-2" id="form__3-5__input-2" class="form__3-5__input" placeholder="8456 ВА" disabled>
-                <input type="text" name="form__3-5__input-3" id="form__3-5__input-3" class="form__3-5__input" placeholder="" disabled>
+        <div class="col mx-auto">
+            <form  name="form__3-5" class="w-100 pt-4 pb-4 d-flex flex-column form__3-5">
+                <div class="input-group mt-3">
+                    <input type="text" name="form__3-5__input-1" id="form__3-5__input-1" class="form-control text-center bg-warning form__3-5__input" placeholder="н 320 ук 716rus" disabled>
+                </div>
+                <div class="input-group mt-1">
+                    <input type="text" name="form__3-5__input-2" id="form__3-5__input-2" class="form-control text-center bg-warning form__3-5__input" placeholder="8456 ВА" disabled>
+                </div>
+                <div class="input-group mt-1">
+                    <input type="text" name="form__3-5__input-3" id="form__3-5__input-3" class="form-control text-center bg-warning form__3-5__input" placeholder="" disabled>
+                </div>
+                <div class="btn-group w-100 mt-4" role="group">
+                    <button type="button" name="form__3-5__button-1" id="form__3-5__button-1" class="btn btn-outline-primary btn-lg form__3-5__button" value="Где ремонтировать">Где ремонтировать</button>
+                </div>
+                <div class="input-group mt-3">
+                    <span class="input-group-text" id="form__3-5__input-span">Заезд</span>
+                    <input type="datetime-local" name="form__3-5__input-4" id="form__3-5__input-4" class="form-control text-center form__3-5__input">
+                </div>
+                <div class="input-group mt-1">
+                    <input type="email" name="form__3-5__input-5" id="form__3-5__input-5" class="form-control text-center form__3-5__input" placeholder="e-mail адрес" disabled>
+                </div>
 
-                <button type="submit" form="id_form" name="form__3-5__button-1" id="form__3-5__button-1" class="form__3-5__button" value="Где ремонтировать">Где ремонтировать</button>
-                <input type="date" name="form__3-5__input-4" id="form__3-5__input-4" class="form__3-5__input" disabled>
-                <input type="date" name="form__3-5__input-5" id="form__3-5__input-5" class="form__3-5__input" disabled>
-                <input type="email" name="form__3-5__input-6" id="form__3-5__input-6" class="form__3-5__input" placeholder="e-mail адрес" disabled>
-
-                <button type="submit" form="id_form" name="form__3-5__button-2" id="form__3-5__button-2" class="form__3-5__button" value="Зарегистрировать">Зарегистрировать</button>
+                <div class="btn-group w-100 mt-auto" role="group">
+                    <button type="button" name="form__3-5__button-back" id="form__3-5__button-back" class="btn btn-lg btn-primary form__3-5__button" value="back">Назад</button>
+                    <button type="button" name="form__3-5__button-next" id="form__3-5__button-next" class="btn btn-lg btn-primary active form__3-5__button" value="next">Зарегистрировать</button>
+                </div>
             </form>
         </div>
     </div>

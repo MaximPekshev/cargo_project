@@ -1,21 +1,34 @@
 {% extends 'cargoapp/main_style/main_base.html'%}
-
+{% block title %}
+Запросы.
+{% endblock %}
 {% block content %}
 <div class="container">
-    <div class="row">
-        <div class="col">
-            <form action="send_form__2-24.py" name="form__2-24" class="form__2-24">
-                <input type="text" name="form__2-24__input-1" id="form__2-24__input-1" class="form__2-24__input" placeholder="н 320 ук716rus">
-                <input type="text" name="form__2-24__input-2" id="form__2-24__input-2" class="form__2-24__input" placeholder="8088 АА">
-                <input type="text" name="form__2-24__input-3" id="form__2-24__input-3" class="form__2-24__input" placeholder="" disabled="">
-                <input type="text" name="form__2-24__input-4" id="form__2-24__input-4" class="form__2-24__input" placeholder="Принять ТС">
+    <div class="container">
+		<div class="row">
+			<div class="col mx-auto">
+				<form name="form__2-4" class="w-100 pt-4 pb-4 d-flex flex-column form__2-4 ">
+					<div class="input-group">
+						<input type="text" name="form__2-4__input-1" id="form__2-4__input-1" class="form-control text-center bg-warning form__2-4__input" placeholder="н 320 ук 716rus">
+					</div>
+					<div class="input-group mt-1">
+						<input type="text" name="form__2-4__input-2" id="form__2-4__input-2" class="form-control text-center bg-warning form__2-4__input" placeholder="8088 АА">
+					</div>
+					<div class="input-group mt-1">
+						<input type="text" name="form__2-4__input-3" id="form__2-4__input-3" class="form-control text-center bg-warning form__2-4__input" placeholder="">
+					</div>
 
-                <div class="row">
-                    <button form="id_form" type="submit" name="form__2-24__button-1" id="form__2-24__button-1" class="form__2-24__button" value="Назад">Назад</button>
-                    <button form="id_form" type="submit" name="form__2-24__button-2" id="form__2-24__button-2" class="form__2-24__button" value="Далее">Далее</button>
-                </div>
-            </form>
-        </div>
-    </div>
+					<div class="d-grid gap-2 mt-3 mb-auto">
+						<button type="button" name="form__2-4__button-1" id="form__2-4__button-1" class="btn btn-lg btn-primary form__2-4__button" value="Принять ТС">Принять ТС</button>
+					</div>
+
+					<div class="btn-group w-100 mt-auto pt-3" role="group">
+						<button type="button" name="form__2-4__button-back" id="form__2-4__button-back" class="btn btn-lg btn-primary form__2-4__button" value="back">Назад</button>
+						<button type="button" name="form__2-4__button-next" id="form__2-4__button-next" class="btn btn-lg btn-primary active form__2-4__button" value="next">Далее</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}

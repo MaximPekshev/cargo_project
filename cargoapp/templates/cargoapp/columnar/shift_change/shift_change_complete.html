@@ -1,29 +1,30 @@
 {% extends 'cargoapp/main_style/main_base.html'%}
 
 {% block content %}
+
 <div class="container">
-    <div class="row">
-        <div class="col">
-            <form action="send_form__2-18.py" name="form__2-18" class="form__2-18">
-                <input type="text" name="form__2-18__input-1" id="form__2-18__input-1" class="form__2-18__input" placeholder="н 320 ук716rus">
-                <input type="text" name="form__2-18__input-2" id="form__2-18__input-2" class="form__2-18__input" placeholder="8088 AA">
-                <input type="text" name="form__2-18__input-3" id="form__2-18__input-3" class="form__2-18__input" placeholder="">
-                <input type="date" name="form__2-18__input-4" id="form__2-18__input-4" class="form__2-18__input">
-                <input type="text" name="form__2-18__input-5" id="form__2-18__input-5" class="form__2-18__input" placeholder="ФИО Водителя">
-                <input type="tel" name="form__2-18__input-6" id="form__2-18__input-6" class="form__2-18__input" placeholder="Телефон">
-                <input type="text" name="form__2-18__input-7" id="form__2-18__input-7" class="form__2-18__input" placeholder="База">
-                <input type="text" name="form__2-18__input-8" id="form__2-18__input-8" class="form__2-18__input" placeholder="ТС Передал" disabled>
+    <div class="row mt-4 mb-4">
+        <div class="col mx-auto">
+            <form action="send_form__2-16.py" name="form__2-16" class="w-100 pt-4 pb-4 d-flex flex-column form__2-16">
+                <div class="input-group mt-1">
+                    <input type="text" name="form__2-16__input-1" id="form__2-16__input-1" class="form-control text-center bg-warning form__2-16__input" placeholder="н 320 ук716rus">
+                </div>
+                <div class="input-group mt-1">
+                    <input type="text" name="form__2-16__input-2" id="form__2-16__input-2" class="form-control text-center bg-warning form__2-16__input" placeholder="8088 AA">
+                </div>
+                <div class="input-group mt-1">
+                    <input type="text" name="form__2-16__input-3" id="form__2-16__input-3" class="form-control text-center bg-warning form__2-16__input" placeholder="">
+                </div>
 
-                <input type="text" name="form__2-18__input-9" id="form__2-18__input-9" class="form__2-18__input" placeholder="сменщик" disabled>
-                <input type="date" name="form__2-18__input-10" id="form__2-18__input-10" class="form__2-18__input">
-                <input type="text" name="form__2-18__input-11" id="form__2-18__input-11" class="form__2-18__input" placeholder="ФИО Сменщика">
-                <input type="text" name="form__2-18__input-12" id="form__2-18__input-12" class="form__2-18__input" placeholder="Телефон">
-                <input type="text" name="form__2-18__input-13" id="form__2-18__input-13" class="form__2-18__input" placeholder="База">
-                <input type="text" name="form__2-18__input-14" id="form__2-18__input-14" class="form__2-18__input" placeholder="ТС Принял" disabled>
+                <button type="button" name="form__2-16__button-1" id="form__2-16__button-1" class="btn btn-success btn-lg my-4 form__2-16__button" value="Передать ТС">Передать ТС</button>
 
-                <button form="id_form" type="submit" name="formm__2-18__button-1" id="formm__2-18__button-1" class="formm__2-18__button" value="Передать ТС">Передать ТС</button>
-                <button form="id_form" type="submit" name="formm__2-18__button-1" id="formm__2-18__button-1" class="formm__2-18__button" value="Передать ТС"><a href="{% url 'show_menu_page' %}">Меню</a></button>
+                <div class="btn-group w-100 mt-auto pt-3" role="group">
+                    <button type="button" name="form__2-16__button-back" id="form__2-16__button-back" class="btn btn-primary btn-lg form__2-16__button" value="back">Назад</button>
+                    <button type="button" name="form__2-16__button-next" id="form__2-16__button-next" class="btn btn-primary btn-lg active visually-hidden form__2-16__button" value="next">Далее</button>
+                </div>
+                
             </form>
+            
         </div>
     </div>
 </div>

@@ -1,14 +1,15 @@
 {% extends 'cargoapp/main_style/main_base.html'%}
-
+{% block title %}
+Запросы.
+{% endblock %}
 {% block content %}
-<p>Запросы на выходной</p>
 <div class="container">
-    <div class="row">
-        <div class="col">
-            <form action="send_form__8-2.py" name="form__8-2" class="form__8-2">
-                <button type="submit" form="id_form" name="form__8-2__button-4" id="form__8-2__button-4" class="form__8-2__button" value="Сменщик отклонил"><a href="{% url 'driver_shift_change_hand_over' %}">Передача</a></button>
-                <button type="submit" form="id_form" name="form__8-2__button-5" id="form__8-2__button-5" class="form__8-2__button" value="Отправить"><a href="{% url 'driver_shift_change_accept' %}">Прием</a></button>
-            </form>
+    <div class="row mt-4">
+        <div class="col mx-auto">
+            <div class="d-grid gap-2 mt-3">
+                <button type="button" name="form__2-2__button-1" id="form__2-2__button-1" class="btn btn-lg btn-outline-primary mt-3 form__2-2__button" value="Внеплановый ремонт"><a href="{% url 'driver_shift_change_hand_over' %}">Передача</a></button>
+                <button type="button" name="form__2-2__button-2" id="form__2-2__button-2" class="btn btn-lg btn-outline-primary mt-3 form__2-2__button" value="Запрос на выходные"><a href="{% url 'driver_shift_change_accept' %}">Прием</a></button>
+            </div>
         </div>
     </div>
 </div>

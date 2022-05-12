@@ -7,6 +7,8 @@ class LogistUserAdmin(admin.ModelAdmin):
 	list_display = (
 					'username',
 					)
+
+	search_fields = ('username', )				
 	# readonly_fields = ['uid',]
 	# exclude = ['psw',]
 admin.site.register(LogistUser, LogistUserAdmin)
@@ -90,7 +92,7 @@ class CityAdmin(admin.ModelAdmin):
 					'lon',
 					'lat',
 					)
-	readonly_fields = ('code',)
+	# readonly_fields = ('code',)
 	search_fields = ('code', 'title', )
 
 admin.site.register(City, CityAdmin)

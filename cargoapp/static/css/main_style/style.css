@@ -1,67 +1,34 @@
-* {
-	margin: 0;
-	font-family: 'Ubuntu', sans-serif;
+a {
+	text-decoration: none;
+	color: black;
+  }
+  .col {
+	max-width: 576px;
+  }
+  
+  @media (orientation: portrait) {
+	form {
+	  min-height: calc(100vh - 5rem);
+	}
+ }
+ :root {
+  --color1: #6ea8fe;
+  --color2: #8c68cd;
+  --color3: #fecba1;
+  --color4: #4dd4ac;
+  --black-color: #000000;
+  --white-color: #ffffff;
+  --bg-color: var(--white-color);
+  --min-width-container: 320px;
+  --max-width-container: 540px; 
 }
 
-body {
-	max-width: 50%;
-	margin: 0 auto;
+.container-fluid {
+  min-width: var(--min-width-container);
+  max-width: var(--max-width-container);
 }
 
-body > p {
-	font-size: 1.5em;
-	text-align: center;
-}
 
-.container {
-	margin: auto;
-	padding-bottom: 50px;
-	text-align: center;
-}
-
-form {
-	display: flex;
-	flex-direction: column;
-	margin: 0 auto;
-	padding: 15px;
-	border: 1px dashed rgba(255, 0, 0, 0.4);
-	background-color: #efffff;
-	border-radius: 20px;
-}
-
-form input,
-form button,
-form select {
-	height: 20px;
-	margin-top: 0;
-	text-align: center;
-	height: 2em;
-}
-
-/*.row {
-	display: flex;
-}*/
-
-/*
-label {
-	margin-bottom: 0;
-}*/
-.row .row .col {
-	display: inline-block;
-}
-.row .row p {
-	box-sizing: border-box;
-	display: inline-block;
-	width: calc(25% - 0.5em);
-	margin: 0;
-}
-
-/*.row .col label{
-	display: block;
-}*/
-
-span {
-	font-size: 0.8em;
-	vertical-align: middle;
-	color: red;
+.form-check {
+  margin-bottom: 0.5em;
 }
