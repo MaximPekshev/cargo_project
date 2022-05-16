@@ -124,6 +124,7 @@ def show_menu_page(request):
         users_in_group_insurance = Group.objects.get(name="Страховка").user_set.all()
         users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
         users_in_group_hr_director = Group.objects.get(name="Директор по персоналу").user_set.all()
+        users_in_group_health_safety = Group.objects.get(name="Охрана труда").user_set.all()
 
         if request.user in users_in_group_hr_director:
             return render(request, 'cargoapp/menu/hr_director_menu.html')
@@ -162,7 +163,11 @@ def show_menu_page(request):
 
         elif request.user in users_in_group_chief_column:
 
-            return render(request, 'cargoapp/menu/chief_column_menu.html')             
+            return render(request, 'cargoapp/menu/chief_column_menu.html')
+
+        elif request.user in users_in_group_health_safety:
+
+            return render(request, 'cargoapp/menu/health_safety.html')        
 
         else:
 
@@ -170,7 +175,23 @@ def show_menu_page(request):
     else:
 
         return redirect('login') 
-        
+
+def get_planned_data(vehicles, month):
+
+    mileageStandard = 0
+    revenueStandard = 0
+    net_incomeStandart = 0
+
+    for vehicle in vehicles:
+        milageStandart = MileageRevenueStandard.objects.filter(vehicle=vehicle, date__lte=month).order_by('-date').first()
+        if milageStandart:
+            mileageStandard += milageStandart.mileage
+            revenueStandard += milageStandart.revenue
+            net_incomeStandart += milageStandart.net_income
+
+    return [mileageStandard, revenueStandard, net_incomeStandart]
+
+
 def show_index_page(request):
 
     if request.user.is_authenticated:
@@ -194,6 +215,11 @@ def show_index_page(request):
 
         elif request.user in users_in_group_logistsupervisor:
 
+            if request.GET.get('month'):
+                month = datetime.datetime.strptime(request.GET.get('month'), '%Y-%m')
+            else:
+                month = datetime.datetime.today()
+
             logists  = LogistUser.objects.filter(supervisor=request.user)
             vehicle = None
             logist = None
@@ -201,16 +227,27 @@ def show_index_page(request):
             if request.GET.get('vehicle') and not request.GET.get('logist'):
                 vehicle = Vehicle.objects.get(uid=request.GET.get('vehicle'))
                 routes = Route.objects.filter(vehicle=vehicle).order_by('logist', '-from_date')
+                planned_data = get_planned_data([vehicle], month)
+
             elif not request.GET.get('vehicle') and request.GET.get('logist'):
                 logist = LogistUser.objects.get(uid=request.GET.get('logist'))
                 routes = Route.objects.filter(logist=logist).order_by('logist', '-from_date')
+                planned_data = get_planned_data(Vehicle.objects.filter(logist=logist), month)
+
             elif request.GET.get('vehicle') and request.GET.get('logist'):
                 vehicle = Vehicle.objects.get(uid=request.GET.get('vehicle'))
                 logist = LogistUser.objects.get(uid=request.GET.get('logist'))
                 routes = Route.objects.filter(logist=logist, vehicle=vehicle).order_by('logist', '-from_date')
+                planned_data = get_planned_data([vehicle], month)
+
             else:
                 routes = Route.objects.filter(logist__in=logists).order_by('logist', '-from_date')
                 vehicle = None
+                planned_data = get_planned_data(Vehicle.objects.filter(logist__in=logists), month)
+
+            mileageStandard = planned_data[0]
+            revenueStandard = planned_data[1]
+            net_incomeStandart = planned_data[2]
 
             if vehicle:
                 vehicles = Vehicle.objects.filter(logist__in=logists).exclude(uid=vehicle.uid)
@@ -223,12 +260,55 @@ def show_index_page(request):
             else:
                 logists = LogistUser.objects.filter(supervisor=request.user)   
 
+            routes  = routes.filter(Q(from_date__month=(month.strftime('%m'))) | Q(to_date__month=(month.strftime('%m'))))
+
             try:
                 # total_routes_length = routes.aggregate(Sum('route_length'))['route_length__sum']
                 total_cost_of_km = ((routes.aggregate(Sum('route_cost'))['route_cost__sum']/routes.aggregate(Sum('route_length'))['route_length__sum']).quantize(Decimal("1.00")))
             except:
                 total_cost_of_km = Decimal(0)
                 total_cost_of_km = total_cost_of_km.quantize(Decimal("1.00")) 
+
+            plan_total_cost_of_km = Constant.objects.filter(title="Стоимость километра", date__lte=datetime.datetime.now()).order_by('date').last().value
+            if not plan_total_cost_of_km:
+                plan_total_cost_of_km = Decimal(50).quantize(Decimal("1.00"))
+
+            #фактические данные
+            total_route_length = routes.aggregate(Sum('route_length'))['route_length__sum'].quantize(Decimal("1.00")) if routes else 0
+            total_route_cost = routes.aggregate(Sum('route_cost'))['route_cost__sum'].quantize(Decimal("1.00")) if routes else 0
+            total_pure_income = routes.aggregate(Sum('straight'))['straight__sum'].quantize(Decimal("1.00"))if routes else 0
+
+            #расчет плановых значений
+            plan_total_route_length = Decimal(mileageStandard).quantize(Decimal("1.00"))
+            plan_total_route_cost = Decimal(revenueStandard).quantize(Decimal("1.00"))
+            plan_total_pure_income = Decimal(net_incomeStandart).quantize(Decimal("1.00"))
+
+            #расчет остатков до плана
+            route_length_diff = plan_total_route_length - total_route_length
+            route_cost_diff = plan_total_route_cost - total_route_cost
+            cost_of_km_diff = plan_total_cost_of_km - total_cost_of_km
+            pure_income_diff = plan_total_pure_income - total_pure_income
+
+            #расчет процента выполнения
+            try:
+                route_length_percent = (total_route_length/plan_total_route_length*100).quantize(Decimal("1"))
+            except:
+                route_length_percent = Decimal(0).quantize(Decimal("1"))
+
+            try:
+                route_cost_percent = (total_route_cost/plan_total_route_cost*100).quantize(Decimal("1"))
+            except:
+                route_cost_percent = Decimal(0).quantize(Decimal("1"))
+
+            try:
+                cost_of_km_percent = (total_cost_of_km/plan_total_cost_of_km*100).quantize(Decimal("1"))
+            except:
+                cost_of_km_percent = Decimal(0).quantize(Decimal("1"))
+
+            try:
+                pure_income_percent = (total_pure_income/plan_total_pure_income*100).quantize(Decimal("1"))
+            except:
+                pure_income_percent = Decimal(0).quantize(Decimal("1")) 
 
             context = {
                 'user' : request.user,
@@ -237,16 +317,33 @@ def show_index_page(request):
                 'logists' : logists,
                 'checked_vehicle': vehicle,
                 'checked_logist': logist,
+                'actual_month': month.strftime('%Y-%m'),
                 'total_expenses_1' : routes.aggregate(Sum('expenses_1'))['expenses_1__sum'].quantize(Decimal("1.00")) if routes else 0,
-                'total_route_cost' : routes.aggregate(Sum('route_cost'))['route_cost__sum'].quantize(Decimal("1.00")) if routes else 0,
-                'total_route_length' : routes.aggregate(Sum('route_length'))['route_length__sum'].quantize(Decimal("1.00")) if routes else 0,
+                'total_route_cost' : total_route_cost,
+                'total_route_length' : total_route_length,
                 'total_days' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")) if routes else 0,
                 'total_fuel_cost' : routes.aggregate(Sum('fuel_cost'))['fuel_cost__sum'].quantize(Decimal("1.00")) if routes else 0,
                 'total_pay_check' : routes.aggregate(Sum('pay_check'))['pay_check__sum'].quantize(Decimal("1.00")) if routes else 0,
-                'total_pure_income' : ((routes.aggregate(Sum('pure_income'))['pure_income__sum']-routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum']).quantize(Decimal("1.00"))) if routes else 0,
+                'total_pure_income' : total_pure_income,
                 'total_cost_of_km' : total_cost_of_km,
                 'total_cost_of_platon' : routes.aggregate(Sum('cost_of_platon'))['cost_of_platon__sum'].quantize(Decimal("1.00")) if routes else 0 if routes else 0,
                 'total_day_count' : routes.aggregate(Sum('day_count'))['day_count__sum'].quantize(Decimal("1.00")) if routes else 0,
+                
+                # 'plan_total_route_length' : mileageRevenueStandard.aggregate(Sum('mileage'))['milage__sum'].quantize(Decimal("1.00")) if mileageRevenueStandard else 0,
+                'plan_total_route_length' : plan_total_route_length,
+                'plan_total_route_cost' : plan_total_route_cost,
+                'plan_total_cost_of_km' : plan_total_cost_of_km,
+                'plan_total_pure_income' : plan_total_pure_income,
+
+                'route_length_diff' : route_length_diff,
+                'route_cost_diff' : route_cost_diff,
+                'cost_of_km_diff' : cost_of_km_diff,
+                'pure_income_diff' : pure_income_diff,
+
+                'route_length_percent' : route_length_percent,
+                'route_cost_percent' : route_cost_percent,
+                'cost_of_km_percent' : cost_of_km_percent,
+                'pure_income_percent' : pure_income_percent,
             }
 
             return render(request, 'cargoapp/supervisor_index.html', context)

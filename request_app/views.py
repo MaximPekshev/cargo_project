@@ -334,7 +334,7 @@ def get_torgtrans_active_data(input_city, input_load):
             }
         }"""
     
-    answer = requests.post(url, headers=headers, json={'query': data},verify=False)
+    answer = requests.post(url, headers=headers, json={'query': data})
     response = answer.json()
     current_order_list = []
     try:
@@ -432,7 +432,7 @@ def get_torgtrans_active_ffa_data(input_city, input_load):
             }
         }"""
     
-    answer = requests.post(url, headers=headers, json={'query': data},verify=False)
+    answer = requests.post(url, headers=headers, json={'query': data})
     response = answer.json()
     current_order_list = []
     try:
@@ -471,13 +471,18 @@ def get_torgtrans_active_ffa_data(input_city, input_load):
     return current_order_list
 
 def correct_time(order):
-
     for depo in order.get('unloading_depots'):
-        depo["date_start"] = datetime.utcfromtimestamp(int(depo.get("date_start"))).strftime("%Y-%m-%d %H:%M:%S")
-        depo["date_end"] = datetime.utcfromtimestamp(int(depo.get("date_end"))).strftime("%Y-%m-%d %H:%M:%S")                             
+
+        if depo["date_start"]:
+            depo["date_start"] = datetime.utcfromtimestamp(int(depo.get("date_start"))).strftime("%Y-%m-%d %H:%M:%S")
+        if depo["date_end"]:
+            depo["date_end"] = datetime.utcfromtimestamp(int(depo.get("date_end"))).strftime("%Y-%m-%d %H:%M:%S")                             
 
     for depo in order.get('loading_depots'):
-        depo["date_start"] = datetime.utcfromtimestamp(int(depo.get("date_start"))).strftime("%Y-%m-%d %H:%M:%S")
-        depo["date_end"] = datetime.utcfromtimestamp(int(depo.get("date_end"))).strftime("%Y-%m-%d %H:%M:%S")     
+
+        if depo["date_start"]:
+            depo["date_start"] = datetime.utcfromtimestamp(int(depo.get("date_start"))).strftime("%Y-%m-%d %H:%M:%S")
+        if depo["date_end"]:    
+            depo["date_end"] = datetime.utcfromtimestamp(int(depo.get("date_end"))).strftime("%Y-%m-%d %H:%M:%S")     
 
     return order    
