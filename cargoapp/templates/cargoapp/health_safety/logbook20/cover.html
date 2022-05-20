@@ -1,0 +1,26 @@
+{% extends 'cargoapp/health_safety/base.html'%}
+
+{% block custom_style %}
+
+{% endblock %}
+
+{% block content %}
+<form name="form__20-1" id="form__20-1" class="w-100 h-100 mx-auto d-flex flex-column form__20-1">
+    <div class="row">
+      <h1 class="col-6 mx-auto text-center h2 text-uppercase form__20-1__title">Журнал<br>учета выхода автомобиля на линию и возврата с линии</h1>
+    </div>
+    <div class="row pt-4 mt-4">
+      <p class="col-8 mx-auto mb-0 text-center"><input type="text" name="form__20-1__input-org" id="form__20-1__input-org" class="w-100 form__20-1__input"></p>
+    </div>
+    <div class="row mt-0 mb-4">
+      <p class="col text-center">(Наименование организации, подразделения)</p>
+    </div>
+
+    <div class="row mt-auto d-flex">
+      <div class="w-50 ms-auto">
+        <p>Начат&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="form__20-1__input-start" id="form__20-1__input-start" class="form__20-1__input">20<input type="text" name="form__20-1__input-start-year" id="form__20-1__input-start-year" class="form__20-1__input">г.</p>
+        <p>Окончен&nbsp;<input type="text" name="form__20-1__input-end" id="form__20-1__input-end" class="form__20-1__input">20<input type="text" name="form__20-1__input-end-year" id="form__20-1__input-end-year" class="form__20-1__input">г.</p>
+      </div>
+    </div>
+</form>
+{% endblock %}

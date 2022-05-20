@@ -51,6 +51,10 @@
             </div>
 
             <div class="col-12 row justify-content-center mb-2">
+                <a class="btn btn-outline-dark col-11" href="{% url 'health_safety_journal_menu' %}" >Журналы</a>
+            </div>
+
+            <div class="col-12 row justify-content-center mb-2">
                 <a class="btn btn-outline-dark col-11" href="{% url 'columnar_maintenance_schedule_menu'%}" >Графики ТО</a>
             </div>
     
@@ -67,7 +71,8 @@
     <div class="row col-12 col-md-8 col-xl-9 justify-content-center mt-4">
         <div class="col-12 col-md-12 col-xl-12 shadow pt-5 pb-5 row justify-content-center">
             <div class="col-10 col-md-10 col-xl-10">
-                <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A0ed832c6b2691bef1306d4c5cca96d0a94dd71c33ed8c4f9b100f99abd69176d&amp;source=constructor" width="100%" height="700" frameborder="0"></iframe>
+                {{ map | safe }}
+                {% comment %} <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A0ed832c6b2691bef1306d4c5cca96d0a94dd71c33ed8c4f9b100f99abd69176d&amp;source=constructor" width="100%" height="700" frameborder="0"></iframe> {% endcomment %}
             </div>
             <div class="col-2 col-md-2 col-xl-2">
                 <a href="{% url 'columnar_vehicle_condition' %}" style="text-decoration: none;">

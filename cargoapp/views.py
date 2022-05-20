@@ -42,6 +42,8 @@ from decouple import config
 
 from django.db.models import Q
 
+import folium
+
 class ContractsList(generics.ListCreateAPIView):
     queryset = Contracts.objects.all()
     serializer_class = ContractsSerializer
@@ -131,7 +133,60 @@ def show_menu_page(request):
 
         if request.user in users_in_group_vehicle_supervisor:
 
-            return render(request, 'cargoapp/menu/vehicle_sv_menu.html')
+            map = folium.Map(
+                location = [64.6863136, 97.7453061],
+                zoom_start = 4
+            )
+
+            # tooltip = "Click me!"
+
+            folium.Marker(
+                [65.3288, 100.6625], 
+                icon=folium.DivIcon(html=f"""<div class="map-label" style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                </svg><i>В456ВВ</i></div>""")
+            ).add_to(map)
+
+            folium.Marker(
+                [55.3288, 110.6625],
+                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                </svg>A555AA</div>""")
+            ).add_to(map)
+
+            folium.Marker(
+                [63.3288, 100.6625],
+                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                </svg>T345EE</div>""")
+            ).add_to(map)
+
+            folium.Marker(
+                [66.3288, 135.6625],
+                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                </svg>A888AA</div>""")
+            ).add_to(map)
+
+            folium.Marker(
+                [70.3288, 115.6625],
+                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                </svg>E667AP</div>""")
+            ).add_to(map)
+
+            map = map._repr_html_()
+
+            context = {
+                'map' : map,
+            }
+
+            return render(request, 'cargoapp/menu/vehicle_sv_menu.html', context)
         
         elif request.user in users_in_group_logistsupervisor:
 
@@ -163,7 +218,60 @@ def show_menu_page(request):
 
         elif request.user in users_in_group_chief_column:
 
-            return render(request, 'cargoapp/menu/chief_column_menu.html')
+            map = folium.Map(
+                location = [64.6863136, 97.7453061],
+                zoom_start = 4
+            )
+
+            # tooltip = "Click me!"
+
+            folium.Marker(
+                [65.3288, 100.6625], 
+                icon=folium.DivIcon(html=f"""<div class="map-label" style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                </svg><i>В456ВВ</i></div>""")
+            ).add_to(map)
+
+            folium.Marker(
+                [55.3288, 110.6625],
+                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                </svg>A555AA</div>""")
+            ).add_to(map)
+
+            folium.Marker(
+                [63.3288, 100.6625],
+                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                </svg>T345EE</div>""")
+            ).add_to(map)
+
+            folium.Marker(
+                [66.3288, 135.6625],
+                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                </svg>A888AA</div>""")
+            ).add_to(map)
+
+            folium.Marker(
+                [70.3288, 115.6625],
+                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                </svg>E667AP</div>""")
+            ).add_to(map)
+
+            map = map._repr_html_()
+
+            context = {
+                'map' : map,
+            }
+
+            return render(request, 'cargoapp/menu/chief_column_menu.html', context)
 
         elif request.user in users_in_group_health_safety:
 
@@ -1839,6 +1947,174 @@ def chief_column_daily_report(request):
             }
 
             return render(request, 'cargoapp/chief_column/daily_report.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+
+
+#health safety
+def health_safety_journal_menu(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_health_safety = Group.objects.get(name="Охрана труда").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+    
+        users_in_group = set(users_in_group_health_safety | users_in_group_vehicle_supervisor | users_in_group_chief_column | users_in_group_driver)
+
+        if request.user in users_in_group:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/health_safety/menu.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def health_safety_journal_19_table(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_health_safety = Group.objects.get(name="Охрана труда").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+    
+        users_in_group = set(users_in_group_health_safety | users_in_group_vehicle_supervisor | users_in_group_chief_column | users_in_group_driver)
+
+        if request.user in users_in_group:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/health_safety/logbook19/table.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+
+def health_safety_journal_19_cover(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_health_safety = Group.objects.get(name="Охрана труда").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+    
+        users_in_group = set(users_in_group_health_safety | users_in_group_vehicle_supervisor | users_in_group_chief_column | users_in_group_driver)
+
+        if request.user in users_in_group:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/health_safety/logbook19/cover.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+
+def health_safety_journal_20_table(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_health_safety = Group.objects.get(name="Охрана труда").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+    
+        users_in_group = set(users_in_group_health_safety | users_in_group_vehicle_supervisor | users_in_group_chief_column | users_in_group_driver)
+
+        if request.user in users_in_group:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/health_safety/logbook20/table.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def health_safety_journal_20_cover(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_health_safety = Group.objects.get(name="Охрана труда").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+    
+        users_in_group = set(users_in_group_health_safety | users_in_group_vehicle_supervisor | users_in_group_chief_column | users_in_group_driver)
+
+        if request.user in users_in_group:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/health_safety/logbook20/cover.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+def health_safety_journal_20_bage(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_health_safety = Group.objects.get(name="Охрана труда").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+    
+        users_in_group = set(users_in_group_health_safety | users_in_group_vehicle_supervisor | users_in_group_chief_column | users_in_group_driver)
+
+        if request.user in users_in_group:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/health_safety/logbook20/bage.html', context)
+
+        else:
+
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+
+
+
+def health_safety_journal_21_table(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_health_safety = Group.objects.get(name="Охрана труда").user_set.all()
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+        users_in_group_driver = Group.objects.get(name="Водитель").user_set.all()
+    
+        users_in_group = set(users_in_group_health_safety | users_in_group_vehicle_supervisor | users_in_group_chief_column | users_in_group_driver)
+
+        if request.user in users_in_group:
+
+            context = {
+
+            }
+
+            return render(request, 'cargoapp/health_safety/logbook21/table.html', context)
 
         else:
 

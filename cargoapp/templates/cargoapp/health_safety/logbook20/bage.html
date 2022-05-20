@@ -1,0 +1,32 @@
+{% extends 'cargoapp/health_safety/base.html'%}
+
+{% block custom_style %}
+
+{% endblock %}
+
+{% block content %}
+<form name="form__20-3" id="form__20-3" class="form__20-3">
+    <div class="row">
+      <p class="col mt-4 text-center">В журнале пронумеровано, прошнуровано и опечатано печатью:</p>
+    </div>
+    <div class="row mt-2">
+      <p class="col text-center"><input type="number" name="form__20-3__input-pages" id="form__20-3__input-pages" class="form__20-3__input" min="1" max="9999999">листов.</p>
+    </div>
+    <div class="row mt-2">
+      <p class="col text-center">"<input type="number" name="form__20-3__input-date-day" id="form__20-3__input-date-day" class="form__20-3__input" min="1" max="31" value="1">"<input type="text" name="form__20-3__input-date-month" id="form__20-3__input-date-month" class="form__20-3__input">20<input type="number" name="form__20-3__input-date-year" id="form__20-3__input-date-year" class="form__20-3__input" min="0" max="99" value="22"> г.</p>
+    </div>
+    <div class="row mt-3">
+      <p class="col text-center">Ответственный за ведение журнала:</p>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <p class="m-0"><input type="text" name="form__20-3__input-person" id="form__20-3__input-person" class="w-100 form__20-3__input"></p>
+        <p class="text-center">(должность)</p>
+      </div>
+      <div class="col-6">
+        <p class="m-0"><input type="text" name="form__20-3__input-name" id="form__20-3__input-name" class="w-100 form__20-3__input"></p>
+        <p class="text-center">(Фамилия, И.О.)</p>
+      </div>
+    </div>
+</form>
+{% endblock %}

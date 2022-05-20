@@ -48,6 +48,18 @@ from .views import gate_shift_change_inspection_1, gate_shift_change_inspection_
 from .views import gate_shift_change_inspection_5, gate_shift_change_inspection_6, gate_shift_change_inspection_7
 from .views import gate_shift_change_complete
 
+#health safety
+from .views import health_safety_journal_menu
+from .views import health_safety_journal_19_table
+from .views import health_safety_journal_19_cover
+
+from .views import health_safety_journal_20_table
+from .views import health_safety_journal_20_cover
+from .views import health_safety_journal_20_bage
+
+from .views import health_safety_journal_21_table
+
+
 urlpatterns = [
 	path('', 	show_menu_page , name='show_menu_page'),
 	path('main/', 	show_index_page , name='show_index_page'),
@@ -118,9 +130,15 @@ urlpatterns = [
 	path('gate/shift-change/single/inspection/7/', 	gate_shift_change_inspection_7 , name='gate_shift_change_inspection_7'),
 	path('gate/shift-change/single/complete/', 	gate_shift_change_complete , name='gate_shift_change_complete'),
 
-	#insurance
+	#health safety
+	path('health_safety/journal/menu/', 	health_safety_journal_menu , name='health_safety_journal_menu'),
+	path('health_safety/journal/19/', 	health_safety_journal_19_table , name='health_safety_journal_19_table'),
+	path('health_safety/journal/19/cover/', 	health_safety_journal_19_cover , name='health_safety_journal_19_cover'),
 
-	# path('insurance/trac-insurance/', 	insurance_trac_insurance , name='insurance_trac_insurance'),
-	# path('insurance/trailer-insurance/', 	insurance_trailer_insurance , name='insurance_trailer_insurance'),
-	
+	path('health_safety/journal/20/cover/', 	health_safety_journal_20_cover , name='health_safety_journal_20_cover'),
+	path('health_safety/journal/20/table/', 	health_safety_journal_20_table , name='health_safety_journal_20_table'),
+	path('health_safety/journal/20/bage/', 		health_safety_journal_20_bage , name='health_safety_journal_20_bage'),
+
+	path('health_safety/journal/21/table/', 	health_safety_journal_21_table , name='health_safety_journal_21_table'),
+
 ]
