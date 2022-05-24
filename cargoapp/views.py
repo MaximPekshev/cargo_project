@@ -129,6 +129,7 @@ def show_menu_page(request):
         users_in_group_health_safety = Group.objects.get(name="Охрана труда").user_set.all()
 
         if request.user in users_in_group_hr_director:
+            
             return render(request, 'cargoapp/menu/hr_director_menu.html')
 
         if request.user in users_in_group_vehicle_supervisor:
