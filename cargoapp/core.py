@@ -25,6 +25,13 @@ def upload_route(route):
                 "weight" : str(Decimal(route.weight)),
                 "request_number" : route.request_number,
                 "description" : route.cargo_description,
+                "straight" : str(Decimal(route.straight)),
+                "fuel_cost" : str(Decimal(route.fuel_cost)),
+                "pay_check" : str(Decimal(route.pay_check)),
+                "pure_income" : str(Decimal(route.pure_income)),
+                "cost_of_km" : str(Decimal(route.cost_of_km)),
+                "cost_of_platon" : str(Decimal(route.cost_of_platon)),
+                "day_count" : str(Decimal(route.day_count)),
 
             },
             "vehicle": {
@@ -38,7 +45,14 @@ def upload_route(route):
             },
             "client" : {
                 "uid" : route.get_client(),
-            }
+            },
+            "contract" : {
+                "uid" : route.get_contract(),
+            },
+            "organization" : {
+                "uid" : route.get_organization(),
+            },
+
         }
 
         answer = requests.post(url, headers=header, data=json.dumps(data))

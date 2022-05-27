@@ -345,8 +345,12 @@ class Route(models.Model):
 
 	def get_client(self):
 
-		return '{}'.format(self.organization.uid) if self.organization else 0
+		return '{}'.format(self.contragent.uid) if self.contragent else 0
 
+	def get_organization(self):
+
+		return '{}'.format(self.organization.uid) if self.organization else 0
+		
 	def get_vehicle(self):
 
 		return '{}'.format(self.vehicle.uid) if self.vehicle else 0
@@ -358,6 +362,10 @@ class Route(models.Model):
 	def get_logist(self):
 
 		return '{}'.format(self.logist.uid) if self.logist else 0
+
+	def get_contract(self):
+
+		return '{}'.format(self.contract.uid) if self.contract else 0	
 
 	def get_fuel_cost(self):
 		
