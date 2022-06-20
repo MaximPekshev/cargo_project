@@ -4,12 +4,17 @@ from decouple import config
 import datetime
 from decimal import Decimal
 
+PAYMENT_TYPE = {
+	'0': 'Наличная',
+	'1': 'Безналичная',
+	'2': 'По заявке',
+}
+
 def upload_route(route):
     if route:
         
         url = config('1C_ADDRESS') + 'api/v1/routes'
         header = {'Authorization' : config('1C_API_SECRET_KEY')}
-
         data = {
             "fields": {
                 "uid" : route.uid,
@@ -32,7 +37,9 @@ def upload_route(route):
                 "cost_of_km" : str(Decimal(route.cost_of_km)),
                 "cost_of_platon" : str(Decimal(route.cost_of_platon)),
                 "day_count" : str(Decimal(route.day_count)),
-
+                "payment_type": PAYMENT_TYPE.get(route.payment_type),
+                "banner_a": route.banner_a,
+                "banner_b": route.banner_b,
             },
             "vehicle": {
                 "uid" : route.get_vehicle(),

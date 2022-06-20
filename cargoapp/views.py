@@ -10,6 +10,7 @@ from .serializers import RouteSerializer
 from .models import LogistUser
 from .serializers import LogistUserSerializer
 from .models import City
+from .serializers import CitySerializer
 from .models import Organization
 from .serializers import OrganizationSerializer
 from .models import Contracts
@@ -44,10 +45,26 @@ from django.db.models import Q
 
 import folium
 
+class CityList(generics.ListAPIView):
+    
+    serializer_class = CitySerializer
+
+    def get_queryset(self):
+        return City.objects.all()
+
 class ContractsList(generics.ListCreateAPIView):
     queryset = Contracts.objects.all()
     serializer_class = ContractsSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+class ContractFilterdList(generics.ListAPIView):
+    
+    serializer_class = ContractsSerializer
+
+    def get_queryset(self):
+
+        contragent_uid = self.kwargs['uid']
+        return Contracts.objects.filter(contragent__uid=contragent_uid)
 
 class OrganizationList(generics.ListCreateAPIView):
     queryset = Organization.objects.all()
@@ -704,6 +721,11 @@ def route_save(request, uid):
                 control_penalty = route_form.cleaned_data['inputControl_penalty']
 
                 straight_boolean = route_form.cleaned_data['inputStraight_boolean']
+                save_and_exit_boolean = route_form.cleaned_data['inputSaveAndExit_boolean']
+
+                banner_a = route_form.cleaned_data['inputBanner_a']
+                banner_b = route_form.cleaned_data['inputBanner_b']
+                payment_type = route_form.cleaned_data['inputPayment_type']
 
                 try:
                     request_img = request.FILES['inputRequest_img']
@@ -764,6 +786,10 @@ def route_save(request, uid):
 
                     current_route.banner_all = banner_all
 
+                    current_route.banner_a = banner_a
+                    current_route.banner_b = banner_b
+                    current_route.payment_type = payment_type
+
                     current_route.banner_side = banner_side
 
                     current_route.control_penalty = control_penalty
@@ -792,7 +818,7 @@ def route_save(request, uid):
                             current_route.driver = current_driver
                         except:
                             current_route.logist = None
-                            messages.info(driver, 'Выбранного Водителя не существует в базе данных!')
+                            messages.info(request, 'Выбранного Водителя не существует в базе данных!')
                     else:
                         current_route.driver = None         
 
@@ -825,11 +851,11 @@ def route_save(request, uid):
                             messages.info(request, 'Выбранного Договора не существует в базе данных!')                   
                     else:
                         current_route.contract = None      
-           
                     current_route.save()
-
-                    current_path = request.META['HTTP_REFERER']
-                    return redirect(current_path)
+                    if save_and_exit_boolean:
+                        return redirect('show_index_page')
+                    else:    
+                        return redirect('show_route', uid=current_route.uid)
 
             else:
 
@@ -876,6 +902,11 @@ def route_add(request):
 
                 straight_boolean = route_form.cleaned_data['inputStraight_boolean']
 
+                save_and_exit_boolean = route_form.cleaned_data['inputSaveAndExit_boolean']
+
+                banner_a = route_form.cleaned_data['inputBanner_a']
+                banner_b = route_form.cleaned_data['inputBanner_b']
+                payment_type = route_form.cleaned_data['inputPayment_type']
 
                 try:
                     request_img = request.FILES['inputRequest_img']
@@ -945,6 +976,10 @@ def route_add(request):
 
                 current_route.banner_all = banner_all
 
+                current_route.banner_a = banner_a
+                current_route.banner_b = banner_b
+                current_route.payment_type = payment_type
+
                 current_route.banner_side = banner_side
 
                 current_route.control_penalty = control_penalty
@@ -999,11 +1034,14 @@ def route_add(request):
 
                 current_route.save()
 
-                return redirect('show_route', uid=current_route.uid)
+                if save_and_exit_boolean:
+                    return redirect('show_index_page')
+                else:    
+                    return redirect('show_route', uid=current_route.uid)
 
             else:
 
-                messages.info(driver, 'В форму введены не корректные данные!')
+                messages.info(request, 'В форму введены не корректные данные!')
                 current_path = request.META['HTTP_REFERER']
                 return redirect(current_path)
 

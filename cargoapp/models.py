@@ -25,6 +25,11 @@ NDS_RATE = (
 	('NO', 'Без НДС'),
 	)
 
+PAYMENT_TYPE = (
+	('0', 'Наличная'),
+	('1', 'Безналичная'),
+	('2', 'По заявке'),
+)
 
 def get_uuid4():
     return str(uuid.uuid4())
@@ -250,6 +255,11 @@ class Route(models.Model):
 	control_penalty = models.BooleanField(verbose_name='Штраф контроля', default=False)
 
 	cargo_description = models.CharField(max_length = 256, verbose_name = 'Описание груза', null=True, blank=True, default='')
+
+	payment_type = models.CharField(max_length=1, verbose_name='Вид оплаты', choices=PAYMENT_TYPE, null=True, blank=True, default="")
+	banner_a = models.BooleanField(verbose_name='Требуется растентовка А', default=False)
+	banner_b = models.BooleanField(verbose_name='Требуется растентовка Б', default=False)
+
 	history = HistoricalRecords()
 
 	def __str__(self):

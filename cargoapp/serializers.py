@@ -1,6 +1,12 @@
 from .models import Driver, Vehicle, Route
 from .models import LogistUser, Organization, Contracts
+from .models import City
 from rest_framework import serializers
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = ('code', 'title', 'reduction', 'lon', 'lat', 'region_code', )
 
 class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:

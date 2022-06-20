@@ -2,10 +2,59 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="row col-12 col-md-4 col-xl-3 justify-content-center mt-4">
-        <div class="col-12 col-md-11 col-xl-11 shadow pt-5 pb-5 row justify-content-center">
-    
-            <div class="col-12 row justify-content-center mb-2">
+    <div class="row col-12 col-md-12 col-xl-12 mt-4 justify-content-center">
+        <div class="col-12 col-md-12 col-xl-12 row justify-content-center p-0">
+
+            <div class="btn-group col-2">
+                <button type="button" class="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  Авто (4)
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url 'show_index_page'%}">Статистика авто</a></li>
+                  <li><a class="dropdown-item" href="#">Выпуск на линию</a></li>
+                  <li><a class="dropdown-item" href="#">Плановый ремонт</a></li>
+                  <li><a class="dropdown-item" href="{% url 'columnar_extra_repair' %}">Внеплановый ремонт <span style="padding-left: 20px; color: red;">4</span></a></li>
+                  <li><a class="dropdown-item" href="#">Список авто</a></li>
+                  <li><a class="dropdown-item" href="{% url 'columnar_shift_change_list' %}">Прием / Передача <span style="padding-left: 20px; color: red;">6</span></a></li>
+                </ul>
+            </div>
+
+            <div class="btn-group col-2">
+                <button type="button" class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    Водители
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url 'accrual_deduction_list'%}">Начисление/Вычет</a></li>
+                  <li><a class="dropdown-item" href="{% url 'columnar_holiday_requests' %}">Запрос на выходные <span style="padding-left: 20px; color: red;">3</span></a></li>
+                </ul>
+            </div>
+
+            <div class="btn-group col-2">
+                <button type="button" class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    Отчеты
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url 'health_safety_journal_menu' %}">Журналы</a></li>
+                  <li><a class="dropdown-item" href="{% url 'columnar_maintenance_schedule_menu'%}">Графики ТО</a></li>
+                  <li><a class="dropdown-item" href="{% url 'documents_menu' %}">Документы</a></li>
+                  <li><a class="dropdown-item" href="{% url 'columnar_daily_report' %}">Ежедневный отчет</a></li>
+                  <li><a class="dropdown-item" href="#">Уведомление</a></li>
+                </ul>
+            </div>
+
+            <div class="btn-group col-2">
+                <a class="btn btn-outline-dark" target="_blank" href="https://padlet.com/o2rusrt116/fv6jazyjpyq5fnkm" >Заметки</a>
+            </div>
+
+            <div class="btn-group col-2">
+                <a class="btn btn-outline-danger" target="_blank" href="{% url 'show_autograph_upload_menu' %}" >Загрузка данных</a>
+            </div>
+
+            <div class="btn-group col-2">
+                <a class="btn btn-outline-primary" href="" data-bs-toggle="modal" data-bs-target="#modalLogout">Выйти</a>
+            </div>
+
+            {% comment %} <div class="col-12 row justify-content-center mb-2">
                 <a class="btn btn-warning col-11" href="{% url 'show_index_page'%}" >Статистика авто</a>
             </div>
     
@@ -65,44 +114,43 @@
             <div class="col-12 row justify-content-center mb-2 mt-2">
                 <a class="btn btn-outline-primary col-11" href="" data-bs-toggle="modal" data-bs-target="#modalLogout">Выйти</a>
             </div>
-    
+     {% endcomment %}
         </div> 
     </div>
-    <div class="row col-12 col-md-8 col-xl-9 justify-content-center mt-4">
+    <div class="row col-12 col-md-12 col-xl-12 justify-content-center mt-4 mb-4">
         <div class="col-12 col-md-12 col-xl-12 shadow pt-5 pb-5 row justify-content-center">
-            <div class="col-10 col-md-10 col-xl-10">
+            <div class="col-9 col-md-9 col-xl-9">
                 {{ map | safe }}
-                {% comment %} <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A0ed832c6b2691bef1306d4c5cca96d0a94dd71c33ed8c4f9b100f99abd69176d&amp;source=constructor" width="100%" height="700" frameborder="0"></iframe> {% endcomment %}
             </div>
-            <div class="col-2 col-md-2 col-xl-2">
+            <div class="col-3 col-md-3 col-xl-3">
                 <a href="{% url 'columnar_vehicle_condition' %}" style="text-decoration: none;">
                     <div class="alert alert-primary" role="alert">
                         в456вв 
-                        <span class="badge rounded-pill bg-primary" style="margin-left: 15%;">На линии</span>
+                        <span class="badge rounded-pill bg-primary" style="margin-left: 5%;">На линии</span>
                         <span class="badge rounded-pill bg-light text-dark">(1)</span>
                     </div>
                 </a>
                 <a href="{% url 'columnar_vehicle_condition' %}" style="text-decoration: none;">
                     <div style="background-color: #aa80ff;" class="alert alert-secondary" role="alert">
-                        а555аа <span class="badge rounded-pill bg-primary" style="margin-left: 15%;">Встал по ДТП </span>
+                        а555аа <span class="badge rounded-pill bg-primary" style="margin-left: 5%;">Встал по ДТП </span>
                         <span class="badge rounded-pill bg-light text-dark">(1)</span>
                     </div>
                 </a>
                 <a href="{% url 'columnar_vehicle_condition' %}" style="text-decoration: none;">
                     <div class="alert alert-success" role="alert">
-                        т345ее <span class="badge rounded-pill bg-primary" style="margin-left: 15%;">Без водителя </span>
+                        т345ее <span class="badge rounded-pill bg-primary" style="margin-left: 5%;">Без водителя </span>
                         <span class="badge rounded-pill bg-light text-dark">(2)</span>
                     </div>
                 </a>
                 <a href="{% url 'columnar_vehicle_condition' %}" style="text-decoration: none;">
                     <div class="alert alert-danger" role="alert">
-                        а888аа <span class="badge rounded-pill bg-primary" style="margin-left: 15%;">Без водителя</span>
+                        а888аа <span class="badge rounded-pill bg-primary" style="margin-left: 5%;">Без водителя</span>
                         <span class="badge rounded-pill bg-light text-dark">(2)</span>
                     </div>
                 </a>
                 <a href="{% url 'columnar_vehicle_condition' %}" style="text-decoration: none;">
                     <div class="alert alert-warning" role="alert">
-                        е667ар <span class="badge rounded-pill bg-primary" style="margin-left: 15%;">Выходной</span>
+                        е667ар <span class="badge rounded-pill bg-primary" style="margin-left: 5%;">Выходной</span>
                         <span class="badge rounded-pill bg-light text-dark">(1)</span>
                     </div>
                 </a>

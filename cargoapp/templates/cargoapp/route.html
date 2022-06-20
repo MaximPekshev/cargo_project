@@ -142,7 +142,7 @@
 			<label for="inputContragent" class="col-2 col-form-label">Контрагент</label>
 			<div class="col-4">
 				<div class="form-group">
-					<select class="js-example-basic-single form-control" name="inputContragent" id="inputContragent">
+					<select class="js-example-basic-single form-control" name="inputContragent" id="inputContragent" required>
 						{% if route.contragent %}
 						<option value="">...</option>
 						<option selected value="{{ route.contragent.uid }}">{{ route.contragent.title }}, ИНН {{ route.contragent.inn }}</option>
@@ -158,7 +158,7 @@
 			<label for="inputContract" class="col-2 col-form-label">Договор</label>
 			<div class="col-4">
 				<div class="form-group">
-					<select class="form-control js-example-basic-single" id="inputContract" name="inputContract" {% if not contracts and not route.contract %}disabled{% endif %}>
+					<select class="form-control js-example-basic-single" id="inputContract" name="inputContract" {% if not contracts and not route.contract %}disabled{% endif %} required>
 						{% if route.contract %}
 						<option selected value="{{ route.contract.uid }}">{{ route.contract.number }} от {{ route.contract.date  }}</option>
 						<option value="">...</option>
@@ -170,11 +170,42 @@
 						{% endfor %}
 					</select>
 				</div>
+				<div class="form-group">
+					<p  id="contractErrorBlock" style="padding-left: 20px; color: red;"></p>
+				</div>
 			</div>
 		</div>
-		<div class="row justify-content-end mt-3">
-			<div class="form-group col-4 d-grid gap-2" align="right">
-				<button type="submit" class="btn btn-outline-primary" form="routeForm">Проверить</button>
+
+		<div class="form-group row mt-4">
+			<label for="inputContragent" class="col-2 col-form-label">Вид оплаты</label>
+			<div class="col-4">
+				<div class="form-group">
+					<select class="js-example-basic-single form-control" name="inputPayment_type" id="inputPayment_type">
+						{% if route.payment_type %}
+							{% if route.payment_type == "0" %}
+							<option selected value="{{ route.payment_type }}">Наличная</option>
+							<option value="">...</option>
+							<option value="1">Безналичная</option>
+							<option value="2">По заявке</option>
+							{% elif route.payment_type == "1" %}
+							<option selected value="{{ route.payment_type }}">Безналичная</option>
+							<option value="">...</option>
+							<option value="0">Наличная</option>
+							<option value="2">По заявке</option>
+							{% elif route.payment_type == "2" %}
+							<option selected value="{{ route.payment_type }}">По заявке</option>
+							<option value="">...</option>
+							<option value="0">Наличная</option>
+							<option value="1">Безналичная</option>
+							{% endif %}
+						{% else %}
+						<option value="">...</option>
+						<option value="0">Наличная</option>
+						<option value="1">Безналичная</option>
+						<option value="2">По заявке</option>
+						{% endif %}
+					</select>
+				</div>
 			</div>
 		</div>
 
@@ -240,20 +271,32 @@
 			</div>
 		</div>
 
-		<div class="form-group row mt-4">
-			<div class="form-check col-4" align="center">
+		<div class="form-group row mt-4 justify-content-between">
+			<div class="form-check col-3" align="center">
+				<input style="float:none; margin-right: 10px;" class="form-check-input mr-3" type="checkbox" id="inputBanner_a" name="inputBanner_a" {% if route.banner_a %}checked{% endif %}>
+				<label class="form-check-label" for="inputBanner_all">
+					Растентовка А
+				</label>
+			</div>
+			<div class="form-check col-3" align="center">
+				<input style="float:none; margin-right: 10px;" class="form-check-input mr-3" type="checkbox" id="inputBanner_b" name="inputBanner_b" {% if route.banner_b %}checked{% endif %}>
+				<label class="form-check-label" for="inputBanner_all">
+					Растентовка Б
+				</label>
+			</div>
+			{% comment %} <div class="form-check col-4" align="center">
 				<input style="float:none; margin-right: 10px;" class="form-check-input mr-3" type="checkbox" id="inputBanner_all" name="inputBanner_all"  {% if route.banner_all %}checked{% endif %}>
 				<label class="form-check-label" for="inputBanner_all">
 					Растентовка полная
 				</label>
-			</div>
-			<div class="form-check col-4" align="center">
+			</div> {% endcomment %}
+			<div class="form-check col-3" align="center">
 				<input  style="float:none; margin-right: 10px;" class="form-check-input mr-3" type="checkbox" id="inputBanner_side" name="inputBanner_side" {% if route.banner_side %}checked{% endif %}>
 				<label class="form-check-label" for="inputBanner_side">
 					Растентовка один бок
 				</label>
 			</div>
-			<div class="form-check col-4" align="center">
+			<div class="form-check col-3" align="center">
 				<input style="float:none; margin-right: 10px;" class="form-check-input mr-3" type="checkbox" id="inputControl_penalty" name="inputControl_penalty" {% if route.control_penalty %}checked{% endif %}>
 				<label class="form-check-label" for="inputControl_penalty">
 					Штраф контроля
@@ -274,10 +317,12 @@
 		{% endfor %}
 		</div>
 		<div class="row justify-content-end mt-4">
-			<div class="form-group col-4 d-grid gap-2" align="right">
-				<button type="submit" class="btn btn-primary" form="routeForm">Сохранить</button>
+			<div class="form-group col-12  gap-2" align="right">
+				<button type="submit" class="col-4 btn btn-outline-primary" id="saveAndExitButton" form="routeForm">Сохранить и выйти</button>
+				<button type="submit" class="col-3 btn btn-primary" form="routeForm">Сохранить</button>
 			</div>
 		</div>
+		<input type="checkbox" name="inputSaveAndExit_boolean" id="saveAndExit" hidden>
 	</form>
 	<div class="pb-5"></div>
 </div>
@@ -319,4 +364,57 @@
   </div>
 </div>
 
+{% endblock %}
+
+{% block custom_script %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+	
+    window.onload = function() {
+		$('#inputContragent').on('change', function () {
+			console.log('hello');
+			getContract();
+		});
+		document.getElementById('saveAndExitButton').addEventListener('click', function(event) {
+			event.preventDefault();
+			let saveAndExit = document.getElementById('saveAndExit');
+			saveAndExit.checked = true;
+			let routeForm = document.getElementById('routeForm');
+			routeForm.submit();
+		}, false);
+    };
+
+	const getContract = async () => {
+		let contractDIV = document.getElementById('inputContract');
+		let contragentUID = document.getElementById('inputContragent');
+		if (contragentUID.value == "" ) {
+			contractDIV.innerHTML = "";
+			contractDIV.innerHTML += `<option value="">...</option>`;
+			contractDIV.disabled = true;
+		} else {
+			let response = await axios.get(`/api/v1/get-contracts/${contragentUID.value}/`)
+                .then((contractList) => {
+					if (contractList.length == 0) {
+						contractErrorBlock = document.getElementById("contractErrorBlock");
+						contractErrorBlock.innerHTML = "У контрагента нет активных договоров!";
+					} else {
+						contractErrorBlock = document.getElementById("contractErrorBlock");
+						contractErrorBlock.innerHTML = "";
+						contractDIV.innerHTML = "";
+						contractDIV.disabled = false;
+						contractList.data.forEach(item => {
+							contractDIV.innerHTML += `<option value="${item.uid}">${item.number} от ${item.date}</option>`;
+						});
+					}
+					
+                }).catch((error) => {
+					contractErrorBlock = document.getElementById("contractErrorBlock");
+					contractErrorBlock.innerHTML = "Ошибка сервера!";
+        	})
+
+		}
+		
+	}	
+
+</script>	
 {% endblock %}

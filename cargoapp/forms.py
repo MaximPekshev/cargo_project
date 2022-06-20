@@ -31,4 +31,8 @@ class RouteForm(forms.Form):
 	inputRequest_img = forms.FileField(required=False)
 	inputLoa_img = forms.FileField(required=False)
 
-	
+	inputSaveAndExit_boolean = forms.BooleanField(required=False)
+
+	inputBanner_a = forms.BooleanField(required=False)
+	inputBanner_b = forms.BooleanField(required=False)
+	inputPayment_type = forms.CharField(max_length = 1, required=False)

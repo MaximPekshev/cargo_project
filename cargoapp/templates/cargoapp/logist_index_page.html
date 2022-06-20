@@ -2,7 +2,7 @@
 
 {% block content %}
 <nav class="fixed-bottom navbar-dark bg-dark">
-	<a class="navbar-brand" type="button" data-bs-toggle="modal" data-bs-target="#modalLogout" style="float: right;" >Выйти</a>
+	{% comment %} <a class="navbar-brand" type="button" data-bs-toggle="modal" data-bs-target="#modalLogout" style="float: right;" >Выйти</a> {% endcomment %}
 	<a class="navbar-brand" href="{% url "show_menu_page" %}" style="float: right;" >Меню</a>
 	<a class="navbar-brand" type="button" data-bs-toggle="modal" data-bs-target="#modalCalc" style="float: right;" >Расчет маршрута</a>
 </nav>
@@ -41,12 +41,10 @@
 		</form>
 	</div>
 	<div class="col-12 col-md-12 col-lg-2" align="right">Логист: {{ user.username }}</div>
-
 </div>
-<div class="row justify-content-center mt-2">
-	<div class="table-responsive col-12">
-		<table class="table table-sm">
-			<thead>
+<div class="row justify-content-center">
+		<table class="table table-sm col-12">
+			<thead style="position: sticky; top: 0; background-color: white;">
 				<tr>
 					<th>#</th>
 					<th width="7%">Дата с</th>
@@ -152,8 +150,7 @@
 					<td></td>
 				</tr>
 			</tbody>
-		</table>
-	</div>
+		</table>		
 	<div class="pb-5"></div>
 </div>
 

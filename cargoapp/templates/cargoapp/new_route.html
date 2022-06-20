@@ -2,7 +2,7 @@
 
 {% block content %}
 <nav class="fixed-bottom navbar-dark bg-dark">
-	<a class="navbar-brand" href="{{ request.META.HTTP_REFERER }}">Назад</a>
+	<a class="navbar-brand" href="{% url 'show_index_page' %}">Назад</a>
 </nav>
 <div class="row pt-1">
 	<div class="col-2 {% if actual_vehicle %} offset-8 {% else %} offset-10 {% endif %} my-auto" align="right">Логист: {{ user.username }}</div>
@@ -135,18 +135,31 @@
 			<label for="inputContract" class="col-2 col-form-label">Договор</label>
 			<div class="col-4">
 				<div class="form-group">
-					<select class="form-control js-example-basic-single" id="inputContract" name="inputContract" disabled>
+					<select class="form-control js-example-basic-single" id="inputContract" name="inputContract" disabled required>
 						<option >...</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<p  id="contractErrorBlock" style="padding-left: 20px; color: red;"></p>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group row mt-4">
+			<label for="inputContragent" class="col-2 col-form-label">Вид оплаты</label>
+			<div class="col-4">
+				<div class="form-group">
+					<select class="js-example-basic-single form-control" name="inputPayment_type" id="inputPayment_type">
+						<option selected value="">...</option>
+						<option value="0">Наличная</option>
+						<option value="1">Безналичная</option>
+						<option value="2">По заявке</option>
 					</select>
 				</div>
 			</div>
 		</div>
 
-		<div class="row justify-content-end mt-3">
-			<div class="form-group col-4 d-grid gap-2" align="right">
-				<button type="submit" class="btn btn-outline-primary" form="routeForm">Проверить</button>
-			</div>
-		</div>
+
 
 		<div align="center" class="mt-3 mb-3">
 			Документы
@@ -196,20 +209,32 @@
 		</div>
 
 
-		<div class="form-group row mt-4">
-			<div class="form-check col-4" align="center">
+		<div class="row form-group row mt-4 justify-content-between">
+			<div class="form-check col-3" align="center">
+				<input style="float:none; margin-right: 10px;" class="form-check-input mr-3" type="checkbox" id="inputBanner_a" name="inputBanner_a">
+				<label class="form-check-label" for="inputBanner_all">
+					Растентовка А
+				</label>
+			</div>
+			<div class="form-check col-3" align="center">
+				<input style="float:none; margin-right: 10px;" class="form-check-input mr-3" type="checkbox" id="inputBanner_b" name="inputBanner_b">
+				<label class="form-check-label" for="inputBanner_all">
+					Растентовка Б
+				</label>
+			</div>
+			{% comment %} <div class="form-check col-4" align="center">
 				<input style="float:none; margin-right: 10px;" class="form-check-input mr-3" type="checkbox" id="inputBanner_all" name="inputBanner_all">
 				<label class="form-check-label" for="inputBanner_all">
 					Растентовка полная
 				</label>
-			</div>
-			<div class="form-check col-4" align="center">
+			</div> {% endcomment %}
+			<div class="form-check col-3" align="center">
 				<input  style="float:none; margin-right: 10px;" class="form-check-input mr-3" type="checkbox" id="inputBanner_side" name="inputBanner_side">
 				<label class="form-check-label" for="inputBanner_side">
 					Растентовка один бок
 				</label>
 			</div>
-			<div class="form-check col-4" align="center">
+			<div class="form-check col-3" align="center">
 				<input style="float:none; margin-right: 10px;" class="form-check-input mr-3" type="checkbox" id="inputControl_penalty" name="inputControl_penalty">
 				<label class="form-check-label" for="inputControl_penalty">
 					Штраф контроля
@@ -225,11 +250,80 @@
 		</div>
 
 		<div class="row justify-content-end mt-4">
-			<div class="form-group col-4 d-grid gap-2" align="right">
-				<button type="submit" class="btn btn-primary" form="routeForm">Сохранить</button>
+			<div class="rowform-group col-12 gap-2" align="right">
+				<button type="submit" class="col-4 btn btn-outline-primary" id="saveAndExitButton" form="routeForm">Сохранить и выйти</button>
+				<button type="submit" class="col-3 btn btn-primary" id="saveButton" form="routeForm">Сохранить</button>
 			</div>
 		</div>
+		<input type="checkbox" name="inputSaveAndExit_boolean" id="saveAndExit" hidden>
 	</form>
 	<div class="pb-5"></div>
 </div>
+{% endblock %}
+
+
+{% block custom_script %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+	
+    window.onload = function() {
+		$('#inputContragent').on('change', function () {
+			getContract();
+		});
+		document.getElementById('saveAndExitButton').addEventListener('click', function(event) {
+			event.preventDefault();
+			let saveAndExit = document.getElementById('saveAndExit');
+			saveAndExit.checked = true;
+			let routeForm = document.getElementById('routeForm');
+			routeForm.submit();
+		}, false);
+    };
+
+	{% comment %} const getCities = async (select) => {
+		console.log("Hello");
+		let response = await axios.get('/api/v1/cities/')
+			.then((citiList) => {
+				citiList.data.forEach(item => {
+					select.innerHTML += `<option value="${item.title}">${item.title}</option>`;
+				});
+				
+			}).catch((error) => {
+				console.log(error);
+			})
+
+	}; {% endcomment %}
+
+	const getContract = async () => {
+		let contractDIV = document.getElementById('inputContract');
+		let contragentUID = document.getElementById('inputContragent');
+		if (contragentUID.value == "" ) {
+			contractDIV.innerHTML = "";
+			contractDIV.innerHTML += `<option value="">...</option>`;
+			contractDIV.disabled = true;
+		} else {
+			let response = await axios.get(`/api/v1/get-contracts/${contragentUID.value}/`)
+                .then((contractList) => {
+					if (contractList.length == 0) {
+						contractErrorBlock = document.getElementById("contractErrorBlock");
+						contractErrorBlock.innerHTML = "У контрагента нет активных договоров!";
+					} else {
+						contractErrorBlock = document.getElementById("contractErrorBlock");
+						contractErrorBlock.innerHTML = "";
+						contractDIV.innerHTML = "";
+						contractDIV.disabled = false;
+						contractList.data.forEach(item => {
+							contractDIV.innerHTML += `<option value="${item.uid}">${item.number} от ${item.date}</option>`;
+						});
+					}
+					
+                }).catch((error) => {
+					contractErrorBlock = document.getElementById("contractErrorBlock");
+					contractErrorBlock.innerHTML = "Ошибка сервера!";
+        	})
+
+		}
+		
+	}	
+
+</script>	
 {% endblock %}
