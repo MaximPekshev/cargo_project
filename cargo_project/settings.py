@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django_crontab',
     'accrual_deduction_app',
     'insurance_app',
+    'line_release_app',
 
 
     'mobiFuel',

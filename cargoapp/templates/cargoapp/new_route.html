@@ -124,7 +124,7 @@
 			<label for="inputContragent" class="col-2 col-form-label">Контрагент</label>
 			<div class="col-4">
 				<div class="form-group">
-					<select class="js-example-basic-single form-control" name="inputContragent" id="inputContragent">
+					<select class="js-example-basic-single form-control" name="inputContragent" id="inputContragent" required>
 						<option selected value="">...</option>
 						{% for contragent in contragents %}
 						<option value="{{ contragent.uid }}">{{ contragent.title }} , ИНН {{ contragent.inn }}</option>
@@ -150,9 +150,9 @@
 			<div class="col-4">
 				<div class="form-group">
 					<select class="js-example-basic-single form-control" name="inputPayment_type" id="inputPayment_type">
-						<option selected value="">...</option>
+						<option value="">...</option>
 						<option value="0">Наличная</option>
-						<option value="1">Безналичная</option>
+						<option selected value="1">Безналичная</option>
 						<option value="2">По заявке</option>
 					</select>
 				</div>

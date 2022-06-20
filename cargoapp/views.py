@@ -895,6 +895,7 @@ def route_add(request):
                 request_number = route_form.cleaned_data['inputRequest_number']
 
                 contragent_uid = route_form.cleaned_data['inputContragent']
+                contract_uid = route_form.cleaned_data['inputContract']
 
                 banner_all = route_form.cleaned_data['inputBanner_all']
                 banner_side = route_form.cleaned_data['inputBanner_side']
@@ -1030,7 +1031,17 @@ def route_add(request):
                         current_route.contragent = None
                         messages.info(request, 'Выбранного Контрагента не существует в базе данных!')                   
                 else:
-                    current_route.contragent = None         
+                    current_route.contragent = None
+
+                if contract_uid:
+                    try:
+                        current_contract = Contracts.objects.get(uid=contract_uid)
+                        current_route.contract = current_contract
+                    except:
+                        current_route.contract = None
+                        messages.info(request, 'Выбранного Договора не существует в базе данных!')                   
+                else:
+                    current_route.contract = None          
 
                 current_route.save()
 

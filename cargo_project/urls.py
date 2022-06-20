@@ -20,6 +20,7 @@ urlpatterns = [
     path('mobi-group/', include('mobiGroup.urls')),
     path('requests/', include('request_app.urls')),
     path('insurance/', include('insurance_app.urls')),
+    path('line-release/', include('line_release_app.urls')),
 ]
 
 
