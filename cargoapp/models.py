@@ -310,7 +310,7 @@ class Route(models.Model):
 
 		super(Route, self).save(*args, **kwargs)
 		divide_route_by_days(self.uid)
-		upload_route(self)
+		# upload_route(self)
 
 	def set_pay_check(self):
 		

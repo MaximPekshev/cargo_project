@@ -1,0 +1,76 @@
+{% extends 'cargoapp/base.html' %}
+
+{% block content %}
+<nav class="fixed-bottom navbar-dark bg-dark">
+	<a class="navbar-brand" href="{{ request.META.HTTP_REFERER }}">Назад</a>
+</nav>
+<div class="row pt-1">
+	<div class="col-12 my-auto" align="right">Пользователь: {{ user.username }}</div>
+</div>
+<div class="row justify-content-center mt-2 mb-6">
+	<div align="center">
+		Новый выпуск на линию
+	</div>
+    <form class="col-10 col-sm-8 col-md-6 col-lg-4" method="POST" id="accrualForm" action="{% url 'line_release_add' %}">
+		{% csrf_token %}
+        <div class="form-group row mt-4">
+            <label for="input_release_date" class="col-md-3 col-form-label">Начало работы</label>
+			<div class="col-md-9">
+				<input type="datetime-local" class="form-control" name="input_release_date" id="input_release_date" required>
+			</div>
+        </div>
+        <div class="form-group row mt-4">    
+			<label for="input_vehicle" class="col-md-3 col-form-label">Автомобиль</label>
+			<div class="col-md-9">
+				<select class="js-example-basic-single form-control" name="input_vehicle" id="input_vehicle" required>
+                    <option selected value="">...</option>
+					{% for item in vehicles %}
+					<option value="{{ item.uid }}">{{ item }}</option>
+					{% endfor %}
+				</select>
+			</div>
+        </div>
+        <div class="form-group row mt-4">    
+            <label for="input_trailer" class="col-md-3 col-form-label">Полуприцеп</label>
+			<div class="col-md-9">
+				<select class="js-example-basic-single form-control" name="input_trailer" id="input_trailer" required>
+                    <option selected value="">...</option>
+					{% for item in trailers %}
+					<option value="{{ item.uid }}">{{ item }}</option>
+					{% endfor %}
+				</select>
+			</div>
+        </div>
+        <div class="form-group row mt-4">    
+            <label for="input_driver" class="col-md-3 col-form-label">Водитель</label>
+			<div class="col-md-9">
+				<select class="js-example-basic-single form-control" name="input_driver" id="input_driver" required>
+                    <option selected value="">...</option>
+					{% for item in drivers %}
+					<option value="{{ item.uid }}">{{ item }}</option>
+					{% endfor %}
+				</select>
+			</div>
+        </div>
+        <div class="form-group row mt-4 justify-content-around">    
+            <div class="form-check col-4" >
+				<input class="form-check-input" type="checkbox" id="input_renewal" name="input_renewal">
+				<label class="form-check-label" for="input_renewal">
+					С продлением
+				</label>
+			</div>
+			<div class="form-check col-4">
+				<input class="form-check-input" type="checkbox" id="input_for_repair" name="input_for_repair">
+				<label class="form-check-label" for="input_for_repair">
+					Ремонтный
+				</label>
+			</div>
+        </div>      
+        <div class="row justify-content-center mt-4">
+			<div class="form-group col-6 d-grid gap-2" align="center">
+				<button type="submit" class="btn btn-primary" form="accrualForm">Создать</button>
+			</div>
+		</div>
+    </form>    
+</div>    
+{% endblock %}
