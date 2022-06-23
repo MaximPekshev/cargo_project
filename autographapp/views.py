@@ -11,17 +11,6 @@ from decimal import Decimal
 from django.contrib.auth.models import Group
 from django.http import HttpResponse
 
-# def show_autograph_page(request):
-#     if request.user.is_authenticated:
-#         yesterday = datetime.datetime.now() -  datetime.timedelta(days=5)
-#         context = {
-#             'vehicles' : AutographDailyIndicators.objects.filter(date=yesterday, vehicle__in=Vehicle.objects.all()),
-#             'date' : yesterday,
-#         }
-#         return render(request, 'autographapp/autograph.html', context)
-#     else:
-#         return redirect('login')
-
 
 def autographAuth():
     
@@ -58,42 +47,36 @@ def enumDevices(session):
 
 
 def createAutographDay(data, date, serial):
-	try:
-		vehicle = Vehicle.objects.get(nav_id=serial)
-	except:
-		vehicle = None
 
-	if vehicle:
+    try:
+        vehicle = Vehicle.objects.get(nav_id=serial)
+    except:
+        vehicle = None
+        
+    if vehicle:
+        
+        try:
+            autographDay = AutographDailyIndicators.objects.get(vehicle=vehicle, date=date)
+        except:
+            autographDay = AutographDailyIndicators()
+            autographDay.date = date
+            autographDay.vehicle = vehicle
+            autographDay.driver = vehicle.driver
+            
+        autographDay.maxSpeed = Decimal(data.get('maxSpeed')).quantize(Decimal("1.00"))
+        autographDay.averageSpeed = Decimal(data.get('averageSpeed')).quantize(Decimal("1.00"))
+        autographDay.fuelConsumPerDay = Decimal(data.get('fuelConsumPerDay')).quantize(Decimal("1.00"))
+        autographDay.fuelConsumPer100km = Decimal(data.get('fuelConsumPer100km')).quantize(Decimal("1.00"))
+        autographDay.rotationMAX = Decimal(data.get('rotationMAX')).quantize(Decimal("1.00"))
+        autographDay.parkCount = int(data.get('parkCount'))
+        autographDay.totalDistance = Decimal(data.get('totalDistance')).quantize(Decimal("1.00"))
+        autographDay.parkCount5MinMore = Decimal(data.get('parkCount5MinMore')).quantize(Decimal("1.00"))
+        autographDay.hardBrakingCount = Decimal(data.get('hardBrakingCount')).quantize(Decimal("1.00"))
+        
+        autographDay.last_lat = Decimal(data.get('last_lat')).quantize(Decimal("1.0000"))
+        autographDay.last_lng = Decimal(data.get('last_lng')).quantize(Decimal("1.0000"))
 
-		try:
-			autographDay = AutographDailyIndicators.objects.get(
-			    vehicle=vehicle, date=date)
-		except:
-			autographDay = AutographDailyIndicators()
-			autographDay.date = date
-			autographDay.vehicle = vehicle
-			autographDay.driver = vehicle.driver
-
-		autographDay.maxSpeed = Decimal(
-		    data.get('maxSpeed')).quantize(Decimal("1.00"))
-		autographDay.averageSpeed = Decimal(
-		    data.get('averageSpeed')).quantize(Decimal("1.00"))
-		autographDay.fuelConsumPerDay = Decimal(
-		    data.get('fuelConsumPerDay')).quantize(Decimal("1.00"))
-		autographDay.fuelConsumPer100km = Decimal(
-		    data.get('fuelConsumPer100km')).quantize(Decimal("1.00"))
-		autographDay.rotationMAX = Decimal(
-		    data.get('rotationMAX')).quantize(Decimal("1.00"))
-		autographDay.parkCount = int(data.get('parkCount'))
-		autographDay.totalDistance = Decimal(
-		    data.get('totalDistance')).quantize(Decimal("1.00"))
-
-		autographDay.parkCount5MinMore = Decimal(
-		    data.get('parkCount5MinMore')).quantize(Decimal("1.00"))
-		autographDay.hardBrakingCount = Decimal(
-		    data.get('hardBrakingCount')).quantize(Decimal("1.00"))
-
-		autographDay.save()
+        autographDay.save()
 
 
 def getRequest(url):
@@ -140,6 +123,13 @@ def upload_autograph_data(request, input_date):
                     if answer:
                         response = answer.json()
                         data = response.get(vehicleID)
+                            
+                        last_position = data.get("LastPosition")
+                        
+                        if last_position:
+                            last_lat = last_position.get("Lat")
+                            last_lng = last_position.get("Lng")
+
                         trips = data.get('Trips')
 
                         if trips:
@@ -214,6 +204,8 @@ def upload_autograph_data(request, input_date):
 								'totalDistance' : totalDistance,
 								'parkCount5MinMore' : parkCount5MinMore,
 								'hardBrakingCount' : hardBrakingCount,
+                                'last_lat' : last_lat,
+								'last_lng' : last_lng,
 							}
                             createAutographDay(request_context, date, data.get('Serial'))
                         else:

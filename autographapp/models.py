@@ -15,6 +15,9 @@ class AutographDailyIndicators(models.Model):
 	totalDistance = models.DecimalField(verbose_name = 'Суточный пробег', max_digits=10, decimal_places=2, blank=True, null=True)
 	vehicle = models.ForeignKey(Vehicle, verbose_name='Автомобиль', on_delete=models.PROTECT, blank=True, null=True, default=None)
 	driver = models.ForeignKey(Driver, verbose_name = 'Водитель', on_delete=models.PROTECT, blank=True, null=True, default=None)
+	last_lat = models.DecimalField(verbose_name = 'Широта', max_digits=10, decimal_places=4, blank=True, null=True, default=0)
+	last_lng = models.DecimalField(verbose_name = 'Долгота', max_digits=10, decimal_places=4, blank=True, null=True, default=0)
+
 
 	def __str__(self):
 		return '{}'.format(self.pk)

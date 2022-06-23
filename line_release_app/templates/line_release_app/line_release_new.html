@@ -51,14 +51,17 @@
 					{% endfor %}
 				</select>
 			</div>
+			<div class="col-md-12" align="right">
+				<p  id="restrictionsWarningBlock" style="padding-left: 20px; color: red;"></p>
+			</div>
         </div>
-        <div class="form-group row mt-4 justify-content-around">    
-            <div class="form-check col-4" >
+        <div class="form-group row mt-4 justify-content-center">    
+            {% comment %} <div class="form-check col-4">
 				<input class="form-check-input" type="checkbox" id="input_renewal" name="input_renewal">
 				<label class="form-check-label" for="input_renewal">
 					С продлением
 				</label>
-			</div>
+			</div> {% endcomment %}
 			<div class="form-check col-4">
 				<input class="form-check-input" type="checkbox" id="input_for_repair" name="input_for_repair">
 				<label class="form-check-label" for="input_for_repair">
@@ -73,4 +76,35 @@
 		</div>
     </form>    
 </div>    
+{% endblock %}
+
+{% block custom_script %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+	
+    window.onload = function() {
+		$('#input_driver').on('change', function () {
+			checkRestrictions();
+		});
+		const checkRestrictions = async () => {
+			let driverSelect = document.getElementById('input_driver');
+			let restrictionsWarningBlock = document.getElementById('restrictionsWarningBlock');
+			restrictionsWarningBlock.innerHTML = "";
+			console.log(restrictionsWarningBlock);
+			if (driverSelect.value == "" ) {
+			} else {
+				let response = await axios.get(`/api/v1/drivers/${driverSelect.value}/`)
+					.then((driver) => {
+						console.log(driver);
+						if (driver.data.restrictions == false) {
+							restrictionsWarningBlock.innerHTML = "";
+						} else {
+							restrictionsWarningBlock.innerHTML = "У водителя есть ограничения!";
+						}
+					})
+			}
+
+		};
+    };
+</script>	
 {% endblock %}

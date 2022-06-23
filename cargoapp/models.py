@@ -110,6 +110,8 @@ class  Driver(models.Model):
 
 	employment_date = models.DateField('Дата приема на работу', auto_now_add = False, blank=True, null=True, default=now)
 
+	restrictions =  models.BooleanField(verbose_name='Есть ограничения', default=False)
+
 	def __str__(self):
 
 		return '{0}'.format(self.title)

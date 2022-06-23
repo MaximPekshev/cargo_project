@@ -15,7 +15,7 @@ def show_line_release_list(request):
         if request.user in users_in_group:
 
             context ={
-                'line_releases': LineRelease.objects.all().order_by('columnar'),
+                'line_releases': LineRelease.objects.filter(columnar=request.user),
             }
 
             return render(request, 'line_release_app/line_release_list.html', context)
@@ -92,7 +92,7 @@ def line_release_new(request):
         if request.user in users_in_group:
 
             context = {
-                'vehicles' : Vehicle.objects.all(),
+                'vehicles' : Vehicle.objects.filter(columnar=request.user),
                 'drivers' : Driver.objects.all(),
                 'trailers' : Trailer.objects.all(),
             }

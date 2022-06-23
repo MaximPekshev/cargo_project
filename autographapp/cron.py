@@ -64,6 +64,9 @@ def createAutographDay(data, date, serial):
 		autographDay.parkCount5MinMore = Decimal(data.get('parkCount5MinMore')).quantize(Decimal("1.00"))
 		autographDay.hardBrakingCount = Decimal(data.get('hardBrakingCount')).quantize(Decimal("1.00"))
 
+		autographDay.last_lat = Decimal(data.get('last_lat')).quantize(Decimal("1.0000"))
+		autographDay.last_lng = Decimal(data.get('last_lng')).quantize(Decimal("1.0000"))
+
 		autographDay.save()
 
 def getRequest(url):
@@ -112,6 +115,13 @@ def uploadAutographDailyIndicators():
 
 						response = answer.json()
 						data = response.get(vehicleID)
+
+						last_position = data.get("LastPosition")
+						
+						if last_position:
+							last_lat = last_position.get("Lat")
+							last_lng = last_position.get("Lng")
+
 						trips = data.get('Trips')
 
 						if trips:
@@ -186,6 +196,8 @@ def uploadAutographDailyIndicators():
 								'totalDistance' : totalDistance,
 								'parkCount5MinMore' : parkCount5MinMore,
 								'hardBrakingCount' : hardBrakingCount,
+								'last_lat' : last_lat,
+								'last_lng' : last_lng,
 							}	
 							createAutographDay(request_context, date, data.get('Serial'))	
 						else:

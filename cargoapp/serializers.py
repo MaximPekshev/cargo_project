@@ -30,7 +30,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
 class DriverSerializer(serializers.ModelSerializer):
     class Meta:
         model = Driver
-        fields = ('uid', 'title', 'employment_date',)
+        fields = ('uid', 'title', 'employment_date', 'restrictions')
 
 class LogistUserSerializer(serializers.ModelSerializer):
     class Meta:
