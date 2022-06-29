@@ -49,17 +49,17 @@
 		<div class="form-group row mt-4">
 			<label for="inputRoute_length" class="col-2 col-form-label">Пробег, км</label>
 			<div class="col-4">
-				<input type="text" class="form-control" name="inputRoute_length" id="inputRoute_length" value="{{ route.route_length }}">
+				<input onKeyPress="inputFilter()" type="text" class="form-control" name="inputRoute_length" id="inputRoute_length" value="{{ route.route_length }}">
 			</div>
 			<label for="inputRoute_cost" class="col-2 col-form-label">Доход, руб</label>
 			<div class="col-4">
-				<input type="text" step="0.01" class="form-control" name="inputRoute_cost" id="inputRoute_cost" value="{{ route.route_cost }}">
+				<input onKeyPress="inputFilter()" type="text" step="0.01" class="form-control" name="inputRoute_cost" id="inputRoute_cost" value="{{ route.route_cost }}">
 			</div>
 		</div>
 		<div class="form-group row mt-4">
 			<label for="inputExpenses_1" class="col-2 col-form-label">Прочие расходы, руб</label>
 			<div class="col-4">
-				<input type="text" class="form-control" name="inputExpenses_1" id="inputExpenses_1" value="{{ route.expenses_1 }}">
+				<input onKeyPress="inputFilter()" type="text" class="form-control" name="inputExpenses_1" id="inputExpenses_1" value="{{ route.expenses_1 }}">
 			</div>
 			<label for="Pay_check" class="col-2 col-form-label">Зарплата водителя, руб</label>
 			<div class="col-4">
@@ -263,7 +263,7 @@
 		<div class="form-group row mt-4">
 			<label for="inputWeight" class="col-2 col-form-label">Вес, кг</label>
 			<div class="col-4">
-				<input type="text" class="form-control" name="inputWeight" id="inputWeight" value="{{ route.weight }}">
+				<input onKeyPress="inputFilter()" type="text" class="form-control" name="inputWeight" id="inputWeight" value="{{ route.weight }}">
 			</div>
 			<label for="inputRequest_number" class="col-2 col-form-label">Номер заявки</label>
 			<div class="col-4">
@@ -375,11 +375,8 @@
 			getContract();
 		});
 		document.getElementById('saveAndExitButton').addEventListener('click', function(event) {
-			event.preventDefault();
 			let saveAndExit = document.getElementById('saveAndExit');
 			saveAndExit.checked = true;
-			let routeForm = document.getElementById('routeForm');
-			routeForm.submit();
 		}, false);
     };
 
@@ -413,7 +410,16 @@
 
 		}
 		
-	}	
+	}; 
+
+	function inputFilter(){
+		if (event.keyCode < 48 || event.keyCode > 57) {
+			if (event.keyCode != 46){
+				event.returnValue= false;
+			}
+		}
+		
+	};
 
 </script>	
 {% endblock %}

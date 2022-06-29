@@ -48,17 +48,17 @@
 		<div class="form-group row mt-4">
 			<label for="inputRoute_length" class="col-2 col-form-label">Пробег, км</label>
 			<div class="col-4">
-				<input type="text" class="form-control" name="inputRoute_length" id="inputRoute_length">
+				<input onKeyPress="inputFilter()" type="text" class="form-control" name="inputRoute_length" id="inputRoute_length">
 			</div>
 			<label for="inputRoute_cost" class="col-2 col-form-label">Доход, руб</label>
 			<div class="col-4">
-				<input type="text" class="form-control" name="inputRoute_cost" id="inputRoute_cost" >
+				<input onKeyPress="inputFilter()" type="text" class="form-control" name="inputRoute_cost" id="inputRoute_cost" >
 			</div>
 		</div>
 		<div class="form-group row mt-4">
 			<label for="inputExpenses_1" class="col-2 col-form-label">Прочие расходы, руб</label>
 			<div class="col-4">
-				<input type="text" class="form-control" name="inputExpenses_1" id="inputExpenses_1">
+				<input onKeyPress="inputFilter()" type="text" class="form-control" name="inputExpenses_1" id="inputExpenses_1">
 			</div>
 			
 		</div>
@@ -66,7 +66,7 @@
 		<div class="row justify-content-between mt-2">
 			<label for="straight_boolean" class="col-2 col-form-label">Прямые</label>
 			<div class="col-4 form-check form-switch align-self-center">
-				<input class="form-check-input" type="checkbox" role="switch" id="straight_boolean" name="inputStraight_boolean">
+				<input onKeyPress="inputFilter()" class="form-check-input" type="checkbox" role="switch" id="straight_boolean" name="inputStraight_boolean">
 			</div>
 			<div class="form-group col-4 d-grid gap-2">
 				<button type="submit" class="btn btn-outline-primary" form="routeForm">Рассчитать</button>
@@ -200,7 +200,7 @@
 		<div class="form-group row mt-4">
 			<label for="inputWeight" class="col-2 col-form-label">Вес, кг</label>
 			<div class="col-4">
-				<input type="text" class="form-control" name="inputWeight" id="inputWeight">
+				<input onKeyPress="inputFilter()" type="text" class="form-control" name="inputWeight" id="inputWeight">
 			</div>
 			<label for="inputRequest_number" class="col-2 col-form-label">Номер заявки</label>
 			<div class="col-4">
@@ -271,27 +271,10 @@
 			getContract();
 		});
 		document.getElementById('saveAndExitButton').addEventListener('click', function(event) {
-			event.preventDefault();
 			let saveAndExit = document.getElementById('saveAndExit');
 			saveAndExit.checked = true;
-			let routeForm = document.getElementById('routeForm');
-			routeForm.submit();
 		}, false);
     };
-
-	{% comment %} const getCities = async (select) => {
-		console.log("Hello");
-		let response = await axios.get('/api/v1/cities/')
-			.then((citiList) => {
-				citiList.data.forEach(item => {
-					select.innerHTML += `<option value="${item.title}">${item.title}</option>`;
-				});
-				
-			}).catch((error) => {
-				console.log(error);
-			})
-
-	}; {% endcomment %}
 
 	const getContract = async () => {
 		let contractDIV = document.getElementById('inputContract');
@@ -323,7 +306,16 @@
 
 		}
 		
-	}	
+	};
+
+	function inputFilter(){
+		if (event.keyCode < 48 || event.keyCode > 57) {
+			if (event.keyCode != 46){
+				event.returnValue= false;
+			}
+		}
+		
+	};
 
 </script>	
 {% endblock %}
