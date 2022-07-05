@@ -1,5 +1,52 @@
 {% extends 'cargoapp/base.html' %}
 
+{% block custom_lib %}
+<script src="https://files.geotree.ru/jquery/jquery-1.12.4.js"></script>
+<script src="https://files.geotree.ru/jquery/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="https://files.geotree.ru/jquery/ui/1.12.1/themes/base/jquery-ui.css">
+<style>
+    .ui-autocomplete-loading {
+      background: white url("https://files.geotree.ru/jquery/ui/images/ui-anim_basic_16x16.gif") right center no-repeat;
+    }
+</style>
+
+<script>
+	var $jq112 = jQuery.noConflict(true);
+	$(function() {
+	  $jq112("#A_point").autocomplete({
+		//При поиске к указанному адресу будет добавляться "&term=введенный текст..."
+		source: "https://api.geotree.ru/search.php?key=nhcg28MfpZ6h",
+		minLength: 0, //Минимальное количество символов, которое пользователь должен ввести перед выполнением поиска
+		delay: 0, //Задержка в миллисекундах между нажатием клавиши и выполнением поиска
+		select: function( event, ui ) {//Событие срабатывает при выборе элемента в меню
+		  //Выбранный элемент выведем в консоль и в блок #result_1
+			$('#inputA_point').val(ui.item.name_without_type);
+		}
+	  })
+	  .on("focus", function() { //при получении фокуса будет выполняться поиск, даже если поле пустое
+		$jq112(this).autocomplete( 'search', $(this).val());
+		
+	  });
+	});
+	$(function() {
+		$jq112("#B_point").autocomplete({
+		  //При поиске к указанному адресу будет добавляться "&term=введенный текст..."
+		  source: "https://api.geotree.ru/search.php?key=nhcg28MfpZ6h",
+		  minLength: 0, //Минимальное количество символов, которое пользователь должен ввести перед выполнением поиска
+		  delay: 0, //Задержка в миллисекундах между нажатием клавиши и выполнением поиска
+		  select: function( event, ui ) {//Событие срабатывает при выборе элемента в меню
+			$('#inputB_point').val(ui.item.name_without_type);
+		  }
+		})
+		.on("focus", function() { //при получении фокуса будет выполняться поиск, даже если поле пустое
+			$jq112(this).autocomplete( 'search', $(this).val());
+		});
+	  });
+</script>
+{% endblock %}
+
+
+
 {% block content %}
 <nav class="fixed-bottom navbar-dark bg-dark mt-5">
 	<a class="navbar-brand" href="{% url 'show_index_page' %}">Назад</a>
@@ -17,6 +64,12 @@
 			<h4>#{{ route.id }}</h4>
 		</div>
 		<div class="form-group row mt-4">
+			<label for="inputRequest_number" class="col-2 col-form-label">Номер заявки</label>
+			<div class="col-10">
+				<input type="text" class="form-control" name="inputRequest_number" id="inputRequest_number" value="{% if route.request_number %}{{ route.request_number }}{% endif %}">
+			</div>
+		</div>
+		<div class="form-group row mt-4">
 			<label for="inputFrom_date" class="col-2 col-form-label">Дата С</label>
 			<div class="col-4">
 				<input type="date" class="form-control" name="inputFrom_date" id="inputFrom_date" value="{{ route.from_date|date:'Y-m-d' }}">
@@ -29,21 +82,13 @@
 		<div class="form-group row mt-4">
 			<label for="inputA_point" class="col-2 col-form-label">Откуда</label>
 			<div class="col-4">
-				<select class="js-example-basic-single form-control" name="inputA_point" id="inputA_point">
-					<option selected value="{{ route.a_point }}">{{ route.a_point }}</option>
-					{% for item in cities %}
-					<option value="{{ item.title }}">{{ item.title }}</option>
-					{% endfor %}
-				</select>
+				<input class="form-control" name="A_point" id="A_point" value="{{ route.a_point }}">
+				<input id="inputA_point" name="inputA_point" value="{{ route.a_point }}" hidden>
 			</div>
 			<label for="inputB_point" class="col-2 col-form-label">Куда</label>
 			<div class="col-4">
-				<select class="js-example-basic-single form-control" name="inputB_point" id="inputB_point">
-					<option selected value="{{ route.b_point }}">{{ route.b_point }}</option>
-					{% for item in cities %}
-					<option value="{{ item.title }}">{{ item.title }}</option>
-					{% endfor %}
-				</select>
+				<input class="form-control" name="B_point" id="B_point" value="{{ route.b_point }}">
+				<input id="inputB_point" name="inputB_point" value="{{ route.b_point }}" hidden>
 			</div>
 		</div>
 		<div class="form-group row mt-4">
@@ -261,13 +306,9 @@
 		</div>
 
 		<div class="form-group row mt-4">
-			<label for="inputWeight" class="col-2 col-form-label">Вес, кг</label>
-			<div class="col-4">
+			<label for="inputWeight" class="col-3 col-form-label">Вес, т</label>
+			<div class="col-9">
 				<input onKeyPress="inputFilter()" type="text" class="form-control" name="inputWeight" id="inputWeight" value="{{ route.weight }}">
-			</div>
-			<label for="inputRequest_number" class="col-2 col-form-label">Номер заявки</label>
-			<div class="col-4">
-				<input type="text" class="form-control" name="inputRequest_number" id="inputRequest_number" value="{% if route.request_number %}{{ route.request_number }}{% endif %}">
 			</div>
 		</div>
 
@@ -284,12 +325,6 @@
 					Растентовка Б
 				</label>
 			</div>
-			{% comment %} <div class="form-check col-4" align="center">
-				<input style="float:none; margin-right: 10px;" class="form-check-input mr-3" type="checkbox" id="inputBanner_all" name="inputBanner_all"  {% if route.banner_all %}checked{% endif %}>
-				<label class="form-check-label" for="inputBanner_all">
-					Растентовка полная
-				</label>
-			</div> {% endcomment %}
 			<div class="form-check col-3" align="center">
 				<input  style="float:none; margin-right: 10px;" class="form-check-input mr-3" type="checkbox" id="inputBanner_side" name="inputBanner_side" {% if route.banner_side %}checked{% endif %}>
 				<label class="form-check-label" for="inputBanner_side">

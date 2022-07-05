@@ -9,6 +9,7 @@ from cargoapp.views import OrganizationList, OrganizationDetail
 from cargoapp.views import ContractsList, ContractsDetail
 from cargoapp.views import ContractFilterdList
 from cargoapp.views import CityList
+from .views import city_list
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
@@ -25,7 +26,7 @@ urlpatterns = [
     path('contracts/', ContractsList.as_view()),
     path('contracts/<str:uid>/', ContractsDetail.as_view()),
     path('get-contracts/<str:uid>/', ContractFilterdList.as_view()),
-    path('cities/', CityList.as_view()),
+    path('cities/', city_list),
     
 ]
 

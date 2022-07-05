@@ -925,6 +925,8 @@ def route_add(request):
                 current_route.to_date = to_date
                 current_route.a_point = a_point
                 current_route.b_point = b_point
+                print(current_route.a_point)
+                print(current_route.b_point)
                 current_route.cargo_description = cargo_description
                 current_route.request_number = request_number
 

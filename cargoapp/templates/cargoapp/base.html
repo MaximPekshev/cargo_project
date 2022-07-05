@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="{% static 'css/select2-bootstrap.min.css' %}" />
 
         <script src="{% static 'js/select2.min.js' %}"></script>
+        {% block custom_lib %}{% endblock %}
         <link rel="shortcut icon"
               href="{% static "favicon.png" %}"
               type="image/png">
@@ -28,13 +29,11 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
         <script type="text/javascript">
-      $(document).ready(function() {
-        $('.js-example-basic-single').select2({
-          {% comment %} width : 'resolve' {% endcomment %}
-          theme : 'bootstrap'
-          
-        });
-      });
+          $(document).ready(function() {
+            $('.js-example-basic-single').select2({
+              theme : 'bootstrap'
+            });
+          });
         </script>
         {% block custom_script %}{% endblock %}
     </body>
