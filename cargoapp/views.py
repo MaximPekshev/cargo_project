@@ -5,6 +5,7 @@ from .models import Driver
 from .serializers import DriverSerializer
 from .models import Vehicle
 from .serializers import VehicleSerializer
+from .models import Vehicle_status
 from .models import Route
 from .serializers import RouteSerializer
 from .models import LogistUser
@@ -17,6 +18,8 @@ from .models import Contracts
 from .serializers import ContractsSerializer
 from .models import Constant
 from django.contrib	import auth
+
+from autographapp.models import AutographDailyIndicators
 
 from django.contrib.auth.models import Group
 
@@ -32,7 +35,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics, permissions
 
-from .forms import RouteForm
+from .forms import RouteForm, FilterForm
 from django.contrib import messages
 from decimal import Decimal
 
@@ -148,63 +151,71 @@ def show_menu_page(request):
         if request.user in users_in_group_hr_director:
             
             return render(request, 'cargoapp/menu/hr_director_menu.html')
-
+        # выводим основное меню для логиста
         if request.user in users_in_group_vehicle_supervisor:
+
+            users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+            columnars = users_in_group_vehicle_supervisor
+            vehicle_statuses = Vehicle_status.objects.all()
 
             map = folium.Map(
                 location = [64.6863136, 97.7453061],
                 zoom_start = 4
             )
+            vehicles_list = Vehicle.objects.all()
 
-            # tooltip = "Click me!"
+            context = {}
 
-            folium.Marker(
-                [65.3288, 100.6625], 
-                icon=folium.DivIcon(html=f"""<div class="map-label" style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                </svg><i>В456ВВ</i></div>""")
-            ).add_to(map)
+            filterForm = FilterForm(request.GET)
+            
+            if filterForm.is_valid():
 
-            folium.Marker(
-                [55.3288, 110.6625],
-                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                </svg>A555AA</div>""")
-            ).add_to(map)
+                columnar_uid = filterForm.cleaned_data['columnar']
+                input_status = filterForm.cleaned_data['status']
 
-            folium.Marker(
-                [63.3288, 100.6625],
-                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                </svg>T345EE</div>""")
-            ).add_to(map)
+                if columnar_uid:
 
-            folium.Marker(
-                [66.3288, 135.6625],
-                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                </svg>A888AA</div>""")
-            ).add_to(map)
+                    try:
+                        input_columnar = LogistUser.objects.get(uid=columnar_uid)
+                        vehicles_list = vehicles_list.filter(columnar=input_columnar)
+                        columnars = columnars.exclude(username=input_columnar.username)
+                        context.update({'actual_columnar' : input_columnar,})    
+                    except:
+                        pass
 
-            folium.Marker(
-                [70.3288, 115.6625],
-                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                </svg>E667AP</div>""")
-            ).add_to(map)
+                if input_status:
+                    
+                    try:
+                        status_object = Vehicle_status.objects.get(title=input_status)
+                        vehicles_list = vehicles_list.filter(status=status_object)
+                        vehicle_statuses = vehicle_statuses.exclude(title=status_object.title)
+                        context.update({'actual_status' : status_object,})
+                    except:
+                        pass    
+
+
+            for vehicle in vehicles_list:
+
+                last_autograph_day = AutographDailyIndicators.objects.filter(vehicle=vehicle).order_by('date').last()
+                if last_autograph_day:
+                    folium.Marker(
+                        [last_autograph_day.last_lat, last_autograph_day.last_lng], 
+                        icon=folium.DivIcon(html=f"""<div class="map-label" style="font-family: courier new; color: { vehicle.status.color }"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                        </svg><i>{vehicle.car_number.replace(" ", "")}</i></div>""")
+                    ).add_to(map)
 
             map = map._repr_html_()
 
-            context = {
+            context.update({
                 'map' : map,
-            }
+                'vehicles_list': vehicles_list,
+                'columnars': columnars,
+                'statuses': vehicle_statuses,
+            })
 
-            return render(request, 'cargoapp/menu/vehicle_sv_menu.html', context)
+            return render(request, 'cargoapp/menu/chief_column_menu.html', context)
         
         elif request.user in users_in_group_logistsupervisor:
 
@@ -236,58 +247,66 @@ def show_menu_page(request):
 
         elif request.user in users_in_group_chief_column:
 
+            users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+            columnars = users_in_group_vehicle_supervisor
+            vehicle_statuses = Vehicle_status.objects.all()
+
             map = folium.Map(
                 location = [64.6863136, 97.7453061],
                 zoom_start = 4
             )
+            vehicles_list = Vehicle.objects.all()
 
-            # tooltip = "Click me!"
+            context = {}
 
-            folium.Marker(
-                [65.3288, 100.6625], 
-                icon=folium.DivIcon(html=f"""<div class="map-label" style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                </svg><i>В456ВВ</i></div>""")
-            ).add_to(map)
+            filterForm = FilterForm(request.GET)
+            
+            if filterForm.is_valid():
 
-            folium.Marker(
-                [55.3288, 110.6625],
-                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                </svg>A555AA</div>""")
-            ).add_to(map)
+                columnar_uid = filterForm.cleaned_data['columnar']
+                input_status = filterForm.cleaned_data['status']
 
-            folium.Marker(
-                [63.3288, 100.6625],
-                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                </svg>T345EE</div>""")
-            ).add_to(map)
+                if columnar_uid:
 
-            folium.Marker(
-                [66.3288, 135.6625],
-                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                </svg>A888AA</div>""")
-            ).add_to(map)
+                    try:
+                        input_columnar = LogistUser.objects.get(uid=columnar_uid)
+                        vehicles_list = vehicles_list.filter(columnar=input_columnar)
+                        columnars = columnars.exclude(username=input_columnar.username)
+                        context.update({'actual_columnar' : input_columnar,})    
+                    except:
+                        pass
 
-            folium.Marker(
-                [70.3288, 115.6625],
-                icon=folium.DivIcon(html=f"""<div style="font-family: courier new; color: blue"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                </svg>E667AP</div>""")
-            ).add_to(map)
+                if input_status:
+                    
+                    try:
+                        status_object = Vehicle_status.objects.get(title=input_status)
+                        vehicles_list = vehicles_list.filter(status=status_object)
+                        vehicle_statuses = vehicle_statuses.exclude(title=status_object.title)
+                        context.update({'actual_status' : status_object,})
+                    except:
+                        pass    
+
+
+            for vehicle in vehicles_list:
+
+                last_autograph_day = AutographDailyIndicators.objects.filter(vehicle=vehicle).order_by('date').last()
+                if last_autograph_day:
+                    folium.Marker(
+                        [last_autograph_day.last_lat, last_autograph_day.last_lng], 
+                        icon=folium.DivIcon(html=f"""<div class="map-label" style="font-family: courier new; color: { vehicle.status.color }"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                        </svg><i>{vehicle.car_number.replace(" ", "")}</i></div>""")
+                    ).add_to(map)
 
             map = map._repr_html_()
 
-            context = {
+            context.update({
                 'map' : map,
-            }
+                'vehicles_list': vehicles_list,
+                'columnars': columnars,
+                'statuses': vehicle_statuses,
+            })
 
             return render(request, 'cargoapp/menu/chief_column_menu.html', context)
 

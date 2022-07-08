@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'mobiGroup',
     'request_app',
     'simple_history',
+    'colorfield',
     
 ]
 

@@ -29,3 +29,35 @@
 	opacity: 0;
 	transition: visibility 0s 0.1s, opacity 0.1s linear;
 }
+
+.columnar-vehicle-list {
+	overflow-y: auto;
+	height: 800px;
+}
+
+@media (max-width: 1700px) {
+
+	.columnar-vehicle-list {
+		overflow-y: auto;
+		height: 730px;
+	}
+	
+}
+
+@media (max-width: 1400px) {
+
+	.columnar-vehicle-list {
+		overflow-y: auto;
+		height: 580px;
+	}
+	
+}
+
+@media (max-width: 1000px) {
+
+	.columnar-vehicle-list {
+		overflow-y: auto;
+		height: 410px;
+	}
+	
+}

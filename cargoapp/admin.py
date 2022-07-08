@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import LogistUser, Vehicle, Driver, Route, City, Trailer
 from .models import Organization, Contracts, Constant
 from .models import MileageRevenueStandard, MileageThresholds, DailyIndicators
+from .models import Vehicle_status
 
 class LogistUserAdmin(admin.ModelAdmin):
 	list_display = (
@@ -175,3 +176,11 @@ class ConstantAdmin(admin.ModelAdmin):
 					'value',
 					)
 admin.site.register(Constant, ConstantAdmin)
+
+class Vehicle_statusAdmin(admin.ModelAdmin):
+	list_display = (
+					'title',
+					'color',
+					)
+
+admin.site.register(Vehicle_status, Vehicle_statusAdmin)

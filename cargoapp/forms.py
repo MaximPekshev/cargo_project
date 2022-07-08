@@ -36,3 +36,7 @@ class RouteForm(forms.Form):
 	inputBanner_a = forms.BooleanField(required=False)
 	inputBanner_b = forms.BooleanField(required=False)
 	inputPayment_type = forms.CharField(max_length = 1, required=False)
+
+class FilterForm(forms.Form):
+	columnar = forms.CharField(max_length = 36, required=False)
+	status = forms.CharField(max_length = 36, required=False)

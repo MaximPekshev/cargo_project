@@ -55,47 +55,66 @@
             </div>
         </div> 
     </div>
+
     <div class="row col-12 col-md-12 col-xl-12 justify-content-center mt-4 mb-4">
-        <div class="col-12 col-md-12 col-xl-12 shadow pt-5 pb-5 row justify-content-center">
+        <div class="col-12 col-md-12 col-xl-12 shadow pb-5 row justify-content-center">
+            <div class="col-12 col-md-12 col-xl-12 mb-3 mt-3">
+                <form id="filterForm" class="form-group row" method="GET" action="{% url 'show_menu_page' %}">
+                    <label for="columnar" class="col-1 col-form-label">Колонный</label>
+                    <div class="col-3 align-self-center">
+                        <div class="form-group">
+                            <select class="js-example-basic-single form-control" name="columnar" id="columnar">
+                                {% if actual_columnar %}
+                                <option selected value="{{ actual_columnar.uid }}">{{ actual_columnar }}</option>
+                                {% endif %}
+                                <option {% if not actual_columnar %}selected{% endif %} value="">...</option>
+                                {% for columnar in columnars %}
+                                <option value="{{ columnar.uid }}">{{ columnar.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <label for="status" class="col-1 col-form-label">Статус</label>
+                    <div class="col-3 align-self-center">
+                        <div class="form-group">
+                            <select class="js-example-basic-single form-control" name="status" id="status">
+                                {% if actual_status %}
+                                <option selected value="{{ actual_status }}">{{ actual_status }}</option>
+                                {% endif %}
+                                <option {% if not actual_status %}selected{% endif %} value="">...</option>
+                                {% for status in statuses %}
+                                <option value="{{ status }}">{{ status }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-2 align-self-center">
+                        <button id="submitButton" type="submit" form="filterForm" class="btn btn-dark btn-sm">Отбор</button>
+                    </div>
+                </form>    
+            </div>
             <div class="col-9 col-md-9 col-xl-9">
                 {{ map | safe }}
             </div>
-            <div class="col-3 col-md-3 col-xl-3">
+            <div class="col-3 col-md-3 col-xl-3 columnar-vehicle-list">
+                {% if vehicles_list %}
+                {% for item in vehicles_list %}
                 <a href="{% url 'columnar_vehicle_condition' %}" style="text-decoration: none;">
                     <div class="alert alert-primary" role="alert">
-                        в456вв 
-                        <span class="badge rounded-pill bg-primary" style="margin-left: 5%;">На линии</span>
+                        {{ item.car_number }}
+                        <span class="badge rounded-pill" style="margin-left: 5%; background-color: {{ item.status.color }};">{{ item.status }}</span>
                         <span class="badge rounded-pill bg-light text-dark">(1)</span>
                     </div>
                 </a>
-                <a href="{% url 'columnar_vehicle_condition' %}" style="text-decoration: none;">
-                    <div style="background-color: #aa80ff;" class="alert alert-secondary" role="alert">
-                        а555аа <span class="badge rounded-pill bg-primary" style="margin-left: 5%;">Встал по ДТП </span>
-                        <span class="badge rounded-pill bg-light text-dark">(1)</span>
-                    </div>
-                </a>
-                <a href="{% url 'columnar_vehicle_condition' %}" style="text-decoration: none;">
-                    <div class="alert alert-success" role="alert">
-                        т345ее <span class="badge rounded-pill bg-primary" style="margin-left: 5%;">Без водителя </span>
-                        <span class="badge rounded-pill bg-light text-dark">(2)</span>
-                    </div>
-                </a>
-                <a href="{% url 'columnar_vehicle_condition' %}" style="text-decoration: none;">
-                    <div class="alert alert-danger" role="alert">
-                        а888аа <span class="badge rounded-pill bg-primary" style="margin-left: 5%;">Без водителя</span>
-                        <span class="badge rounded-pill bg-light text-dark">(2)</span>
-                    </div>
-                </a>
-                <a href="{% url 'columnar_vehicle_condition' %}" style="text-decoration: none;">
-                    <div class="alert alert-warning" role="alert">
-                        е667ар <span class="badge rounded-pill bg-primary" style="margin-left: 5%;">Выходной</span>
-                        <span class="badge rounded-pill bg-light text-dark">(1)</span>
-                    </div>
-                </a>
-                
+                {% endfor %}
+                {% else %}
+                <div class="alert alert-warning" role="alert">
+                    Автомобили с данными параметрами отбора не найдены...
+                </div>
+                {% endif %}
             </div>    
         </div>
-    </div>        
+    </div>         
 </div> 
 
 <div class="modal fade" id="modalLogout" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLogoutLabel" aria-hidden="true">
@@ -115,5 +134,20 @@
 {% endblock %}
 
 {% block custom_script %}
- 
+
+<script type="text/javascript">
+	
+    window.onload = function() {
+		document.getElementById('submitButton').addEventListener('click', (event) => {
+            let preloaderEl = document.getElementById('preloader');
+            preloaderEl.classList.add('visible');
+            preloaderEl.classList.remove('hidden');
+            event.preventDefault();
+            let submitForm = document.getElementById('filterForm');
+            filterForm.submit();
+        }, false);
+    };
+
+
+</script>	
 {% endblock %}

@@ -19,6 +19,8 @@ from django.conf import settings
 
 from django.db.models import Sum
 
+from colorfield.fields import ColorField
+
 
 NDS_RATE = (
 	('TP', '20%'),
@@ -132,7 +134,7 @@ class  Driver(models.Model):
 		verbose_name = 'Водитель'
 		verbose_name_plural = 'Водители'
 
-
+# модель автомобиля
 class  Vehicle(models.Model):
 
 	uid = models.SlugField(max_length=36, verbose_name='Идентификатор', unique=True)
@@ -149,6 +151,8 @@ class  Vehicle(models.Model):
 	nav_id = models.CharField(max_length=15, verbose_name="Nav ID", null=True, blank=True)
 	
 	columnar = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="columnar", verbose_name='Колонный', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
+
+	status = models.ForeignKey('Vehicle_status', verbose_name='Статус', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 
 	def __str__(self):
 
@@ -171,10 +175,25 @@ class  Vehicle(models.Model):
 
 	def get_osago_insurance(self):
 		pass	
-
+	
 	class Meta:
 		verbose_name = 'Автомобиль'
 		verbose_name_plural = 'Автомобили'
+
+# модель статуса автомобиля
+class Vehicle_status(models.Model):
+
+	title = models.CharField(max_length=50, verbose_name="Название", null=True, blank=True, default='')
+	color = ColorField(verbose_name="Цвет", default='#ffffff')
+
+	def __str__(self):
+
+		return '{}'.format(self.title)
+
+	class Meta:
+		verbose_name = 'Статус автомобиля'
+		verbose_name_plural = 'Статусы автомобиля'
+
 
 class  Trailer(models.Model):
 
