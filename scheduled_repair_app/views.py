@@ -139,7 +139,7 @@ def scheduled_repair_save(request, pk):
 
                     try:
                         service_work_status = ServiceWorkStatus.objects.get(uid=status_uid)
-                        service_work_object.status_uid = service_work_status
+                        service_work_object.status = service_work_status
                     except:
                         pass
 
@@ -179,7 +179,7 @@ def scheduled_repair_save(request, pk):
 
                     try:
                         service_work_status = ServiceWorkStatus.objects.get(uid=status_uid)
-                        service_work_object.status_uid = service_work_status
+                        service_work_object.status = service_work_status
                     except:
                         pass
 
