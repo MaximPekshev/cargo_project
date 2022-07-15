@@ -85,18 +85,18 @@
 								<div>{{ item.vehicle.car_number }}</div>
 							</div>
 						</th>
-						<td>{% if item.get_month_num == "01" %}{{ item.from_date_logist|date:"d.m.y" }}{% endif %}</td>
-						<td>{% if item.get_month_num == "02" %}{{ item.from_date_logist|date:"d.m.y" }}{% endif %}</td>
-						<td>{% if item.get_month_num == "03" %}{{ item.from_date_logist|date:"d.m.y" }}{% endif %}</td>
-						<td>{% if item.get_month_num == "04" %}{{ item.from_date_logist|date:"d.m.y" }}{% endif %}</td>
-						<td>{% if item.get_month_num == "05" %}{{ item.from_date_logist|date:"d.m.y" }}{% endif %}</td>
-						<td>{% if item.get_month_num == "06" %}{{ item.from_date_logist|date:"d.m.y" }}{% endif %}</td>
-						<td>{% if item.get_month_num == "07" %}{{ item.from_date_logist|date:"d.m.y" }}{% endif %}</td>
-						<td>{% if item.get_month_num == "08" %}{{ item.from_date_logist|date:"d.m.y" }}{% endif %}</td>
-						<td>{% if item.get_month_num == "09" %}{{ item.from_date_logist|date:"d.m.y" }}{% endif %}</td>
-						<td>{% if item.get_month_num == "10" %}{{ item.from_date_logist|date:"d.m.y" }}{% endif %}</td>
-						<td>{% if item.get_month_num == "11" %}{{ item.from_date_logist|date:"d.m.y" }}{% endif %}</td>
-						<td>{% if item.get_month_num == "12" %}{{ item.from_date_logist|date:"d.m.y" }}{% endif %}</td>
+						<td>{% if item.get_month_num == "01" %}{{ item.from_date_logist|date:"d.m.y" }} {{ item.from_date_logist|time:"H:i" }}{% endif %}</td>
+						<td>{% if item.get_month_num == "02" %}{{ item.from_date_logist|date:"d.m.y" }} {{ item.from_date_logist|time:"H:i" }}{% endif %}</td>
+						<td>{% if item.get_month_num == "03" %}{{ item.from_date_logist|date:"d.m.y" }} {{ item.from_date_logist|time:"H:i" }}{% endif %}</td>
+						<td>{% if item.get_month_num == "04" %}{{ item.from_date_logist|date:"d.m.y" }} {{ item.from_date_logist|time:"H:i" }}{% endif %}</td>
+						<td>{% if item.get_month_num == "05" %}{{ item.from_date_logist|date:"d.m.y" }} {{ item.from_date_logist|time:"H:i" }}{% endif %}</td>
+						<td>{% if item.get_month_num == "06" %}{{ item.from_date_logist|date:"d.m.y" }} {{ item.from_date_logist|time:"H:i" }}{% endif %}</td>
+						<td>{% if item.get_month_num == "07" %}{{ item.from_date_logist|date:"d.m.y" }} {{ item.from_date_logist|time:"H:i" }}{% endif %}</td>
+						<td>{% if item.get_month_num == "08" %}{{ item.from_date_logist|date:"d.m.y" }} {{ item.from_date_logist|time:"H:i" }}{% endif %}</td>
+						<td>{% if item.get_month_num == "09" %}{{ item.from_date_logist|date:"d.m.y" }} {{ item.from_date_logist|time:"H:i" }}{% endif %}</td>
+						<td>{% if item.get_month_num == "10" %}{{ item.from_date_logist|date:"d.m.y" }} {{ item.from_date_logist|time:"H:i" }}{% endif %}</td>
+						<td>{% if item.get_month_num == "11" %}{{ item.from_date_logist|date:"d.m.y" }} {{ item.from_date_logist|time:"H:i" }}{% endif %}</td>
+						<td>{% if item.get_month_num == "12" %}{{ item.from_date_logist|date:"d.m.y" }} {{ item.from_date_logist|time:"H:i" }}{% endif %}</td>
 						
 					</tr>
 					{% endfor %}

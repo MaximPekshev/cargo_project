@@ -22,6 +22,7 @@
                 <th>СТО</th>
                 <th>Дата начала</th>
                 <th>Дата окончания</th>
+                <th>Дата начала(Логист)</th>
                 <th>Автор</th>
                 <th>Статус</th>
                 <th></th>
@@ -37,6 +38,7 @@
                 <td>{{ item.service_organization.title }}</td>
                 <td>{{ item.from_date | date:"d.m.y" }} {{item.from_date|time:"H:i"}}</td>
                 <td>{{ item.to_date | date:"d.m.y" }} {{item.to_date|time:"H:i"}}</td>
+                <td>{{ item.from_date_logist | date:"d.m.y" }} {{item.from_date_logist|time:"H:i"}}</td>
                 <td>{{ item.autor }}</td>
                 <td>{{ item.status.title }}</td>
                 <td><a class="btn btn-warning btn-sm" href="{% url 'scheduled_repair_object' pk=item.pk %}"><i class="fa fa-edit"></i></a></td>
