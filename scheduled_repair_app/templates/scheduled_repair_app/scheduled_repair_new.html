@@ -1,0 +1,127 @@
+{% extends 'cargoapp/base.html' %}
+
+{% block content %}
+<nav class="fixed-bottom navbar-dark bg-dark">
+	<a class="navbar-brand" href="{{ request.META.HTTP_REFERER }}">Назад</a>
+</nav>
+<div class="row pt-1">
+	<div class="col-12 my-auto" align="right">Пользователь: {{ user.username }}</div>
+</div>
+<div class="row justify-content-center mt-2 mb-6">
+	<div align="center">
+		Запланировать сервисную работу
+	</div>
+    <form class="col-10 col-sm-8 col-md-8 col-lg-6" method="POST" id="service_workForm" action="{% url 'scheduled_repair_add' %}">
+		{% csrf_token %}
+
+        <div class="form-group row mt-4">    
+			<label for="input_vehicle" class="col-md-3 col-form-label">Тип сервисной работы</label>
+			<div class="col-md-9">
+				<select class="js-example-basic-single form-control" name="service_work_type" id="service_work_type" required>
+                    <option selected value="">...</option>
+					{% for item in service_work_type %}
+					<option value="{{ item.uid }}">{{ item }}</option>
+					{% endfor %}
+				</select>
+			</div>
+        </div>
+
+        <div class="form-group row mt-4">    
+			<label for="input_vehicle" class="col-md-3 col-form-label">Автомобиль</label>
+			<div class="col-md-9">
+				<select class="js-example-basic-single form-control" name="vehicle" id="vehicle" required>
+                    <option selected value="">...</option>
+					{% for item in vehicles %}
+					<option value="{{ item.uid }}">{{ item }}</option>
+					{% endfor %}
+				</select>
+			</div>
+        </div>
+
+        <div class="form-group row mt-4">    
+			<label for="input_vehicle" class="col-md-3 col-form-label">Наименование</label>
+			<div class="col-md-9">
+				<input class="form-control" name="title" id="title" required>
+			</div>
+        </div>
+
+
+        <div class="form-group row mt-4">
+            <label for="input_release_date" class="col-md-3 col-form-label">Дата начала</label>
+			<div class="col-md-9">
+				<input onfocus="this.type='datetime-local'" placeholder="Дата начала работ" class="form-control" name="date_from" id="date_from" required>
+			</div>
+        </div>
+
+        <div class="form-group row mt-4">
+            <label for="input_release_date" class="col-md-3 col-form-label">Дата окончания</label>
+			<div class="col-md-9">
+				<input onfocus="this.type='datetime-local'" placeholder="Дата окончания работ" class="form-control" name="date_to" id="date_to" required>
+			</div>
+        </div>
+
+        <div class="form-group row mt-4" hidden>
+            <label for="input_release_date" class="col-md-3 col-form-label">Начало работы (Логист)</label>
+			<div class="col-md-9">
+				<input type="datetime-local" class="form-control" name="date_from_logist" id="date_from_logist">
+			</div>
+        </div>
+
+        <div class="form-group row mt-4">    
+			<label for="input_vehicle" class="col-md-3 col-form-label">СТО</label>
+			<div class="col-md-9">
+				<select class="js-example-basic-single form-control" name="sto" id="sto" required>
+                    <option selected value="">...</option>
+					{% for item in sto %}
+					<option value="{{ item.uid }}">{{ item }}</option>
+					{% endfor %}
+				</select>
+			</div>
+        </div>
+
+        <div class="form-group row mt-4">    
+			<label for="input_vehicle" class="col-md-3 col-form-label">Комментарий</label>
+			<div class="col-md-9">
+				<textarea class="form-control" name="comment" id="comment"></textarea>
+			</div>
+        </div>
+
+        <div class="row justify-content-center mt-4">
+			<div class="form-group col-6 d-grid gap-2" align="center">
+				<button type="submit" class="btn btn-primary" form="service_workForm">Создать</button>
+			</div>
+		</div>
+    </form>    
+</div>    
+{% endblock %}
+
+{% block custom_script %}
+{% comment %} <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+	
+    window.onload = function() {
+		$('#input_driver').on('change', function () {
+			checkRestrictions();
+		});
+		const checkRestrictions = async () => {
+			let driverSelect = document.getElementById('input_driver');
+			let restrictionsWarningBlock = document.getElementById('restrictionsWarningBlock');
+			restrictionsWarningBlock.innerHTML = "";
+			console.log(restrictionsWarningBlock);
+			if (driverSelect.value == "" ) {
+			} else {
+				let response = await axios.get(`/api/v1/drivers/${driverSelect.value}/`)
+					.then((driver) => {
+						console.log(driver);
+						if (driver.data.restrictions == false) {
+							restrictionsWarningBlock.innerHTML = "";
+						} else {
+							restrictionsWarningBlock.innerHTML = "У водителя есть ограничения!";
+						}
+					})
+			}
+
+		};
+    };
+</script>	 {% endcomment %}
+{% endblock %}

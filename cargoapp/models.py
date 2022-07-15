@@ -153,6 +153,9 @@ class  Vehicle(models.Model):
 	columnar = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="columnar", verbose_name='Колонный', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
 
 	status = models.ForeignKey('Vehicle_status', verbose_name='Статус', on_delete=models.SET_DEFAULT, null=True, blank=True, default=None)
+	
+	scheduled_repair_mileage_limit = models.DecimalField(verbose_name = 'Межсервисный интервал', max_digits=15, decimal_places=2, blank=True, null=True, default=0)
+	date_of_last_scheduled_repair = models.DateField('Дата последнего ТО', auto_now_add = False, blank=True, null=True, default=None)
 
 	def __str__(self):
 

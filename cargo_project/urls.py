@@ -21,6 +21,7 @@ urlpatterns = [
     path('requests/', include('request_app.urls')),
     path('insurance/', include('insurance_app.urls')),
     path('line-release/', include('line_release_app.urls')),
+    path('scheduled-repair/', include('scheduled_repair_app.urls')),
 ]
 
 

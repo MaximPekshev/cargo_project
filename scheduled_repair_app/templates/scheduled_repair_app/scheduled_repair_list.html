@@ -1,0 +1,51 @@
+{% extends 'cargoapp/base.html' %}
+
+{% block content %}
+<nav class="fixed-bottom navbar-dark bg-dark">
+	{% comment %} <a class="navbar-brand" type="button" data-bs-toggle="modal" data-bs-target="#modalLogout" style="float: right;" >Выйти</a> {% endcomment %}
+    <a class="navbar-brand" href="{% url "show_menu_page" %}" style="float: right;" >Меню</a>
+</nav>
+<div class="row pt-3 justify-content-between" style="background-color: white;">
+    <div class="col-md-2 col-sm-3 col-6" align="left">
+        <a style="width: 100%;" class="btn btn-dark btn-sm" href="{% url 'scheduled_repair_new' %}">Запланировать ТО</a>
+    </div>
+	<div class="col-3" align="right"><p>Пользователь: {{ user.username }}</p></div>
+</div>
+<div class="row justify-content-center">
+	<table class="table table-sm col-12">
+		<thead style="position: sticky;top: 0; background-color: white;">
+			<tr>
+				<th>#</th>
+                <th>Наименование</th>
+				<th>Автомобиль</th>
+				<th>Тип сервиса</th>
+                <th>СТО</th>
+                <th>Дата начала</th>
+                <th>Дата окончания</th>
+                <th>Автор</th>
+                <th>Статус</th>
+                <th></th>
+			</tr>
+		</thead>
+		<tbody>
+            {% for item in service_work_list %}
+			<tr>
+                <td>{{ item.pk }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.vehicle.car_number }}</td>
+                <td>{{ item.type.title }}</td>
+                <td>{{ item.service_organization.title }}</td>
+                <td>{{ item.from_date | date:"d.m.y" }} {{item.from_date|time:"H:i"}}</td>
+                <td>{{ item.to_date | date:"d.m.y" }} {{item.to_date|time:"H:i"}}</td>
+                <td>{{ item.autor }}</td>
+                <td>{{ item.status.title }}</td>
+                <td><a class="btn btn-warning btn-sm" href="{% url 'scheduled_repair_object' pk=item.pk %}"><i class="fa fa-edit"></i></a></td>
+			</tr>
+            {% endfor %}
+		</tbody>
+	</table>
+	<div class="pb-5"></div>
+</div>
+
+{% endblock %}
+

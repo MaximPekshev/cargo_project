@@ -1,0 +1,137 @@
+{% extends 'cargoapp/base.html' %}
+
+{% block content %}
+<nav class="fixed-bottom navbar-dark bg-dark">
+	<a class="navbar-brand" href="{% url "show_scheduled_repair_list" %}">Назад</a>
+</nav>
+<div class="row pt-1">
+	<div class="col-12 my-auto" align="right">Пользователь: {{ user.username }}</div>
+</div>
+<div class="row justify-content-center mt-2 mb-6">
+	<div align="center">
+		Запланировать сервисную работу
+	</div>
+    <form class="col-10 col-sm-8 col-md-8 col-lg-6" method="POST" id="service_workForm" action="{% url 'scheduled_repair_save' pk=service_work_object.pk %}">
+		{% csrf_token %}
+
+        <div class="form-group row mt-4">    
+			<label for="input_vehicle" class="col-md-3 col-form-label">Тип сервисной работы</label>
+			<div class="col-md-9">
+				<select class="js-example-basic-single form-control" disabled>
+					<option selected value="{{ service_work_object.type.uid }}">{{ service_work_object.type }}</option>
+				</select>
+			</div>
+        </div>
+
+        <div class="form-group row mt-4">    
+			<label for="input_vehicle" class="col-md-3 col-form-label">Автомобиль</label>
+			<div class="col-md-9">
+				<select class="js-example-basic-single form-control" disabled>
+                    <option selected value="{{ service_work_object.vehicle.uid }}">{{ service_work_object.vehicle }}</option>
+				</select>
+			</div>
+        </div>
+
+        <div class="form-group row mt-4">    
+			<label for="input_vehicle" class="col-md-3 col-form-label">Наименование</label>
+			<div class="col-md-9">
+				<input class="form-control"  value="{{ service_work_object.title }}" disabled>
+			</div>
+        </div>
+
+
+        <div class="form-group row mt-4">
+            <label for="input_release_date" class="col-md-3 col-form-label">Дата начала</label>
+			<div class="col-md-9">
+				<input type="datetime-local" value="{{ service_work_object.from_date|date:'Y-m-d' }} {{ service_work_object.from_date|time:"H:i" }}" class="form-control"  disabled>
+			</div>
+        </div>
+
+        <div class="form-group row mt-4">
+            <label for="input_release_date" class="col-md-3 col-form-label">Дата окончания</label>
+			<div class="col-md-9">
+				<input type="datetime-local" value="{{ service_work_object.to_date|date:'Y-m-d' }} {{ service_work_object.to_date|time:"H:i" }}" class="form-control"  disabled>
+			</div>
+        </div>
+
+        <div class="form-group row mt-4">
+            <label for="input_release_date" class="col-md-3 col-form-label">Начало работы (Логист)</label>
+			<div class="col-md-9">
+				{% if service_work_object.from_date_logist %}
+				<input type="datetime-local" value="{{ service_work_object.from_date_logist|date:'Y-m-d' }} {{ service_work_object.from_date_logist|time:"H:i" }}" class="form-control" name="date_from_logist" id="date_from_logist">
+				{% else %}
+				<input onfocus="this.type='datetime-local'" placeholder="Дата начала работ" class="form-control" name="date_from_logist" id="date_from_logist" required>
+				{% endif %}
+			</div>
+        </div>
+
+        <div class="form-group row mt-4">    
+			<label for="input_vehicle" class="col-md-3 col-form-label">СТО</label>
+			<div class="col-md-9">
+				<select class="js-example-basic-single form-control" disabled>
+                    <option selected value="{{ service_work_object.service_organization.uid }}">{{ service_work_object.service_organization }}</option>
+					{% for item in sto %}
+					<option value="{{ item.uid }}">{{ item }}</option>
+					{% endfor %}
+				</select>
+			</div>
+        </div>
+
+		<div class="form-group row mt-4">    
+			<label for="input_vehicle" class="col-md-3 col-form-label">Статус</label>
+			<div class="col-md-9">
+				<select class="js-example-basic-single form-control" name="status" id="status">
+                    <option selected value="{{ service_work_object.status.uid }}">{{ service_work_object.status }}</option>
+					{% for item in statuses %}
+					<option value="{{ item.uid }}">{{ item }}</option>
+					{% endfor %}
+				</select>
+			</div>
+        </div>
+
+        <div class="form-group row mt-4">    
+			<label for="input_vehicle" class="col-md-3 col-form-label">Комментарий</label>
+			<div class="col-md-9">
+				<textarea class="form-control" name="comment" id="comment">{{ service_work_object.comment }}</textarea>
+			</div>
+        </div>
+
+        <div class="row justify-content-center mt-4">
+			<div class="form-group col-6 d-grid gap-2" align="center">
+				<button type="submit" class="btn btn-primary" form="service_workForm">Сохранить</button>
+			</div>
+		</div>
+    </form>    
+</div>    
+{% endblock %}
+
+{% block custom_script %}
+{% comment %} <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+	
+    window.onload = function() {
+		$('#input_driver').on('change', function () {
+			checkRestrictions();
+		});
+		const checkRestrictions = async () => {
+			let driverSelect = document.getElementById('input_driver');
+			let restrictionsWarningBlock = document.getElementById('restrictionsWarningBlock');
+			restrictionsWarningBlock.innerHTML = "";
+			console.log(restrictionsWarningBlock);
+			if (driverSelect.value == "" ) {
+			} else {
+				let response = await axios.get(`/api/v1/drivers/${driverSelect.value}/`)
+					.then((driver) => {
+						console.log(driver);
+						if (driver.data.restrictions == false) {
+							restrictionsWarningBlock.innerHTML = "";
+						} else {
+							restrictionsWarningBlock.innerHTML = "У водителя есть ограничения!";
+						}
+					})
+			}
+
+		};
+    };
+</script>	 {% endcomment %}
+{% endblock %}

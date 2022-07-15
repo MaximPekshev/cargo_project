@@ -17,7 +17,7 @@
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="{% url 'show_index_page'%}">Статистика авто</a></li>
                   <li><a class="dropdown-item" href="{% url 'show_line_release_list' %}">Выпуск авто на линию</a></li>
-                  <li><a class="dropdown-item" href="#">Плановый ремонт</a></li>
+                  <li><a class="dropdown-item" href="{% url 'show_scheduled_repair_list' %}">Плановый ремонт</a></li>
                   <li><a class="dropdown-item" href="{% url 'columnar_extra_repair' %}">Внеплановый ремонт <span style="padding-left: 20px; color: red;">4</span></a></li>
                   <li><a class="dropdown-item" href="#">Список авто</a></li>
                   <li><a class="dropdown-item" href="{% url 'columnar_shift_change_list' %}">Прием / Передача <span style="padding-left: 20px; color: red;">6</span></a></li>
@@ -65,17 +65,34 @@
         <div class="col-12 col-md-12 col-xl-12 shadow pb-5 row justify-content-center">
             <div class="col-12 col-md-12 col-xl-12 mb-3 mt-3">
                 <form id="filterForm" class="form-group row" method="GET" action="{% url 'show_menu_page' %}">
-                    <label for="columnar" class="col-1 col-form-label">Колонный</label>
+                    <label for="columnar" class="col-1 col-form-label">Ответственный</label>
                     <div class="col-3 align-self-center">
                         <div class="form-group">
-                            <select class="js-example-basic-single form-control" name="columnar" id="columnar">
-                                {% if actual_columnar %}
-                                <option selected value="{{ actual_columnar.uid }}">{{ actual_columnar }}</option>
+                            <select class="js-example-basic-single form-control" name="user_uid" id="user_uid">
+                                {% if actual_user %}
+                                <option selected value="{{ actual_user.uid }}">{{ actual_user }}</option>
                                 {% endif %}
-                                <option {% if not actual_columnar %}selected{% endif %} value="">...</option>
+                                <option {% if not actual_user %}selected{% endif %} value="">...</option>
+                                <optgroup label="Колонные">
                                 {% for columnar in columnars %}
                                 <option value="{{ columnar.uid }}">{{ columnar.username }}</option>
                                 {% endfor %}
+                                </optgroup>
+                                <optgroup label="Начальники колонных">
+                                    {% for item in chief_columns %}
+                                    <option value="{{ item.uid }}">{{ item.username }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                                <optgroup label="Логисты">
+                                    {% for item in logists %}
+                                    <option value="{{ item.uid }}">{{ item.username }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                                <optgroup label="Начальники логистов">
+                                    {% for item in logist_sv %}
+                                    <option value="{{ item.uid }}">{{ item.username }}</option>
+                                    {% endfor %}
+                                </optgroup>
                             </select>
                         </div>
                     </div>
@@ -108,7 +125,7 @@
                     <div class="alert alert-primary" role="alert">
                         {{ item.car_number }}
                         <span class="badge rounded-pill" style="margin-left: 5%; background-color: {{ item.status.color }};">{{ item.status }}</span>
-                        <span class="badge rounded-pill bg-light text-dark">(1)</span>
+                        {% comment %} <span class="badge rounded-pill bg-light text-dark">(1)</span> {% endcomment %}
                     </div>
                 </a>
                 {% endfor %}

@@ -38,5 +38,5 @@ class RouteForm(forms.Form):
 	inputPayment_type = forms.CharField(max_length = 1, required=False)
 
 class FilterForm(forms.Form):
-	columnar = forms.CharField(max_length = 36, required=False)
+	user_uid = forms.CharField(max_length = 36, required=False)
 	status = forms.CharField(max_length = 36, required=False)

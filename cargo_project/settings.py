@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'accrual_deduction_app',
     'insurance_app',
     'line_release_app',
+    'scheduled_repair_app',
 
 
     'mobiFuel',
