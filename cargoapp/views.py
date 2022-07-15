@@ -1621,8 +1621,10 @@ def columnar_maintenance_schedule_menu(request):
 
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
         users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+        users_in_group_logistsupervisor = Group.objects.get(name="Старший логист").user_set.all()
+        users_in_group_logist = Group.objects.get(name="Логист").user_set.all()
 
-        if request.user in users_in_group_vehicle_supervisor or request.user in users_in_group_chief_column:
+        if request.user in set(users_in_group_vehicle_supervisor | users_in_group_chief_column | users_in_group_logistsupervisor | users_in_group_logist):
 
             context = {
 

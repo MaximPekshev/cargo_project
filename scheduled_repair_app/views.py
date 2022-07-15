@@ -228,7 +228,7 @@ def show_scheduled_plan_fact_vehicle_list(request):
         year = datetime.datetime.now().strftime('%Y')
 
         context = {
-            'service_work_list': ServiceWork.objects.filter(from_date__year=year),
+            'service_work_list': ServiceWork.objects.filter(from_date_logist__year=year),
         }
 
         return render(request, 'scheduled_repair_app/plan_fact/schedule_auto.html', context)

@@ -2,7 +2,7 @@ from django.db import models
 from cargoapp.models import Vehicle, LogistUser
 import uuid
 from simple_history.models import HistoricalRecords
-import datetime
+
 
 def get_uuid4():
     return str(uuid.uuid4())
