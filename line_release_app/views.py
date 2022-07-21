@@ -15,7 +15,7 @@ def show_line_release_list(request):
         if request.user in users_in_group:
 
             context ={
-                'line_releases': LineRelease.objects.filter(columnar=request.user),
+                'line_releases': LineRelease.objects.filter(columnar=request.user).reverse(),
             }
 
             return render(request, 'line_release_app/line_release_list.html', context)
