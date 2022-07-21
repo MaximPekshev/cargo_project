@@ -26,7 +26,7 @@
                 <td>{{ item.driver.title }}</td>
                 <td>{{ item.car_number }}</td>
                 <td>{{ item.driver.employment_date|date:"Y-m-d" }}</td>
-                <td><i class="fa fa-check"></i></td>
+                <td>{% if item.restrictions %}<i class="fa fa-check"></i>{% endif %}</td>
                 <td>{{ item.driver.get_experience }}</td>
 			</tr>
             {% endfor %}
