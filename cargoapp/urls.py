@@ -1,8 +1,9 @@
 from django.urls import path
 from .views import show_index_page, show_route, route_save, route_add, show_new_route_form
 from .views import delete_req_img, delete_loa_img, show_menu_page
-from .views import routes_list, holiday_requests, columnar_daily_report
+from .views import routes_list, holiday_requests, columnar_daily_report, repair_request_menu
 from .views import documents_menu, documents_agreement, documents_familiarize, documents_all, documents_add, documents_report
+from .views import show_driver_list, show_vehicle_list
 #driver
 from .views import driver_extra_repair
 from .views import driver_holiday_requests
@@ -70,6 +71,11 @@ urlpatterns = [
 	path('routes/<str:uid>/', 	show_route , name='show_route'),
 	path('routes/save/<str:uid>/', 	route_save , name='route_save'),
 	path('routes-list/', 	routes_list , name='routes_list'),
+	path('repair-request-menu/', 	repair_request_menu , name='repair_request_menu'),
+	path('driver-list/', 	show_driver_list , name='show_driver_list'),
+	path('vehicle-list/', 	show_vehicle_list , name='show_vehicle_list'),
+
+
 	path('hr/holiday-requests/', 	holiday_requests , name='holiday_requests'),
 	path('documents/menu/', 	documents_menu , name='documents_menu'),
 	path('documents/agreement/', 	documents_agreement , name='documents_agreement'),

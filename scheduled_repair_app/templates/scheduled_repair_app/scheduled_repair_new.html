@@ -9,13 +9,13 @@
 </div>
 <div class="row justify-content-center mt-2 mb-6">
 	<div align="center">
-		Запланировать сервисную работу
+		Заявка на ремонт
 	</div>
     <form class="col-10 col-sm-8 col-md-8 col-lg-6" method="POST" id="service_workForm" action="{% url 'scheduled_repair_add' %}">
 		{% csrf_token %}
 
         <div class="form-group row mt-4">    
-			<label for="input_vehicle" class="col-md-3 col-form-label">Тип сервисной работы</label>
+			<label for="input_vehicle" class="col-md-3 col-form-label">Вид ремонта</label>
 			<div class="col-md-9">
 				<select class="js-example-basic-single form-control" name="service_work_type" id="service_work_type" required>
                     <option selected value="">...</option>

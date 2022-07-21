@@ -11,7 +11,7 @@ def show_scheduled_repair_list(request):
     if request.user.is_authenticated:
 
         context = {
-            'service_work_list': ServiceWork.objects.all(),
+            'service_work_list': ServiceWork.objects.all().order_by("-date"),
         }
 
         users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()

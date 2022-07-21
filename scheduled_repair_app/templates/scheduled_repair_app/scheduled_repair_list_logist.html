@@ -2,12 +2,10 @@
 
 {% block content %}
 <nav class="fixed-bottom navbar-dark bg-dark">
-	{% comment %} <a class="navbar-brand" type="button" data-bs-toggle="modal" data-bs-target="#modalLogout" style="float: right;" >Выйти</a> {% endcomment %}
     <a class="navbar-brand" href="{% url "show_menu_page" %}" style="float: right;" >Меню</a>
 </nav>
 <div class="row pt-3 justify-content-between" style="background-color: white;">
     <div class="col-md-2 col-sm-3 col-6" align="left">
-        {% comment %} <a style="width: 100%;" class="btn btn-dark btn-sm" href="{% url 'scheduled_repair_new' %}">Запланировать ТО</a> {% endcomment %}
     </div>
 	<div class="col-3" align="right"><p>Пользователь: {{ user.username }}</p></div>
 </div>

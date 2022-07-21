@@ -1,0 +1,39 @@
+{% extends 'cargoapp/base.html' %}
+
+{% block content %}
+<nav class="fixed-bottom navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url "show_menu_page" %}" style="float: right;" >Меню</a>
+</nav>
+<div class="row pt-3 justify-content-between" style="background-color: white;">
+	<div class="col-12" align="right"><p>Пользователь: {{ user.username }}</p></div>
+</div>
+<div class="row justify-content-center">
+	<table class="table table-sm col-12">
+		<thead style="position: sticky;top: 0; background-color: white;">
+			<tr>
+				<th>#</th>
+                <th>ФИО</th>
+				<th>Автомобиль</th>
+				<th>Дата приема</th>
+                <th>Ограничения</th>
+                <th>Опыт</th>
+			</tr>
+		</thead>
+		<tbody>
+            {% for item in vehicles %}
+			<tr>
+                <td>{{ item.driver.pk }}</td>
+                <td>{{ item.driver.title }}</td>
+                <td>{{ item.car_number }}</td>
+                <td>{{ item.driver.employment_date|date:"Y-m-d" }}</td>
+                <td><i class="fa fa-check"></i></td>
+                <td>{{ item.driver.get_experience }}</td>
+			</tr>
+            {% endfor %}
+		</tbody>
+	</table>
+	<div class="pb-5"></div>
+</div>
+
+{% endblock %}
+

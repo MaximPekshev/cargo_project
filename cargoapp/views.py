@@ -292,6 +292,76 @@ def show_menu_page(request):
 
         return redirect('login') 
 
+def repair_request_menu(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_logistsupervisor = Group.objects.get(name="Старший логист").user_set.all()
+        users_in_group_logist = Group.objects.get(name="Логист").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+
+        if request.user in set(users_in_group_vehicle_supervisor | users_in_group_logistsupervisor | users_in_group_logist | users_in_group_chief_column):
+            return render(request, 'cargoapp/repair_request/menu.html')
+        else:
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+    else:
+
+        return redirect('login')
+
+def show_driver_list(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+
+        if request.user in set(users_in_group_vehicle_supervisor | users_in_group_chief_column):
+
+            if request.user in users_in_group_vehicle_supervisor:
+                vehicles = Vehicle.objects.filter(columnar=request.user).order_by('driver__title')
+
+            elif request.user in users_in_group_chief_column:
+                vehicles = Vehicle.objects.filter(columnar__in=LogistUser.objects.filter(supervisor=request.user)).order_by('driver__title')
+
+            context = {
+                'vehicles' : vehicles,
+            }
+
+            return render(request, 'cargoapp/driver_list.html', context)
+        else:
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+    else:
+
+        return redirect('login')
+
+def show_vehicle_list(request):
+
+    if request.user.is_authenticated:
+
+        users_in_group_vehicle_supervisor = Group.objects.get(name="Колонный").user_set.all()
+        users_in_group_chief_column = Group.objects.get(name="Начальник колонных").user_set.all()
+
+        if request.user in set(users_in_group_vehicle_supervisor | users_in_group_chief_column):
+
+            if request.user in users_in_group_vehicle_supervisor:
+                vehicles = Vehicle.objects.filter(columnar=request.user).order_by('driver__title')
+
+            elif request.user in users_in_group_chief_column:
+                vehicles = Vehicle.objects.filter(columnar__in=LogistUser.objects.filter(supervisor=request.user)).order_by('driver__title')
+
+            context = {
+                'vehicles' : vehicles,
+            }
+
+            return render(request, 'cargoapp/vehicle_list.html', context)
+        else:
+            return render(request, 'cargoapp/menu/auth_role_error.html')
+    else:
+
+        return redirect('login')        
+
+
 def get_planned_data(vehicles, month):
 
     mileageStandard = 0

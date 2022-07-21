@@ -12,9 +12,8 @@
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="{% url 'show_index_page'%}">Статистика авто</a></li>
                   <li><a class="dropdown-item" href="{% url 'show_line_release_list' %}">Выпуск авто на линию</a></li>
-                  <li><a class="dropdown-item" href="{% url 'show_scheduled_repair_list' %}">Плановый ремонт</a></li>
-                  <li><a class="dropdown-item" href="{% url 'columnar_extra_repair' %}">Внеплановый ремонт <span style="padding-left: 20px; color: red;">4</span></a></li>
-                  <li><a class="dropdown-item" href="#">Список авто</a></li>
+                  <li><a class="dropdown-item" href="{% url 'repair_request_menu' %}">Заявки на ремонт</a></li>
+                  <li><a class="dropdown-item" href="{% url 'show_vehicle_list' %}">Список авто</a></li>
                   <li><a class="dropdown-item" href="{% url 'columnar_shift_change_list' %}">Прием / Передача <span style="padding-left: 20px; color: red;">6</span></a></li>
                 </ul>
             </div>
@@ -24,6 +23,7 @@
                     Водители
                 </button>
                 <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url 'show_driver_list'%}">Водители</a></li>
                   <li><a class="dropdown-item" href="{% url 'accrual_deduction_list'%}">Начисление/Вычет</a></li>
                   <li><a class="dropdown-item" href="{% url 'columnar_holiday_requests' %}">Запрос на выходные <span style="padding-left: 20px; color: red;">3</span></a></li>
                 </ul>
